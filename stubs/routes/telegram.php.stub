@@ -1,0 +1,15 @@
+<?php
+
+use Kolirt\Telegram\Config\TelegramConfig;
+
+/**
+ * @var TelegramConfig $config
+ */
+
+$config
+    ->bot('test')
+    ->commands([
+        'start' => [\App\Http\Telegram\Commands\StartCommand::class, 'index', 'Start command description'],
+        'info' => [\App\Http\Telegram\Commands\InfoCommand::class, 'index', 'Info command description'],
+    ])
+    ->command('test', [\App\Http\Telegram\Commands\TestCommand::class, 'index'], 'Test command description');

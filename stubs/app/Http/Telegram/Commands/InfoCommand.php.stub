@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Http\Telegram\Commands;
+
+use Kolirt\Telegram\Commands\BaseCommand;
+
+class InfoCommand extends BaseCommand
+{
+    public function index()
+    {
+        $this->telegram->reply(
+            text: <<<TEXT
+            🤖 This bot is a simple example of a telegram bot.
+            TEXT
+        );
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "name": "kolirt/laravel-telegram",
+    "version": "1.0.0",
+    "homepage": "https://github.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "kolirt"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^10.0 | ^11.0",
+        "kolirt/laravel-master-model": "^3.0"
+    },
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
+        "psr-4": {
+            "Kolirt\\Telegram\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Kolirt\\Telegram\\ServiceProvider"
+            ],
+            "aliases": {
+            }
+        }
+    }
+}

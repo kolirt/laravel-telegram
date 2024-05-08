@@ -1,0 +1,15 @@
+<?php
+
+namespace PHPSTORM_META {
+
+    registerArgumentsSet(
+        'bot_names',
+        {{ bot_names }}
+    );
+
+    expectedArguments(
+        \Kolirt\Telegram\Config\TelegramConfig::bot(),
+        0,
+        argumentsSet('bot_names')
+    );
+}

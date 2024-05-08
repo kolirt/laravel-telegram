@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Http\Telegram\Commands;
+
+use Kolirt\Telegram\Commands\BaseCommand;
+
+class StartCommand extends BaseCommand
+{
+    public function index()
+    {
+        $this->telegram->reply(
+            text: <<<TEXT
+            👋🏻 Hey! I'm a telegram bot.
+            TEXT
+        );
+    }
+}

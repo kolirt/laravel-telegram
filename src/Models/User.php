@@ -5,7 +5,7 @@ namespace Kolirt\Telegram\Models;
 use Illuminate\Database\Eloquent\Model;
 use Kolirt\MasterModel\MasterModel;
 
-class TelegramUser extends Model
+class User extends Model
 {
     use MasterModel;
 

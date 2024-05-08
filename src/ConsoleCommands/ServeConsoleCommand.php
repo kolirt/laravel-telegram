@@ -3,9 +3,9 @@
 namespace Kolirt\Telegram\ConsoleCommands;
 
 use Illuminate\Console\Command;
-use Kolirt\Telegram\Config\TelegramConfig;
+use Kolirt\Telegram\Config\Config;
 use Kolirt\Telegram\Core\Telegram;
-use Kolirt\Telegram\Facades\TelegramConfig as TelegramConfigFacade;
+use Kolirt\Telegram\Facades\Config as ConfigFacade;
 
 class ServeConsoleCommand extends Command
 {
@@ -21,10 +21,10 @@ class ServeConsoleCommand extends Command
         $bot_model = config('telegram.models.bot.model')::where('name', $bot_name)->first();
         if ($bot_model) {
             /**
-             * @var TelegramConfig $config
+             * @var Config $config
              */
-            $config = TelegramConfigFacade::getFacadeRoot();
-            $config->loadRoutes();
+            $config = ConfigFacade::getFacadeRoot();
+            $config->load();
 
             $bot = $config->getBot($bot_model->name);
             $bot->setModel($bot_model);

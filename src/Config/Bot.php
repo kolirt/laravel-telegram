@@ -3,24 +3,20 @@
 namespace Kolirt\Telegram\Config;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-use Kolirt\Telegram\Config\Traits\Backable;
-use Kolirt\Telegram\Config\Traits\Cancelable;
-use Kolirt\Telegram\Config\Traits\Commandable;
-use Kolirt\Telegram\Config\Traits\Routable;
+use Kolirt\Telegram\Config\Traits\CommandBuildable;
+use Kolirt\Telegram\Config\Traits\VirtualRouterable;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Updates\UpdateType;
-use Kolirt\Telegram\Models\Pivots\BotChatPivot;
-use Kolirt\Telegram\Models\TelegramChat;
-use Kolirt\Telegram\Models\TelegramUser;
+use Kolirt\Telegram\Models\Chat;
+use Kolirt\Telegram\Models\User;
 
-class TelegramBotConfig
+class Bot
 {
 
-    use Commandable, Routable;
-    use Backable, Cancelable;
+    use CommandBuildable, VirtualRouterable;
 
     private Model $model;
+
 
     public function __construct(
         protected string $name,
@@ -33,20 +29,20 @@ class TelegramBotConfig
         $this->model = $model;
     }
 
-    public function run(Telegram $telegram,UpdateType $context): void
+    public function run(Telegram $telegram, UpdateType $context): void
     {
         /**
-         * @var TelegramChat|null $chat
-         * @var TelegramUser|null $user
+         * @var Chat|null $chat
+         * @var User|null $user
          */
-        [$chat, $user] = $this->save($context);
+        [$chat, $user] = $this->saveData($context);
 
         if ($context->message && $this->isCommand($context->message->text)) {
             $segments = explode(' ', $context->message->text, 2);
             $command_name = str_replace('/', '', $segments[0]);
             $args = $segments[1] ?? '';
 
-            $command = $this->getCommand($command_name);
+            $command = $this->command_builder->getCommand($command_name);
             if ($command) {
                 $command->setBot($this);
                 $command->setTelegram($telegram);
@@ -56,9 +52,11 @@ class TelegramBotConfig
                 $command->run($args);
             }
         }
+
+// dd($context);
     }
 
-    private function save(UpdateType $context): array
+    private function saveData(UpdateType $context): array
     {
         $chat = null;
         $user = null;
@@ -85,7 +83,7 @@ class TelegramBotConfig
         }
 
         if ($chat && $user) {
-            BotChatPivot::query()->updateOrCreate([
+            config('telegram.models.bot_chat_pivot.model')::query()->updateOrCreate([
                 'bot_id' => $this->model->id,
                 'chat_id' => $chat->id
             ], [

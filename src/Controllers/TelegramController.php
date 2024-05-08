@@ -3,9 +3,9 @@
 namespace Kolirt\Telegram\Controllers;
 
 use Illuminate\Support\Facades\Cache;
-use Kolirt\Telegram\Config\TelegramConfig;
+use Kolirt\Telegram\Config\Config;
 use Kolirt\Telegram\Core\Telegram;
-use Kolirt\Telegram\Facades\TelegramConfig as TelegramConfigFacade;
+use Kolirt\Telegram\Facades\Config as ConfigFacade;
 
 class TelegramController
 {
@@ -21,10 +21,10 @@ class TelegramController
 
         if ($bot_model) {
             /**
-             * @var TelegramConfig $config
+             * @var Config $config
              */
-            $config = TelegramConfigFacade::getFacadeRoot();
-            $config->loadRoutes();
+            $config = ConfigFacade::getFacadeRoot();
+            $config->load();
 
             $bot = $config->getBot($bot_model->name);
             if ($bot) {

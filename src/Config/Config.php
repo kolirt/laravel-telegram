@@ -2,21 +2,20 @@
 
 namespace Kolirt\Telegram\Config;
 
-use Closure;
-use Illuminate\Support\Collection;
-use Kolirt\Telegram\Core\Types\Updates\UpdateType;
-
-class TelegramConfig
+class Config
 {
 
+    /**
+     * @var Bot[] $bots
+     */
     private array $bots = [];
 
-    public function bot(string $bot_name): TelegramBotConfig
+    public function bot(string $bot_name): Bot
     {
-        return $this->bots[$bot_name] = new TelegramBotConfig($bot_name);
+        return $this->bots[$bot_name] = new Bot($bot_name);
     }
 
-    public function getBot(string $bot_name): TelegramBotConfig|null
+    public function getBot(string $bot_name): Bot|null
     {
         return $this->bots[$bot_name] ?? null;
     }
@@ -26,7 +25,7 @@ class TelegramConfig
         return $this->bots;
     }
 
-    public function loadRoutes(): void
+    public function load(): void
     {
         $config = $this;
         foreach (config('telegram.routes.files') as $file) {

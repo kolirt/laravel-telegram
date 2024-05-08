@@ -4,28 +4,28 @@ namespace Kolirt\Telegram\Config;
 
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Updates\UpdateType;
-use Kolirt\Telegram\Models\TelegramChat;
-use Kolirt\Telegram\Models\TelegramUser;
+use Kolirt\Telegram\Models\Chat;
+use Kolirt\Telegram\Models\User;
 use ReflectionMethod;
 
-class CommandConfig
+class Command
 {
 
-    public TelegramBotConfig $bot;
+    public Bot $bot;
     public Telegram $telegram;
     public UpdateType $context;
-    public TelegramChat|null $chat;
-    public TelegramUser|null $user;
+    public Chat|null $chat;
+    public User|null $user;
 
     public function __construct(
-        protected string $command,
-        protected array  $handler,
-        protected string $description
+        protected string       $name,
+        protected string|array $handler,
+        protected string       $description
     )
     {
     }
 
-    public function setBot(TelegramBotConfig $bot): self
+    public function setBot(Bot $bot): self
     {
         $this->bot = $bot;
         return $this;
@@ -43,13 +43,13 @@ class CommandConfig
         return $this;
     }
 
-    public function setChat(TelegramChat|null $chat): self
+    public function setChat(Chat|null $chat): self
     {
         $this->chat = $chat;
         return $this;
     }
 
-    public function setUser(TelegramUser|null $user): self
+    public function setUser(User|null $user): self
     {
         $this->user = $user;
         return $this;
@@ -57,16 +57,17 @@ class CommandConfig
 
     public function run(string $args): void
     {
-        $handler = new $this->handler[0](
+        $class = is_array($this->handler) ? $this->handler[0] : $this->handler;
+        $method = is_array($this->handler) ? $this->handler[1] : '__invoke';
+        $params = [];
+
+        $handler = new $class(
             $this->bot,
             $this->telegram,
             $this->context,
             $this->chat,
             $this->user
         );
-
-        $method = $this->handler[1];
-        $params = [];
 
         $ref = new ReflectionMethod($handler, $method);
         $ref_params = $ref->getParameters();
@@ -81,9 +82,9 @@ class CommandConfig
         call_user_func([$handler, $method], ...$params);
     }
 
-    public function getCommand(): string
+    public function getCommandName(): string
     {
-        return $this->command;
+        return $this->name;
     }
 
     public function getDescription(): string

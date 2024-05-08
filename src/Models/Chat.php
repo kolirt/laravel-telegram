@@ -7,7 +7,7 @@ use Kolirt\Telegram\Core\Enums\ChatTypeEnum;
 use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 use Kolirt\MasterModel\MasterModel;
 
-class TelegramChat extends Model
+class Chat extends Model
 {
     use MasterModel;
 

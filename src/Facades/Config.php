@@ -5,9 +5,9 @@ namespace Kolirt\Telegram\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @mixin \Kolirt\Telegram\Config\TelegramConfig
+ * @mixin \Kolirt\Telegram\Config\Config
  */
-class TelegramConfig extends Facade
+class Config extends Facade
 {
 
     protected static function getFacadeAccessor(): string

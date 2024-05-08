@@ -4,7 +4,7 @@ namespace Kolirt\Telegram;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Kolirt\Telegram\Config\TelegramConfig;
+use Kolirt\Telegram\Config\Config;
 use Kolirt\Telegram\ConsoleCommands\Bot\BotCreateConsoleCommand;
 use Kolirt\Telegram\ConsoleCommands\Bot\BotDeleteCommandsConsoleCommand;
 use Kolirt\Telegram\ConsoleCommands\Bot\BotUpdateCommandsConsoleCommand;
@@ -51,7 +51,7 @@ class ServiceProvider extends BaseServiceProvider
         $this->commands($this->commands);
 
         $this->app->bind('telegram-config', function () {
-            return new TelegramConfig();
+            return new Config;
         });
     }
 

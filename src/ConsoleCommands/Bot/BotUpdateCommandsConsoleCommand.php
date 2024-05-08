@@ -3,11 +3,10 @@
 namespace Kolirt\Telegram\ConsoleCommands\Bot;
 
 use Illuminate\Console\Command;
-use Kolirt\Telegram\Config\CommandConfig;
-use Kolirt\Telegram\Config\TelegramConfig;
+use Kolirt\Telegram\Config\Config;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Commands\BotCommandType;
-use Kolirt\Telegram\Facades\TelegramConfig as TelegramConfigFacade;
+use Kolirt\Telegram\Facades\Config as ConfigFacade;
 
 class BotUpdateCommandsConsoleCommand extends Command
 {
@@ -23,24 +22,25 @@ class BotUpdateCommandsConsoleCommand extends Command
         $bot_model = config('telegram.models.bot.model')::where('name', $bot_name)->first();
         if ($bot_model) {
             /**
-             * @var TelegramConfig $config
+             * @var Config $config
              */
-            $config = TelegramConfigFacade::getFacadeRoot();
-            $config->loadRoutes();
+            $config = ConfigFacade::getFacadeRoot();
+            $config->load();
 
             $bot_config = $config->getBot($bot_model->name);
             if ($bot_config) {
                 $telegram = new Telegram($bot_model->token);
 
-                $commands = array_map(function ($command) {
-                    /**
-                     * @var CommandConfig $command
-                     */
-                    return new BotCommandType(
-                        command: $command->getCommand(),
+                /**
+                 * @var BotCommandType[] $commands
+                 */
+                $commands = [];
+                foreach ($bot_config->getCommands() as $command) {
+                    $commands[] = new BotCommandType(
+                        command: $command->getCommandName(),
                         description: $command->getDescription()
                     );
-                }, $bot_config->getCommands());
+                }
 
                 if ($telegram->setMyCommands(commands: $commands)) {
                     $this->info('Commands updated');

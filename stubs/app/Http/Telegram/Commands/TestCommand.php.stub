@@ -6,7 +6,7 @@ use Kolirt\Telegram\Commands\BaseCommand;
 
 class TestCommand extends BaseCommand
 {
-    public function index()
+    public function index(): void
     {
         $this->telegram->reply(
             text: <<<TEXT

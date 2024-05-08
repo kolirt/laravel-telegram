@@ -50,26 +50,12 @@ php artisan telegram:bot-create test {token}
 
 You can configure bot commands in `routes/telegram.php`, which will be published after the installation, and then you can update the commands in bot using the `php aritsan telegram:bot-update-commands {bot_name}` command.
 ```php
-$config
-    ->bot('test')
-    ->commands([
-        'start' => [
-            \App\Http\Telegram\Commands\StartCommand::class,
-            'index',
-            'Start command description' // command description
-        ],
-        'info' => [
-            \App\Http\Telegram\Commands\InfoCommand::class,
-            'index',
-            'Info command description' // command description
-        ],
-    ])
-    ->command(
-        'test',
-        [\App\Http\Telegram\Commands\TestCommand::class, 'index'],
-        'Test command description' // command description
-    );
-
+$config->bot('test')
+    ->commands(function (CommandBuilder $builder) {
+        $builder->start(StartCommand::class, 'Start command description');
+        $builder->command('info', InfoCommand::class, 'Info command description');
+        $builder->command('test', [TestCommand::class, 'index'], 'Test command description');
+    })
 ```
 
 # Console commands

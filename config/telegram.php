@@ -29,7 +29,7 @@ return [
     ],
 
     'routes' => [
-        'prefix' => 'api/telegram/bot{token}',
+        'path' => 'api/telegram/bot{token}',
         'files' => [
             base_path('routes/telegram.php')
         ]

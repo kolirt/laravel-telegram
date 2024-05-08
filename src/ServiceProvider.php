@@ -58,7 +58,7 @@ class ServiceProvider extends BaseServiceProvider
     private function loadRoutes(): void
     {
         Route::middleware('api')
-            ->any(config('telegram.routes.prefix'), [TelegramController::class, 'index']);
+            ->any(config('telegram.routes.path'), [TelegramController::class, 'index']);
 
         //        dd(config('telegram.routes'));
     }

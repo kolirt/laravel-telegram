@@ -3,7 +3,7 @@
 use App\Http\Telegram\Commands\InfoCommand;
 use App\Http\Telegram\Commands\StartCommand;
 use App\Http\Telegram\Commands\TestCommand;
-use Kolirt\Telegram\Config\CommandBuilder;
+use Kolirt\Telegram\Config\Command\CommandBuilder;
 use Kolirt\Telegram\Config\Config;
 
 /**

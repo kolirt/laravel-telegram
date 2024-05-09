@@ -1,7 +1,8 @@
 <?php
 
-namespace Kolirt\Telegram\Config;
+namespace Kolirt\Telegram\Config\Command;
 
+use Kolirt\Telegram\Config\Bot;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Updates\UpdateType;
 use Kolirt\Telegram\Models\Chat;

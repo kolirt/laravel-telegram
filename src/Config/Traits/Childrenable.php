@@ -5,29 +5,31 @@ namespace Kolirt\Telegram\Config\Traits;
 use Kolirt\Telegram\Config\VirtualRoute;
 use Kolirt\Telegram\Config\VirtualRouter;
 
-trait VirtualRouterable
+trait Childrenable
 {
 
     protected VirtualRouter $virtual_router;
 
-    public function virtualRoutes($fn): self
+    public function children($fn): self
     {
         $this->virtual_router = new VirtualRouter;
+        $this->virtual_router->setPath($this->name);
         $fn($this->virtual_router);
         return $this;
     }
 
+
     /**
      * @return VirtualRoute[]
      */
-    public function getVirtualRoutes(): array
+    public function getChildren(): array
     {
         return $this->virtual_router->getRoutes();
     }
 
-    public function hasVirtualRoutes(): bool
+    public function hasChildren(): bool
     {
-        return count($this->getVirtualRoutes()) > 0;
+        return !empty($this->virtual_router) && count($this->getChildren()) > 0;
     }
 
 }

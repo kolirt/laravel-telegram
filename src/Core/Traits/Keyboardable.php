@@ -5,13 +5,14 @@ namespace Kolirt\Telegram\Core\Traits;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Keyboard\Buttons\KeyboardButtonType;
 use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardMarkupType;
+use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardRemoveType;
 
 trait Keyboardable
 {
 
-    protected ReplyKeyboardMarkupType|null $attached_keyboard = null;
+    protected ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $attached_keyboard = null;
 
-    public function attachReplyKeyboardMarkupObject(ReplyKeyboardMarkupType $keyboard): self
+    public function attachReplyKeyboardMarkupObject(ReplyKeyboardMarkupType|ReplyKeyboardRemoveType $keyboard): self
     {
         $this->attached_keyboard = $keyboard;
         return $this;

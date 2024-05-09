@@ -1,11 +1,11 @@
 <?php
 
-namespace Kolirt\Telegram\Config;
+namespace Kolirt\Telegram\Config\Keyboard\Buttons;
 
-use Kolirt\Telegram\Config\Traits\Childrenable;
+use Kolirt\Telegram\Config\Keyboard\Childrenable;
 use Kolirt\Telegram\Core\Types\Keyboard\Buttons\KeyboardButtonType;
 
-class VirtualRoute
+class KeyboardTextButton extends BaseKeyboardButton
 {
 
     use Childrenable;
@@ -28,11 +28,10 @@ class VirtualRoute
         return $this->label;
     }
 
-    public function renderKeyboardButton(): KeyboardButtonType
+    public function render(): KeyboardButtonType
     {
         return new KeyboardButtonType(
-            text: $this->label
+            text: $this->getLabel()
         );
     }
-
 }

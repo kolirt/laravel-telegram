@@ -54,10 +54,6 @@ trait SendMessageMethod
             if ($this->attached_keyboard) {
                 $reply_markup_formatted = $this->attached_keyboard->render();
             }
-
-            if ($reply_markup_formatted === null) {
-                $reply_markup_formatted = new ReplyKeyboardRemoveType(true);
-            }
         }
 
         /**

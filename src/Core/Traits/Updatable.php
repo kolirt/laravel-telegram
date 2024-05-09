@@ -1,6 +1,6 @@
 <?php
 
-namespace Kolirt\Telegram\Core\Methods\Updates;
+namespace Kolirt\Telegram\Core\Traits;
 
 use Kolirt\Telegram\Core\Types\Updates\UpdateType;
 

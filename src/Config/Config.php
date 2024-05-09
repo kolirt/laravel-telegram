@@ -28,7 +28,7 @@ class Config
     public function load(): void
     {
         $config = $this;
-        foreach (config('telegram.routes.files') as $file) {
+        foreach (config('telegram.config_files') as $file) {
             require_once $file;
         }
     }

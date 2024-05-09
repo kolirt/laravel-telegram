@@ -4,6 +4,8 @@ namespace Kolirt\Telegram\Core\Methods\Messages;
 
 use Kolirt\Telegram\Core\Enums\ParseModeEnum;
 use Kolirt\Telegram\Core\Telegram;
+use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardMarkupType;
+use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardRemoveType;
 use Kolirt\Telegram\Core\Types\MessageType;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Client\ConnectionException;
@@ -25,6 +27,7 @@ trait SendMessageMethod
      * @param ParseModeEnum|null $parse_mode
      * @param bool|null $disable_notification
      * @param bool|null $protect_content
+     * @param ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
      *
      * @return MessageType
      *
@@ -32,19 +35,31 @@ trait SendMessageMethod
      * @throws GuzzleException
      */
     public function sendMessage(
-        string|int         $chat_id,
-        string             $text,
-        string             $business_connection_id = null,
-        int                $message_thread_id = null,
-        ParseModeEnum|null $parse_mode = null,
+        string|int                                           $chat_id,
+        string                                               $text,
+        string                                               $business_connection_id = null,
+        int                                                  $message_thread_id = null,
+        ParseModeEnum|null                                   $parse_mode = null,
         // $entities = null,
         // $link_preview_options = null,
-        bool               $disable_notification = null,
-        bool               $protect_content = null,
+        bool                                                 $disable_notification = null,
+        bool                                                 $protect_content = null,
         // $reply_parameters = null,
-        // $reply_markup = null,
+        ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
     ): MessageType
     {
+        $reply_markup_formatted = $reply_markup;
+
+        if (!$reply_markup) {
+            if ($this->attached_keyboard) {
+                $reply_markup_formatted = $this->attached_keyboard->render();
+            }
+
+            if ($reply_markup_formatted === null) {
+                $reply_markup_formatted = new ReplyKeyboardRemoveType(true);
+            }
+        }
+
         /**
          * @var PendingRequest $this ->client
          */
@@ -59,7 +74,7 @@ trait SendMessageMethod
             'disable_notification' => $disable_notification,
             'protect_content' => $protect_content,
             // 'reply_parameters' => $reply_parameters,
-            // 'reply_markup' => $reply_markup
+            'reply_markup' => $reply_markup_formatted
         ]))->getBody();
 
         return MessageType::from(json_decode($response, true)['result']);
@@ -73,6 +88,7 @@ trait SendMessageMethod
      * @param ParseModeEnum|null $parse_mode
      * @param bool|null $disable_notification
      * @param bool|null $protect_content
+     * @param ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
      *
      * @return MessageType
      *
@@ -80,16 +96,16 @@ trait SendMessageMethod
      * @throws GuzzleException
      */
     public function reply(
-        string             $text,
-        string             $business_connection_id = null,
-        int                $message_thread_id = null,
-        ParseModeEnum|null $parse_mode = null,
+        string                                               $text,
+        string                                               $business_connection_id = null,
+        int                                                  $message_thread_id = null,
+        ParseModeEnum|null                                   $parse_mode = null,
         // $entities = null,
         // $link_preview_options = null,
-        bool               $disable_notification = null,
-        bool               $protect_content = null,
+        bool                                                 $disable_notification = null,
+        bool                                                 $protect_content = null,
         // $reply_parameters = null,
-        // $reply_markup = null,
+        ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
     ): MessageType
     {
         /**
@@ -105,8 +121,8 @@ trait SendMessageMethod
             // link_preview_options: $link_preview_options,
             disable_notification: $disable_notification,
             protect_content: $protect_content,
-        // reply_parameters: $reply_parameters,
-        // reply_markup: $reply_markup,
+            // reply_parameters: $reply_parameters,
+            reply_markup: $reply_markup,
         );
     }
 

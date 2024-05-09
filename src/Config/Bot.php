@@ -40,6 +40,15 @@ class Bot
         if ($context->message && $this->isCommand($context->message->text)) {
             $segments = explode(' ', $context->message->text, 2);
             $command_name = str_replace('/', '', $segments[0]);
+
+            if ($this->isStartCommand($command_name)) {
+                $reply_keyboard_markup_object = $this->virtual_router->renderReplyKeyboardMarkup();
+                if ($reply_keyboard_markup_object) {
+                    $telegram->attachReplyKeyboardMarkupObject($reply_keyboard_markup_object);
+                }
+                // TODO: need reset virtual_router_state
+            }
+
             $args = $segments[1] ?? '';
 
             $command = $this->command_builder->getCommand($command_name);

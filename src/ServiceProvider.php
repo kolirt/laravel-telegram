@@ -58,7 +58,7 @@ class ServiceProvider extends BaseServiceProvider
     private function loadRoutes(): void
     {
         Route::middleware('api')
-            ->any(config('telegram.routes.path'), [TelegramController::class, 'index']);
+            ->any(config('telegram.webhook_path'), [TelegramController::class, 'index']);
 
         //        dd(config('telegram.routes'));
     }
@@ -66,7 +66,7 @@ class ServiceProvider extends BaseServiceProvider
     private function publishFiles(): void
     {
         $this->publishes([
-            __DIR__ . '/../stubs/routes/telegram.php.stub' => base_path('routes/telegram.php')
+            __DIR__ . '/../stubs/telegram/test.php.stub' => base_path('telegram/test.php')
         ], 'routes');
 
         $this->publishes([

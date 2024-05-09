@@ -10,6 +10,11 @@ trait CommandBuildable
 
     protected CommandBuilder $command_builder;
 
+    private function isStartCommand(string $command_name): bool
+    {
+        return $command_name === 'start';
+    }
+
     private function isCommand(string|null $text): bool
     {
         return $text && preg_match('/^\//', $text);

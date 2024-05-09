@@ -12,10 +12,13 @@ use Kolirt\Telegram\Core\Methods\Updates\DeleteWebhookMethod;
 use Kolirt\Telegram\Core\Methods\Updates\GetUpdatesMethod;
 use Kolirt\Telegram\Core\Methods\Updates\GetWebhookInfoMethod;
 use Kolirt\Telegram\Core\Methods\Updates\SetWebhookMethod;
-use Kolirt\Telegram\Core\Methods\Updates\Updatable;
+use Kolirt\Telegram\Core\Traits\Keyboardable;
+use Kolirt\Telegram\Core\Traits\Updatable;
 
 class Telegram
 {
+    use Keyboardable, Updatable;
+
     use DeleteMyCommandsMethod;
     use GetMyCommandsMethod;
     use SetMyCommandsMethod;
@@ -24,8 +27,6 @@ class Telegram
     use SetWebhookMethod;
     use DeleteWebhookMethod;
     use GetWebhookInfoMethod;
-
-    use Updatable;
 
     use GetMeMethod;
     use SendMessageMethod;

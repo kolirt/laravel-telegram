@@ -5,9 +5,17 @@ use Illuminate\Support\Str;
 use Kolirt\Telegram\Core\Types\BaseType;
 
 if (!function_exists('request_params')) {
-    function request_params(array $params): array
+    function request_params(array $input): array
     {
-        return array_filter($params, fn($param) => $param !== null);
+        foreach ($input as &$value) {
+            if (is_array($value)) {
+                $value = request_params($value);
+            }
+        }
+
+        return array_filter($input, function ($value) {
+            return $value !== null;
+        });
     }
 }
 

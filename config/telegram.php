@@ -28,11 +28,10 @@ return [
         ],
     ],
 
-    'routes' => [
-        'path' => 'api/telegram/bot{token}',
-        'files' => [
-            base_path('routes/telegram.php')
-        ]
+    'webhook_path' => 'api/telegram/bot{token}',
+
+    'config_files' => [
+        base_path('telegram/test.php')
     ],
 
     'metadata_filename' => 'telegram.meta.php',

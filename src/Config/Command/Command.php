@@ -56,7 +56,7 @@ class Command
         return $this;
     }
 
-    public function run(string $args): void
+    public function run(string $input): void
     {
         $class = is_array($this->handler) ? $this->handler[0] : $this->handler;
         $method = is_array($this->handler) ? $this->handler[1] : '__invoke';
@@ -75,9 +75,9 @@ class Command
         if (count($ref_params)) {
             $type = $ref->getParameters()[0]->getType();
             if ($type && class_exists($type->getName())) {
-                $args = new ($type->getName())($args);
+                $input = new ($type->getName())($input);
             }
-            $params[] = $args;
+            $params[] = $input;
         }
 
         call_user_func([$handler, $method], ...$params);

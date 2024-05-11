@@ -1,6 +1,6 @@
 <?php
 
-namespace Kolirt\Telegram\Controllers;
+namespace Kolirt\Telegram;
 
 use Illuminate\Support\Facades\Cache;
 use Kolirt\Telegram\Config\Config;

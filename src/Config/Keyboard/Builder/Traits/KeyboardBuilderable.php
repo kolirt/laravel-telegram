@@ -1,6 +1,8 @@
 <?php
 
-namespace Kolirt\Telegram\Config\Keyboard;
+namespace Kolirt\Telegram\Config\Keyboard\Builder\Traits;
+
+use Kolirt\Telegram\Config\Keyboard\Builder\KeyboardBuilder;
 
 trait KeyboardBuilderable
 {

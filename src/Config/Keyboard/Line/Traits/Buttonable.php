@@ -1,6 +1,6 @@
 <?php
 
-namespace Kolirt\Telegram\Config\Keyboard;
+namespace Kolirt\Telegram\Config\Keyboard\Line\Traits;
 
 use Kolirt\Telegram\Config\Keyboard\Buttons\KeyboardRequestChatButton;
 use Kolirt\Telegram\Config\Keyboard\Buttons\KeyboardRequestContactButton;
@@ -10,7 +10,7 @@ use Kolirt\Telegram\Config\Keyboard\Buttons\KeyboardRequestUsersButton;
 use Kolirt\Telegram\Config\Keyboard\Buttons\KeyboardTextButton;
 use Kolirt\Telegram\Config\Keyboard\Buttons\KeyboardWebAppButton;
 
-class KeyboardLine
+trait Buttonable
 {
 
     /**
@@ -70,9 +70,34 @@ class KeyboardLine
         return $web_app;
     }
 
-    public function render()
+    /**
+     * @return KeyboardTextButton[] | KeyboardRequestUsersButton[] | KeyboardRequestChatButton[] | KeyboardRequestContactButton[] | KeyboardRequestLocationButton[] |KeyboardRequestPollButton[] | KeyboardWebAppButton[]
+     */
+    public function getButtons(): array
     {
-        return array_map(fn($button) => $button->render(), $this->buttons);
+        return $this->buttons;
+    }
+
+    public function getButtonByLabel(string $label): KeyboardRequestPollButton|KeyboardRequestContactButton|KeyboardRequestChatButton|KeyboardRequestUsersButton|KeyboardRequestLocationButton|KeyboardWebAppButton|KeyboardTextButton|null
+    {
+        foreach ($this->getButtons() as $button) {
+            if ($button->getLabel() == $label) {
+                return $button;
+            }
+        }
+
+        return null;
+    }
+
+    public function getButtonByName(string $name): KeyboardRequestPollButton|KeyboardRequestContactButton|KeyboardRequestChatButton|KeyboardRequestUsersButton|KeyboardRequestLocationButton|KeyboardWebAppButton|KeyboardTextButton|null
+    {
+        foreach ($this->getButtons() as $button) {
+            if ($button->getName() == $name) {
+                return $button;
+            }
+        }
+
+        return null;
     }
 
 }

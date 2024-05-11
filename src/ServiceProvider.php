@@ -15,7 +15,6 @@ use Kolirt\Telegram\ConsoleCommands\Initial\PublishConfigConsoleCommand;
 use Kolirt\Telegram\ConsoleCommands\Initial\PublishMigrationsConsoleCommand;
 use Kolirt\Telegram\ConsoleCommands\Initial\PublishRoutesConsoleCommand;
 use Kolirt\Telegram\ConsoleCommands\ServeConsoleCommand;
-use Kolirt\Telegram\Controllers\TelegramController;
 
 class ServiceProvider extends BaseServiceProvider
 {

@@ -1,6 +1,8 @@
 <?php
 
-namespace Kolirt\Telegram\Config\Command;
+namespace Kolirt\Telegram\Config\Command\Traits;
+
+use Kolirt\Telegram\Config\Command\CommandBuilder;
 
 trait CommandBuildable
 {

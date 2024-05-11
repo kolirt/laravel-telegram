@@ -44,4 +44,9 @@ class CommandBuilder
         return $text && preg_match('/^\//', $text);
     }
 
+    public function empty(): bool
+    {
+        return empty($this->commands);
+    }
+
 }

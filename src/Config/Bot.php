@@ -3,8 +3,8 @@
 namespace Kolirt\Telegram\Config;
 
 use Illuminate\Database\Eloquent\Model;
-use Kolirt\Telegram\Config\Command\CommandBuildable;
-use Kolirt\Telegram\Config\Keyboard\KeyboardBuilderable;
+use Kolirt\Telegram\Config\Command\Traits\CommandBuildable;
+use Kolirt\Telegram\Config\Keyboard\Builder\Traits\KeyboardBuilderable;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Updates\UpdateType;
 use Kolirt\Telegram\Models\Chat;
@@ -38,15 +38,21 @@ class Bot
          */
         [$chat_model, $user_model, $bot_chat_pivot_model] = $this->saveData($context);
 
-        /** Commands */
-        if ($context->message && $this->command_builder->isCommand($context->message->text)) {
-            $segments = explode(' ', $context->message->text, 2);
+        $text = $context->message->text ?? '';
+
+        if (
+            /** Commands */
+            $context->message &&
+            !$this->command_builder->empty() &&
+            $this->command_builder->isCommand($text)
+        ) {
+            $segments = explode(' ', $text, 2);
             $command_name = str_replace('/', '', $segments[0]);
 
             if ($this->command_builder->isStartCommand($command_name)) {
                 $reply_keyboard_markup_object = $this->keyboard_builder->renderReplyKeyboardMarkup();
                 $telegram->attachReplyKeyboardMarkupObject($reply_keyboard_markup_object);
-                // TODO: need reset virtual_router_state
+                $bot_chat_pivot_model->update(['virtual_router_state' => '']);
             }
 
             $args = $segments[1] ?? '';
@@ -60,23 +66,25 @@ class Bot
                 $command->setUser($user_model);
                 $command->run($args);
             }
-        }
-
-        /** Virtual routes */
-        /*if ($context->message && $this->hasVirtualRoutes()) {
-            $router = $this->virtual_router;
-//            $router->normalize();
-            dd($router);
-            $router->setPath($bot_chat_pivot_model->virtual_router_state ?? '');
-
-            $text = $context->message->text ?? '';
-            $route = $this->virtual_router->getRoute($text);
-
-            dd(
+        } else if (
+            /** Keyboard */
+            $chat_model &&
+            $user_model &&
+            $bot_chat_pivot_model &&
+            $context->message &&
+            !$this->keyboard_builder->empty()
+        ) {
+            $this->keyboard_builder->setPath($bot_chat_pivot_model->virtual_router_state ?? '');
+            $this->keyboard_builder->run(
+                $this,
+                $telegram,
                 $context,
-                $route
+                $chat_model,
+                $user_model,
+                $bot_chat_pivot_model,
+                $text
             );
-        }*/
+        }
     }
 
     /**

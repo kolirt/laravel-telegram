@@ -17,7 +17,11 @@ trait Buttonable
     public function text(string $name, string|array $handler, string $label): KeyboardTextButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($name, $handler, $label, &$button) {
-            $button = $keyboard_line->text($name, $handler, $label);
+            $button = $keyboard_line->text(
+                name: $name,
+                handler: $handler,
+                label: $label,
+            );
         });
 
         return $button;

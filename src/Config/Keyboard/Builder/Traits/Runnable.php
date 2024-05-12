@@ -45,8 +45,8 @@ trait Runnable
                 $buttons[$button->getName()] = $button;
 
                 if (method_exists($button, 'hasChildren') && $button->hasChildren()) {
-                    foreach ($button->getKeyboard()->normalizeButtons() as $key => $value) {
-                        $buttons[$button->getName() . '.' . $key] = $value;
+                    foreach ($button->getKeyboard()->normalizeButtons() as $value) {
+                        $buttons[$value->getName()] = $value;
                     }
                 }
             }
@@ -79,7 +79,7 @@ trait Runnable
             }
         }
 
-        dump(
+        /*dump(
             $this->path,
             $buttons,
             $matched_buttons,
@@ -87,22 +87,74 @@ trait Runnable
             $matched_children,
             $next_button,
             '==========='
+        );*/
+
+        dump(
+            '$matched_button',
+            $matched_button,
+            '$next_button',
+            $next_button,
+            '========='
         );
 
-        if ($next_button) {
-            if (method_exists($next_button, 'hasChildren') && $next_button->hasChildren()) {
-                $new_virtual_router_state = $this->path !== ''
-                    ? implode('.', [$this->path, $next_button->getName()])
-                    : $next_button->getName();
-                $bot_chat_pivot_model->update(['virtual_router_state' => $new_virtual_router_state]);
-
-                $telegram->attachReplyKeyboardMarkupObject(
-                    $next_button->getKeyboard()->renderReplyKeyboardMarkup()
-                );
+        /** handle back and home buttons */
+        if (!$next_button && $matched_button) {
+            if ($input === $matched_button->getBackButtonLabel()) {
+                $parent_path = $matched_button->getParentPath();
+                if ($parent_path === '') {
+                    $matched_button = null;
+                } else {
+                    $next_button = $buttons[$parent_path];
+                }
+            } else if ($input === $matched_button->getHomeButtonLabel()) {
+                $matched_button = null;
             }
+        }
 
+        /** routing */
+        $new_path = '';
+        if ($next_button && method_exists($next_button, 'hasChildren') && $next_button->hasChildren()) {
+            $new_path = $next_button->getName();
+        } else if ($matched_button) {
+            $new_path = $matched_button->getName();
+        }
+        $bot_chat_pivot_model->update(['virtual_router_state' => $new_path]);
+        $this->setPath($new_path);
+
+        /** attach keyboard */
+        if ($next_button && method_exists($next_button, 'hasChildren') && $next_button->hasChildren()) {
+            $telegram->attachReplyKeyboardMarkupObject(
+                $next_button->getKeyboard()->renderReplyKeyboardMarkup()
+            );
+        } else if ($matched_button) {
+            if ($this->path !== '') {
+                if (method_exists($matched_button, 'hasChildren') && $matched_button->hasChildren()) {
+                    $telegram->attachReplyKeyboardMarkupObject(
+                        $matched_button->getKeyboard()->renderReplyKeyboardMarkup()
+                    );
+                } else {
+                    $parent_path = $matched_button->getParentPath();
+                    if ($parent_path === '') {
+                        $telegram->attachReplyKeyboardMarkupObject(
+                            $this->renderReplyKeyboardMarkup()
+                        );
+                    } else {
+                        $telegram->attachReplyKeyboardMarkupObject(
+                            $buttons[$parent_path]->getKeyboard()->renderReplyKeyboardMarkup()
+                        );
+                    }
+                }
+            }
+        } else {
+            $telegram->attachReplyKeyboardMarkupObject(
+                $this->renderReplyKeyboardMarkup()
+            );
+        }
+
+
+        /** run handler */
+        if ($next_button) {
             dump('$next_button', $next_button);
-
             $next_button->run(
                 $bot,
                 $telegram,
@@ -112,16 +164,8 @@ trait Runnable
                 $bot_chat_pivot_model,
                 $input
             );
-
         } else if ($matched_button) {
-            if ($this->path !== '' && method_exists($matched_button, 'hasChildren') && $matched_button->hasChildren()) {
-                $telegram->attachReplyKeyboardMarkupObject(
-                    $matched_button->getKeyboard()->renderReplyKeyboardMarkup()
-                );
-            }
-
             dump('$matched_button', $matched_button);
-
             $matched_button->run(
                 $bot,
                 $telegram,
@@ -133,11 +177,6 @@ trait Runnable
             );
         } else {
             dump('else');
-
-            /*$telegram->attachReplyKeyboardMarkupObject(
-                $this->renderReplyKeyboardMarkup()
-            );
-
             $this->runDefault(
                 $bot,
                 $telegram,
@@ -146,94 +185,48 @@ trait Runnable
                 $user_model,
                 $bot_chat_pivot_model,
                 $input
-            );*/
-        }
-
-        die;
-// dd($this->path, $input, $matched_button, $matched_children, $next_button);
-
-
-        $button_path = $this->prepareState();
-        if (count($button_path)) {
-
-        } else {
-            $button = null;
-            foreach ($this->lines as $line) {
-                $button = $line->getButtonByLabel($input);
-                if ($button) break;
-            }
-
-            if ($button) {
-                if (method_exists($button, 'hasChildren') && $button->hasChildren()) {
-                    $new_virtual_router_state = $this->path !== ''
-                        ? implode('.', [$this->path, $button->getName()])
-                        : $button->getName();
-                    $bot_chat_pivot_model->update(['virtual_router_state' => $new_virtual_router_state]);
-
-                    $telegram->attachReplyKeyboardMarkupObject(
-                        $button->getKeyboard()->renderReplyKeyboardMarkup()
-                    );
-                }
-
-                $button->run(
-                    $bot,
-                    $telegram,
-                    $context,
-                    $chat_model,
-                    $user_model,
-                    $bot_chat_pivot_model,
-                    $input
-                );
-            }
-        }
-
-        dd($this, $input, $button_path);
-
-        if ($last) {
-            dd($last);
-
-//            $telegram->attachReplyKeyboardMarkupObject()
-
-            $last->run(
-                $bot,
-                $telegram,
-                $context,
-                $chat_model,
-                $user_model,
-                $bot_chat_pivot_model,
-                $input
             );
         }
-        dd($parent, $last);
 
 
-        // dump('last_path: ' . $this->path);
+        /*if ($next_button) {
+            if (method_exists($next_button, 'hasChildren') && $next_button->hasChildren()) {
+                $new_path = $next_button->getName();
+                $bot_chat_pivot_model->update(['virtual_router_state' => $new_path]);
+                $this->setPath($new_path);
 
-        // dump($this->getButton());
-
-        // $current_lines = $this->getLines($this->path);
-
-
-        // dd($this, $input, $current_lines);
-
-
-        // dd($this, $virtual_router_state, $input, $current_lines);
-
-        /*$button = $this->getButton($input);
-        if ($button) {
-            if (method_exists($button, 'hasChildren') && $button->hasChildren()) {
-                $new_virtual_router_state = implode('/', [$virtual_router_state, $button->getName()]);
-                $bot_chat_pivot_model->update(['virtual_router_state' => $new_virtual_router_state]);
+                $telegram->attachReplyKeyboardMarkupObject(
+                    $next_button->getKeyboard()->renderReplyKeyboardMarkup()
+                );
+            } else {
+                $telegram->attachReplyKeyboardMarkupObject(
+                    $this->renderReplyKeyboardMarkup()
+                );
+            }
+        } else if ($matched_button) {
+            if ($this->path !== '' && method_exists($matched_button, 'hasChildren') && $matched_button->hasChildren()) {
+                // dump('add back');
+                $telegram->attachReplyKeyboardMarkupObject(
+                    $matched_button->getKeyboard()->renderReplyKeyboardMarkup()
+                );
+            } else {
+                $telegram->attachReplyKeyboardMarkupObject(
+                    $this->renderReplyKeyboardMarkup()
+                );
             }
 
-            $button->run(
-                $bot,
-                $telegram,
-                $context,
-                $chat_model,
-                $user_model,
-                $bot_chat_pivot_model,
-                $input);
+            dump('$matched_button', $matched_button);
+        } else {
+            $new_path = '';
+            $bot_chat_pivot_model->update(['virtual_router_state' => $new_path]);
+            $this->setPath($new_path);
+
+            dump('else');
+            // dump($this->renderReplyKeyboardMarkup());
+
+            $telegram->attachReplyKeyboardMarkupObject(
+                $this->renderReplyKeyboardMarkup()
+            );
         }*/
     }
 

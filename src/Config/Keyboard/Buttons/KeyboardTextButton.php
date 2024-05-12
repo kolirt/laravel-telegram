@@ -4,6 +4,7 @@ namespace Kolirt\Telegram\Config\Keyboard\Buttons;
 
 use Kolirt\Telegram\Config\Bot;
 use Kolirt\Telegram\Config\Keyboard\Buttons\Traits\Childrenable;
+use Kolirt\Telegram\Config\Keyboard\Navigation\Traits\Navigable;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Keyboard\Buttons\KeyboardButtonType;
 use Kolirt\Telegram\Core\Types\Updates\UpdateType;
@@ -17,12 +18,29 @@ class KeyboardTextButton extends BaseKeyboardButton
 
     use Childrenable;
 
+    use Navigable {
+        Navigable::__construct as private __navigable_construct;
+    }
+
     public function __construct(
         protected string       $name,
         protected string|array $handler,
-        protected string       $label
+        protected string       $label,
+
+        bool                   $lined_back_and_home_buttons = false,
+        bool                   $reverse_back_and_home_buttons = false,
+        string                 $back_button_label = 'default',
+        bool                   $home_button_enabled = false,
+        string                 $home_button_label = 'default',
     )
     {
+        $this->__navigable_construct(
+            lined_back_and_home_buttons: $lined_back_and_home_buttons,
+            reverse_back_and_home_buttons: $reverse_back_and_home_buttons,
+            back_button_label: $back_button_label,
+            home_button_enabled: $home_button_enabled,
+            home_button_label: $home_button_label,
+        );
     }
 
     public function getName(): string

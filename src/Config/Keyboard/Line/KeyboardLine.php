@@ -2,13 +2,36 @@
 
 namespace Kolirt\Telegram\Config\Keyboard\Line;
 
+use Kolirt\Telegram\Config\Keyboard\Builder\Traits\Pathable;
 use Kolirt\Telegram\Config\Keyboard\Line\Traits\Buttonable;
+use Kolirt\Telegram\Config\Keyboard\Navigation\Traits\Navigable;
 use Kolirt\Telegram\Core\Types\Keyboard\Buttons\KeyboardButtonType;
 
 class KeyboardLine
 {
 
-    use Buttonable;
+    use Navigable {
+        Navigable::navigation as private;
+        Navigable::__construct as private __navigable_construct;
+    }
+    use Buttonable, Pathable;
+
+    public function __construct(
+        bool   $lined_back_and_home_buttons = false,
+        bool   $reverse_back_and_home_buttons = false,
+        string $back_button_label = '🔙 Back',
+        bool   $home_button_enabled = false,
+        string $home_button_label = '🏘 Home',
+    )
+    {
+        $this->__navigable_construct(
+            lined_back_and_home_buttons: $lined_back_and_home_buttons,
+            reverse_back_and_home_buttons: $reverse_back_and_home_buttons,
+            back_button_label: $back_button_label,
+            home_button_enabled: $home_button_enabled,
+            home_button_label: $home_button_label,
+        );
+    }
 
     /**
      * @return KeyboardButtonType[]

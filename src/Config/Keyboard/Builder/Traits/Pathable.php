@@ -13,4 +13,10 @@ trait Pathable
         return $this;
     }
 
+    public function addToPath(string $path): self
+    {
+        $this->path = $this->path !== '' ? $this->path . '.' . $path : $path;
+        return $this;
+    }
+
 }

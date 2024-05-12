@@ -13,6 +13,8 @@ use Kolirt\Telegram\Models\User;
 abstract class BaseKeyboardButton
 {
 
+    protected string $parent_path;
+
     abstract public function getLabel(): string;
 
     abstract public function render(): KeyboardButtonType;
@@ -26,5 +28,16 @@ abstract class BaseKeyboardButton
         BotChatPivot $bot_chat_pivot_model,
         string       $input
     );
+
+    public function setParentPath(string $path): self
+    {
+        $this->parent_path = $path;
+        return $this;
+    }
+
+    public function getParentPath(): string
+    {
+        return $this->parent_path;
+    }
 
 }

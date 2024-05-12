@@ -23,7 +23,20 @@ trait Buttonable
 
     public function text(string $name, string|array $handler, string $label): KeyboardTextButton
     {
-        $text = new KeyboardTextButton($name, $handler, $label);
+        $name = $this->path === '' ? $name : $this->path . '.' . $name;
+
+        $text = new KeyboardTextButton(
+            name: $name,
+            handler: $handler,
+            label: $label,
+
+            lined_back_and_home_buttons: $this->navigation->lined_back_and_home_buttons,
+            reverse_back_and_home_buttons: $this->navigation->reverse_back_and_home_buttons,
+            back_button_label: $this->navigation->back_button_label,
+            home_button_enabled: $this->navigation->home_button_enabled,
+            home_button_label: $this->navigation->home_button_label,
+        );
+        $text->setParentPath($this->path);
         $this->buttons[] = $text;
         return $text;
     }

@@ -38,9 +38,6 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/telegram.php', 'telegram');
 
-        // TODO: need remove
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-
         $this->loadRoutes();
         $this->publishFiles();
     }
@@ -58,8 +55,6 @@ class ServiceProvider extends BaseServiceProvider
     {
         Route::middleware('api')
             ->any(config('telegram.webhook_path'), [TelegramController::class, 'index']);
-
-        //        dd(config('telegram.routes'));
     }
 
     private function publishFiles(): void

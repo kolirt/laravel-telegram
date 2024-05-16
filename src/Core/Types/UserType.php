@@ -15,7 +15,7 @@ class UserType extends BaseType
         public string|null $last_name = null,
         public string|null $username = null,
         public string|null $language_code = null,
-        public bool|null   $is_premium = null,
+        public true|null   $is_premium = null,
         public true|null   $added_to_attachment_menu = null,
         public bool|null   $can_join_groups = null,
         public bool|null   $can_read_all_group_messages = null,

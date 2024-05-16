@@ -63,7 +63,7 @@ trait Runnable
         User         $user_model,
         BotChatPivot $bot_chat_pivot_model,
         string       $input
-    )
+    ): void
     {
         $buttons = $this->normalizeButtons();
         $matched_buttons = $this->path === ''
@@ -151,7 +151,6 @@ trait Runnable
             );
         }
 
-
         /** run handler */
         if ($next_button) {
             dump('$next_button', $next_button);
@@ -167,13 +166,14 @@ trait Runnable
         } else if ($matched_button) {
             dump('$matched_button', $matched_button);
             $matched_button->run(
-                $bot,
-                $telegram,
-                $context,
-                $chat_model,
-                $user_model,
-                $bot_chat_pivot_model,
-                $input
+                bot: $bot,
+                telegram: $telegram,
+                context: $context,
+                chat_model: $chat_model,
+                user_model: $user_model,
+                bot_chat_pivot_model: $bot_chat_pivot_model,
+                input: $input,
+                fallback: method_exists($matched_button, 'hasFallback') && $matched_button->hasFallback()
             );
         } else {
             dump('else');
@@ -187,47 +187,6 @@ trait Runnable
                 $input
             );
         }
-
-
-        /*if ($next_button) {
-            if (method_exists($next_button, 'hasChildren') && $next_button->hasChildren()) {
-                $new_path = $next_button->getName();
-                $bot_chat_pivot_model->update(['virtual_router_state' => $new_path]);
-                $this->setPath($new_path);
-
-                $telegram->attachReplyKeyboardMarkupObject(
-                    $next_button->getKeyboard()->renderReplyKeyboardMarkup()
-                );
-            } else {
-                $telegram->attachReplyKeyboardMarkupObject(
-                    $this->renderReplyKeyboardMarkup()
-                );
-            }
-        } else if ($matched_button) {
-            if ($this->path !== '' && method_exists($matched_button, 'hasChildren') && $matched_button->hasChildren()) {
-                // dump('add back');
-                $telegram->attachReplyKeyboardMarkupObject(
-                    $matched_button->getKeyboard()->renderReplyKeyboardMarkup()
-                );
-            } else {
-                $telegram->attachReplyKeyboardMarkupObject(
-                    $this->renderReplyKeyboardMarkup()
-                );
-            }
-
-            dump('$matched_button', $matched_button);
-        } else {
-            $new_path = '';
-            $bot_chat_pivot_model->update(['virtual_router_state' => $new_path]);
-            $this->setPath($new_path);
-
-            dump('else');
-            // dump($this->renderReplyKeyboardMarkup());
-
-            $telegram->attachReplyKeyboardMarkupObject(
-                $this->renderReplyKeyboardMarkup()
-            );
-        }*/
     }
 
 }

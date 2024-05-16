@@ -7,7 +7,7 @@ use Kolirt\Telegram\Config\Keyboard\Builder\Traits\Buttonable;
 use Kolirt\Telegram\Config\Keyboard\Builder\Traits\Pathable;
 use Kolirt\Telegram\Config\Keyboard\Builder\Traits\Runnable;
 use Kolirt\Telegram\Config\Keyboard\Line\KeyboardLine;
-use Kolirt\Telegram\Config\Keyboard\Navigation\Traits\Navigable;
+use Kolirt\Telegram\Config\Keyboard\Configuration\Traits\Configurable;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Keyboard\Buttons\KeyboardButtonType;
 use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardMarkupType;
@@ -21,8 +21,8 @@ use ReflectionMethod;
 class KeyboardBuilder
 {
 
-    use Navigable {
-        Navigable::__construct as private __navigable_construct;
+    use Configurable {
+        Configurable::__construct as private __configurable_construct;
     }
     use Buttonable;
     use Pathable;
@@ -41,7 +41,7 @@ class KeyboardBuilder
         string $home_button_label = '🏘 Home',
     )
     {
-        $this->__navigable_construct(
+        $this->__configurable_construct(
             lined_back_and_home_buttons: $lined_back_and_home_buttons,
             reverse_back_and_home_buttons: $reverse_back_and_home_buttons,
             back_button_label: $back_button_label,
@@ -53,11 +53,11 @@ class KeyboardBuilder
     public function line($fn): void
     {
         $line = new KeyboardLine(
-            lined_back_and_home_buttons: $this->navigation->lined_back_and_home_buttons,
-            reverse_back_and_home_buttons: $this->navigation->reverse_back_and_home_buttons,
-            back_button_label: $this->navigation->back_button_label,
-            home_button_enabled: $this->navigation->home_button_enabled,
-            home_button_label: $this->navigation->home_button_label,
+            lined_back_and_home_buttons: $this->configuration->lined_back_and_home_buttons,
+            reverse_back_and_home_buttons: $this->configuration->reverse_back_and_home_buttons,
+            back_button_label: $this->configuration->back_button_label,
+            home_button_enabled: $this->configuration->home_button_enabled,
+            home_button_label: $this->configuration->home_button_label,
         );
         $line->addToPath($this->path);
         $fn($line);
@@ -117,35 +117,35 @@ class KeyboardBuilder
             dump($this);
 
             if ($this->path !== '') {
-                if ($this->navigation->lined_back_and_home_buttons && $this->navigation->home_button_enabled) {
+                if ($this->configuration->lined_back_and_home_buttons && $this->configuration->home_button_enabled) {
                     $buttons = [
                         new KeyboardButtonType(
-                            text: $this->navigation->back_button_label
+                            text: $this->configuration->back_button_label
                         ),
                         new KeyboardButtonType(
-                            text: $this->navigation->home_button_label
+                            text: $this->configuration->home_button_label
                         )
                     ];
 
-                    $keyboard[] = $this->navigation->reverse_back_and_home_buttons ? array_reverse($buttons) : $buttons;
+                    $keyboard[] = $this->configuration->reverse_back_and_home_buttons ? array_reverse($buttons) : $buttons;
                 } else {
                     $buttons = [
                         [
                             new KeyboardButtonType(
-                                text: $this->navigation->back_button_label
+                                text: $this->configuration->back_button_label
                             ),
                         ]
                     ];
 
-                    if ($this->navigation->home_button_enabled) {
+                    if ($this->configuration->home_button_enabled) {
                         $buttons[] = [
                             new KeyboardButtonType(
-                                text: $this->navigation->home_button_label
+                                text: $this->configuration->home_button_label
                             )
                         ];
                     }
 
-                    $buttons = $this->navigation->reverse_back_and_home_buttons ? array_reverse($buttons) : $buttons;
+                    $buttons = $this->configuration->reverse_back_and_home_buttons ? array_reverse($buttons) : $buttons;
 
                     array_push($keyboard, ...$buttons);
                 }

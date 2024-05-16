@@ -112,6 +112,7 @@ class Bot
                         ['id' => $message->from->id],
                         [
                             ...(array)$message->from,
+                            'is_premium' => $message->from->is_premium !== null,
                             'chat_id' => $chat_model->id
                         ]
                     );

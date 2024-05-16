@@ -14,13 +14,19 @@ use Kolirt\Telegram\Config\Keyboard\Line\KeyboardLine;
 trait Buttonable
 {
 
-    public function text(string $name, string|array $handler, string $label): KeyboardTextButton
+    public function text(
+        string       $name,
+        string|array $handler,
+        string       $label,
+        string|array $fallback_handler = null
+    ): KeyboardTextButton
     {
-        $this->line(function (KeyboardLine $keyboard_line) use ($name, $handler, $label, &$button) {
+        $this->line(function (KeyboardLine $keyboard_line) use ($name, $handler, $label, $fallback_handler, &$button) {
             $button = $keyboard_line->text(
                 name: $name,
                 handler: $handler,
                 label: $label,
+                fallback_handler: $fallback_handler
             );
         });
 
@@ -80,32 +86,5 @@ trait Buttonable
 
         return $button;
     }
-
-    /*protected function getButtonByPath(string $path)
-    {
-        $explode = explode('/', preg_replace('/^\//', '', $path));
-
-        $button = null;
-        foreach ($explode as $key => $value) {
-            $button = $this->getButtonByName($value);
-            if ($button) {
-                break;
-            }
-        }
-
-        dd($explode, $button);
-    }*/
-
-    /*protected function getButtonByName(string $text)
-    {
-        foreach ($this->getLines() as $line) {
-            $button = $line->getButtonByName($text);
-            if ($button) {
-                return $button;
-            }
-        }
-
-        return null;
-    }*/
 
 }

@@ -22,6 +22,10 @@ class Bot extends Model
         'token' => 'encrypted'
     ];
 
+    protected $hidden = [
+        'token'
+    ];
+
     public function __construct(array $attributes = [])
     {
         $this->table = config('telegram.models.bot.table_name');

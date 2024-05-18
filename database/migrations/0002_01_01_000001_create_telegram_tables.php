@@ -35,7 +35,7 @@ return new class extends Migration {
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('username')->nullable();
-            $table->boolean('is_premium');
+            $table->boolean('is_premium')->nullable();
 
             $table->bigInteger('chat_id');
             $table->foreign('chat_id')

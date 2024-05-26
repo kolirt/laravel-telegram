@@ -35,7 +35,9 @@ class Chat extends Model
             config('telegram.models.bot_chat_pivot.table_name'),
             'chat_id',
             'bot_id'
-        )->using(BotChatPivot::class);
+        )
+            ->withPivot('last_activity_at', 'virtual_router_state')
+            ->using(BotChatPivot::class);
     }
 
     public function user(): \Illuminate\Database\Eloquent\Relations\HasOne

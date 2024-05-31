@@ -2,13 +2,10 @@
 
 namespace Kolirt\Telegram\Models\Pivots;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class BotChatPivot extends Pivot
 {
-
-    use HasFactory;
 
     protected $foreignKey = 'bot_id';
     protected $relatedKey = 'chat_id';

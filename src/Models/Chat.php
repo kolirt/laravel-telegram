@@ -2,6 +2,7 @@
 
 namespace Kolirt\Telegram\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kolirt\Telegram\Core\Enums\ChatTypeEnum;
 use Kolirt\Telegram\Models\Pivots\BotChatPivot;
@@ -9,7 +10,7 @@ use Kolirt\MasterModel\MasterModel;
 
 class Chat extends Model
 {
-    use MasterModel;
+    use MasterModel, HasFactory;
 
     public $incrementing = false;
 

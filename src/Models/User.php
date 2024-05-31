@@ -2,12 +2,13 @@
 
 namespace Kolirt\Telegram\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Kolirt\MasterModel\MasterModel;
 
 class User extends Authenticatable
 {
-    use MasterModel;
+    use MasterModel, HasFactory;
 
     public $incrementing = false;
 

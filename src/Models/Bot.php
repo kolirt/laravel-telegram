@@ -2,6 +2,7 @@
 
 namespace Kolirt\Telegram\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kolirt\MasterModel\MasterModel;
 use Kolirt\Telegram\Core\Methods\Updates\GetUpdatesMethod;
@@ -9,7 +10,7 @@ use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 
 class Bot extends Model
 {
-    use MasterModel;
+    use MasterModel, HasFactory;
 
     use GetUpdatesMethod;
 

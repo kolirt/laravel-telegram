@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class BotChatPivot extends Pivot
 {
 
+    protected $primaryKey = 'chat_id';
+
     protected $foreignKey = 'bot_id';
     protected $relatedKey = 'chat_id';
 

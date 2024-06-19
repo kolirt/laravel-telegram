@@ -2,9 +2,7 @@
 
 namespace Kolirt\Telegram\Core\Types\Keyboard\Buttons;
 
-use Kolirt\Telegram\Core\Types\BaseType;
-
-class KeyboardButtonType extends BaseType
+class KeyboardButtonType extends BaseButtonType
 {
     public function __construct(
         public string    $text,
@@ -21,13 +19,13 @@ class KeyboardButtonType extends BaseType
     static function from(array $data): self
     {
         return new self(
-            $data['text'],
-            // $data['request_users'] ?? null,
-            // $data['request_chat'] ?? null,
-            $data['request_contact'] ?? null,
-            $data['request_location'] ?? null,
-        // $data['request_poll'] ?? null,
-        // $data['web_app'] ?? null,
+            text: $data['text'],
+            // request_users: $data['request_users'] ?? null,
+            // request_chat: $data['request_chat'] ?? null,
+            request_contact: $data['request_contact'] ?? null,
+            request_location: $data['request_location'] ?? null,
+        // request_poll: $data['request_poll'] ?? null,
+        // web_app: $data['web_app'] ?? null,
         );
     }
 }

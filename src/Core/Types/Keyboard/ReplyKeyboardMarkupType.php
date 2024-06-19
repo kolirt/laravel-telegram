@@ -37,7 +37,7 @@ class ReplyKeyboardMarkupType extends BaseReplyMarkupType
 
         $data['keyboard'] = array_map(function ($line) {
             return array_map(function ($button) {
-                return (array)$button;
+                return $button->render();
             }, $line);
         }, $data['keyboard']);
 

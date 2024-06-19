@@ -47,14 +47,13 @@ class TelegramController
         abort(404);
     }
 
-    private function getUpdate(Request $request,Telegram $telegram): UpdateType|null
+    private function getUpdate(Request $request, Telegram $telegram): UpdateType|null
     {
-        info($request->all());
-
-        $updates = $telegram->getUpdates(offset: -1, limit: 1);
-
-        if (count($updates)) {
-            return $updates[0];
+        if ($request->has('update_id')) {
+            return UpdateType::from($request->all());
+        } else {
+            $updates = $telegram->getUpdates(offset: -1, limit: 1);
+            return count($updates) ? $updates[0] : null;
         }
     }
 

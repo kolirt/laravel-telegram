@@ -47,7 +47,7 @@ class TelegramController
         abort(404);
     }
 
-    private function getUpdate(Request $request,Telegram $telegram): UpdateType
+    private function getUpdate(Request $request,Telegram $telegram): UpdateType|null
     {
         info($request->all());
 

@@ -50,10 +50,8 @@ class Bot
             $command_name = str_replace('/', '', $segments[0]);
 
             if ($this->command_builder->isStartCommand($command_name)) {
-                if (isset($this->keyboard_builder)) {
-                    $reply_keyboard_markup_object = $this->keyboard_builder->renderReplyKeyboardMarkup();
-                    $telegram->attachReplyKeyboardMarkupObject($reply_keyboard_markup_object);
-                }
+                $reply_keyboard_markup_object = $this->renderReplyKeyboardMarkup();
+                $telegram->attachReplyKeyboardMarkupObject($reply_keyboard_markup_object);
                 $bot_chat_pivot_model->update(['virtual_router_state' => '']);
             }
 

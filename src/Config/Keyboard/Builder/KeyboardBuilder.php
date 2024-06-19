@@ -6,8 +6,8 @@ use Kolirt\Telegram\Config\Bot;
 use Kolirt\Telegram\Config\Keyboard\Builder\Traits\Buttonable;
 use Kolirt\Telegram\Config\Keyboard\Builder\Traits\Pathable;
 use Kolirt\Telegram\Config\Keyboard\Builder\Traits\Runnable;
-use Kolirt\Telegram\Config\Keyboard\Line\KeyboardLine;
 use Kolirt\Telegram\Config\Keyboard\Configuration\Traits\Configurable;
+use Kolirt\Telegram\Config\Keyboard\Line\KeyboardLine;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Keyboard\Buttons\KeyboardButtonType;
 use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardMarkupType;
@@ -114,7 +114,7 @@ class KeyboardBuilder
         if (count($this->lines)) {
             $keyboard = array_map(fn(KeyboardLine $line) => $line->render(), $this->lines);
 
-            dump($this);
+            // dump($this);
 
             if ($this->path !== '') {
                 if ($this->configuration->lined_back_and_home_buttons && $this->configuration->home_button_enabled) {

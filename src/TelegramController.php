@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Cache;
 use Kolirt\Telegram\Config\Config;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Updates\UpdateType;
-use Kolirt\Telegram\Facades\Config as ConfigFacade;
 
 class TelegramController
 {
@@ -21,13 +20,12 @@ class TelegramController
             });
         });
 
-        info($bot_model);
-
         if ($bot_model) {
             /**
              * @var Config $config
              */
-            $config = ConfigFacade::getFacadeRoot();
+            // $config = ConfigFacade::getFacadeRoot();
+            $config = new Config();
             $config->load();
 
             $bot = $config->getBot($bot_model->name);

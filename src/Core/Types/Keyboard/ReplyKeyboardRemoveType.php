@@ -2,8 +2,6 @@
 
 namespace Kolirt\Telegram\Core\Types\Keyboard;
 
-use Kolirt\Telegram\Core\Types\BaseType;
-
 class ReplyKeyboardRemoveType extends BaseReplyMarkupType
 {
 

@@ -11,8 +11,8 @@ class BotCommandType extends BaseType
 {
 
     public function __construct(
-       public string $command,
-       public string $description
+        public string $command,
+        public string $description
     )
     {
     }

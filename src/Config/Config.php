@@ -2,8 +2,6 @@
 
 namespace Kolirt\Telegram\Config;
 
-use Illuminate\Support\Facades\Cache;
-
 class Config
 {
 

@@ -3,8 +3,8 @@
 namespace Kolirt\Telegram\Config\Keyboard\Line;
 
 use Kolirt\Telegram\Config\Keyboard\Builder\Traits\Pathable;
-use Kolirt\Telegram\Config\Keyboard\Line\Traits\Buttonable;
 use Kolirt\Telegram\Config\Keyboard\Configuration\Traits\Configurable;
+use Kolirt\Telegram\Config\Keyboard\Line\Traits\Buttonable;
 use Kolirt\Telegram\Core\Types\Keyboard\Buttons\KeyboardButtonType;
 
 class KeyboardLine

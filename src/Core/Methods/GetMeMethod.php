@@ -23,8 +23,8 @@ trait GetMeMethod
      */
     public function getMe(): UserType
     {
-         /**
-         * @var PendingRequest $this->client
+        /**
+         * @var PendingRequest $this ->client
          */
         $response = $this->client->get('getMe')->getBody();
 

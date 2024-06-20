@@ -1,8 +1,8 @@
 <?php
 
-use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 use Kolirt\Telegram\Models\Bot;
 use Kolirt\Telegram\Models\Chat;
+use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 use Kolirt\Telegram\Models\User;
 
 return [

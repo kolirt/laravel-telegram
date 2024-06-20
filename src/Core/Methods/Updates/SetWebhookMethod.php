@@ -43,7 +43,7 @@ trait SetWebhookMethod
         array       $allowed_updates = null,
         bool|null   $drop_pending_updates = null,
         string|null $secret_token = null,
-    ):bool
+    ): bool
     {
         /**
          * @var PendingRequest $this ->client

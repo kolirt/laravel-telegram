@@ -21,6 +21,8 @@ class TelegramController
             });
         });
 
+        info($bot_model);
+
         if ($bot_model) {
             /**
              * @var Config $config

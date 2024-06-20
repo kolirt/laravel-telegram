@@ -20,6 +20,8 @@ class TelegramController
             });
         });
 
+        info($bot_model);
+
         if ($bot_model) {
             /**
              * @var Config $config
@@ -28,7 +30,12 @@ class TelegramController
             $config = new Config();
             $config->load();
 
+            info($bot_model->name);
+
             $bot = $config->getBot($bot_model->name);
+
+            info($bot ? 1 : 0);
+
             if ($bot) {
                 $telegram = new Telegram($bot_model->token);
                 $update = $this->getUpdate($request, $telegram);

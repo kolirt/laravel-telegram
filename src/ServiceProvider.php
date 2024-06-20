@@ -2,6 +2,7 @@
 
 namespace Kolirt\Telegram;
 
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Kolirt\Telegram\Config\Config;
@@ -46,8 +47,10 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->commands($this->commands);
 
-        $this->app->bind('telegram-config', function () {
-            return new Config;
+        $this->app->singleton('telegram-config', function (Application $app) {
+            $config = new Config;
+            $config->load();
+            return $config;
         });
     }
 

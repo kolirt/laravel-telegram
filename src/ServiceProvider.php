@@ -46,9 +46,9 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->commands($this->commands);
 
-        $this->app->bind('telegram-config', function () {
+        /*$this->app->bind('telegram-config', function () {
             return new Config;
-        });
+        });*/
     }
 
     private function loadRoutes(): void

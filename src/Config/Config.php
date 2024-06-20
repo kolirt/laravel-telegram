@@ -2,6 +2,8 @@
 
 namespace Kolirt\Telegram\Config;
 
+use Illuminate\Support\Facades\Cache;
+
 class Config
 {
 
@@ -29,7 +31,7 @@ class Config
     {
         $config = $this;
         foreach (config('telegram.config_files') as $file) {
-            require_once $file;
+            require $file;
         }
     }
 

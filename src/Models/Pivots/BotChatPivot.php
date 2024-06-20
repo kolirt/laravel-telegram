@@ -31,4 +31,10 @@ class BotChatPivot extends Pivot
         parent::__construct($attributes);
     }
 
+    protected function setKeysForSaveQuery($query): \Illuminate\Database\Eloquent\Builder
+    {
+        $query->where('bot_id', $this->bot_id);
+        return parent::setKeysForSaveQuery($query);
+    }
+
 }

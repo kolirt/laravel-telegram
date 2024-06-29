@@ -24,8 +24,8 @@ class User extends Authenticatable
     protected $casts = [
         'id' => 'integer',
         'is_bot' => 'boolean',
-        'chat_id' => 'integer',
-        'is_premium' => 'boolean'
+        'is_premium' => 'boolean',
+        'chat_id' => 'integer'
     ];
 
     public function __construct(array $attributes = [])

@@ -28,7 +28,7 @@ trait SendMessageMethod
      * @param ParseModeEnum|null $parse_mode
      * @param bool|null $disable_notification
      * @param bool|null $protect_content
-     * @param ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
+     * @param InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
      *
      * @return MessageType
      *

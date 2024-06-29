@@ -11,7 +11,7 @@ class WebAppInfoType extends BaseType
     {
     }
 
-    static function from(array $data): BaseType
+    static function from(array $data): self
     {
         return new self(
             url: $data['url']

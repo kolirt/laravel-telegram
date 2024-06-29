@@ -3,6 +3,7 @@
 namespace Kolirt\Telegram\Core;
 
 use Illuminate\Support\Facades\Http;
+use Kolirt\Telegram\Core\Methods\Chat\GetChatMemberMethod;
 use Kolirt\Telegram\Core\Methods\Commands\DeleteMyCommandsMethod;
 use Kolirt\Telegram\Core\Methods\Commands\GetMyCommandsMethod;
 use Kolirt\Telegram\Core\Methods\Commands\SetMyCommandsMethod;
@@ -20,18 +21,28 @@ class Telegram
 {
     use Keyboardable, Updatable;
 
+    /** Chat methods */
+    use GetChatMemberMethod;
+
+    /** Commands methods */
     use DeleteMyCommandsMethod;
     use GetMyCommandsMethod;
     use SetMyCommandsMethod;
 
+    /** Messages methods */
+    use SendMessageMethod;
+
+    /** Photo methods */
+    use SendPhotoMethod;
+
+    /** Updates methods */
     use GetUpdatesMethod;
     use SetWebhookMethod;
     use DeleteWebhookMethod;
     use GetWebhookInfoMethod;
 
     use GetMeMethod;
-    use SendMessageMethod;
-    use SendPhotoMethod;
+
 
     private readonly string $endpoint;
 

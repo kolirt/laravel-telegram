@@ -16,6 +16,7 @@
     - [Available methods](#available-methods)
 - [FAQ](#faq)
 - [License](#license)
+- [Other packages](#other-packages)
 
 <a href="https://www.buymeacoffee.com/kolirt" target="_blank">
   <img src="https://cdn.buymeacoffee.com/buttons/v2/arial-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" >
@@ -162,13 +163,13 @@ $config->bot('test')
 - [ ] ChatInviteLink
 - [ ] ChatAdministratorRights
 - [ ] ChatMemberUpdated
-- [ ] ChatMember
-- [ ] ChatMemberOwner
-- [ ] ChatMemberAdministrator
-- [ ] ChatMemberMember
-- [ ] ChatMemberRestricted
-- [ ] ChatMemberLeft
-- [ ] ChatMemberBanned
+- [X] [ChatMember](https://core.telegram.org/bots/api#chatmember) - [[source code](src/Core/Types/Chat/Member/ChatMemberType.php)]
+- [X] [ChatMemberOwner](https://core.telegram.org/bots/api#chatmemberowner) - [[source code](src/Core/Types/Chat/Member/ChatMemberOwnerType.php)]
+- [X] [ChatMemberAdministrator](https://core.telegram.org/bots/api#chatmemberadministrator) - [[source code](src/Core/Types/Chat/Member/ChatMemberAdministratorType.php)]
+- [X] [ChatMemberMember](https://core.telegram.org/bots/api#chatmembermember) - [[source code](src/Core/Types/Chat/Member/ChatMemberMemberType.php)]
+- [X] [ChatMemberRestricted](https://core.telegram.org/bots/api#chatmemberrestricted) - [[source code](src/Core/Types/Chat/Member/ChatMemberRestrictedType.php)]
+- [X] [ChatMemberLeft](https://core.telegram.org/bots/api#chatmemberleft) - [[source code](src/Core/Types/Chat/Member/ChatMemberLeftType.php)]
+- [X] [ChatMemberBanned](https://core.telegram.org/bots/api#chatmemberbanned) - [[source code](src/Core/Types/Chat/Member/ChatMemberBannedType.php)]
 - [ ] ChatJoinRequest
 - [ ] ChatPermissions
 - [ ] Birthdate
@@ -235,7 +236,7 @@ $config->bot('test')
 - [ ] forwardMessages
 - [ ] copyMessage
 - [ ] copyMessages
-- [ ] [sendPhoto](https://core.telegram.org/bots/api#sendphoto) [[source code](src/Core/Methods/Photo/SendPhotoMethod.php)]
+- [X] [sendPhoto](https://core.telegram.org/bots/api#sendphoto) [[source code](src/Core/Methods/Photo/SendPhotoMethod.php)]
 - [ ] sendAudio
 - [ ] sendDocument
 - [ ] sendVideo
@@ -277,7 +278,7 @@ $config->bot('test')
 - [ ] getChat
 - [ ] getChatAdministrators
 - [ ] getChatMemberCount
-- [ ] getChatMember
+- [X] [getChatMember](https://core.telegram.org/bots/api#getchatmember) - [[source code](src/Core/Methods/Chat/GetChatMemberMethod.php)]
 - [ ] setChatStickerSet
 - [ ] deleteChatStickerSet
 - [ ] getForumTopicIconStickers
@@ -318,3 +319,7 @@ Check closed [issues](#) to get answers for most asked questions
 # License
 
 [MIT](LICENSE.txt)
+
+# Other packages
+
+Check out my other packages on my [GitHub profile](https://github.com/kolirt)

@@ -8,6 +8,7 @@ use Kolirt\Telegram\Core\Methods\Commands\GetMyCommandsMethod;
 use Kolirt\Telegram\Core\Methods\Commands\SetMyCommandsMethod;
 use Kolirt\Telegram\Core\Methods\GetMeMethod;
 use Kolirt\Telegram\Core\Methods\Messages\SendMessageMethod;
+use Kolirt\Telegram\Core\Methods\Photo\SendPhotoMethod;
 use Kolirt\Telegram\Core\Methods\Updates\DeleteWebhookMethod;
 use Kolirt\Telegram\Core\Methods\Updates\GetUpdatesMethod;
 use Kolirt\Telegram\Core\Methods\Updates\GetWebhookInfoMethod;
@@ -30,6 +31,7 @@ class Telegram
 
     use GetMeMethod;
     use SendMessageMethod;
+    use SendPhotoMethod;
 
     private readonly string $endpoint;
 

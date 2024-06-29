@@ -13,7 +13,7 @@ use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardRemoveType;
 use Kolirt\Telegram\Core\Types\MessageType;
 
 /**
- * @see https://core.telegram.org/bots/api#sendmessage
+ * @see https://core.telegram.org/bots/api#sendphoto
  */
 trait SendPhotoMethod
 {
@@ -21,6 +21,18 @@ trait SendPhotoMethod
     /**
      * Use this method to send photos. On success, the sent Message is returned.
      *
+     * @param string|int $chat_id
+     * @param string $photo
+     * @param string|null $business_connection_id
+     * @param int|null $message_thread_id
+     * @param string|null $caption
+     * @param ParseModeEnum|null $parse_mode
+     * @param bool|null $show_caption_above_media
+     * @param bool|null $has_spoiler
+     * @param bool|null $disable_notification
+     * @param bool|null $protect_content
+     * @param string|null $message_effect_id
+     * @param InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
      * @return MessageType
      *
      * @throws ConnectionException
@@ -77,15 +89,19 @@ trait SendPhotoMethod
     }
 
     /**
+     * Use this method to send photos. On success, the sent Message is returned.
      *
-     * @param string $text
+     * @param string $photo
      * @param string|null $business_connection_id
      * @param int|null $message_thread_id
+     * @param string|null $caption
      * @param ParseModeEnum|null $parse_mode
+     * @param bool|null $show_caption_above_media
+     * @param bool|null $has_spoiler
      * @param bool|null $disable_notification
      * @param bool|null $protect_content
-     * @param ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
-     *
+     * @param string|null $message_effect_id
+     * @param InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
      * @return MessageType
      *
      * @throws ConnectionException

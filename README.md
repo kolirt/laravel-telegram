@@ -235,7 +235,7 @@ $config->bot('test')
 - [ ] forwardMessages
 - [ ] copyMessage
 - [ ] copyMessages
-- [ ] sendPhoto
+- [ ] [sendPhoto](https://core.telegram.org/bots/api#sendphoto) [[source code](src/Core/Methods/Photo/SendPhotoMethod.php)]
 - [ ] sendAudio
 - [ ] sendDocument
 - [ ] sendVideo

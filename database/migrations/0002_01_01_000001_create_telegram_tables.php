@@ -18,7 +18,7 @@ return new class extends Migration {
         });
 
         Schema::create(config('telegram.models.chat.table_name'), function (Blueprint $table) {
-            $table->bigInteger('id')->unique();
+            $table->bigInteger('id')->unique()->primary();
 
             $table->string('type');
 
@@ -29,7 +29,7 @@ return new class extends Migration {
         });
 
         Schema::create(config('telegram.models.user.table_name'), function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->unique();
+            $table->unsignedBigInteger('id')->unique()->primary();
 
             $table->boolean('is_bot')->nullable();
             $table->string('first_name')->nullable();

@@ -43,6 +43,7 @@ class Bot
         if (
             /** Commands */
             $context->message &&
+            !empty($this->command_builder) &&
             !$this->command_builder->empty() &&
             $this->command_builder->isCommand($text)
         ) {
@@ -72,7 +73,7 @@ class Bot
             $user_model &&
             $bot_chat_pivot_model &&
             $context->message &&
-            !$this->keyboard_builder->empty()
+            !empty($this->keyboard_builder) && !$this->keyboard_builder->empty()
         ) {
             $this->keyboard_builder->setPath($bot_chat_pivot_model->virtual_router_state ?? '');
             $this->keyboard_builder->run(

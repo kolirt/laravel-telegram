@@ -53,7 +53,7 @@ trait SendPhotoMethod
         string                                                                        $message_effect_id = null,
         // $reply_parameters = null,
         InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
-    ): MessageType
+    ): MessageType | null
     {
         $reply_markup_formatted = null;
 
@@ -85,7 +85,15 @@ trait SendPhotoMethod
             'reply_markup' => $reply_markup_formatted
         ]))->getBody();
 
-        return MessageType::from(json_decode($response, true)['result']);
+        $response = json_decode($response, true);
+
+        if ($response['ok']) {
+            return MessageType::from(['result']);
+        }
+
+        info($response);
+
+        return null;
     }
 
     /**

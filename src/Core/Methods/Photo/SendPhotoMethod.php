@@ -88,7 +88,7 @@ trait SendPhotoMethod
         $response = json_decode($response, true);
 
         if ($response['ok']) {
-            return MessageType::from(['result']);
+            return MessageType::from($response['result']);
         }
 
         info($response);

@@ -129,7 +129,7 @@ trait SendPhotoMethod
         string                                                                        $message_effect_id = null,
         // $reply_parameters = null,
         InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
-    ): MessageType
+    ): MessageType | null
     {
         /**
          * @var $this Telegram

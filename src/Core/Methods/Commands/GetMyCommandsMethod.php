@@ -19,7 +19,7 @@ trait GetMyCommandsMethod
      * If commands aren't set, an empty list is returned.
      *
      * @param string|null $language_code
-     * @return BotCommandType[]
+     * @return BotCommandType[]|null
      *
      * @throws ConnectionException
      * @throws GuzzleException
@@ -27,7 +27,7 @@ trait GetMyCommandsMethod
     public function getMyCommands(
         // BotCommandScopeType|null $scope = null,
         string|null $language_code = null,
-    ): array
+    ): array|null
     {
         /**
          * @var PendingRequest $this ->client
@@ -37,9 +37,13 @@ trait GetMyCommandsMethod
             'language_code' => $language_code,
         ]))->getBody();
 
-        $data = json_decode($response, true)['result'];
+        $response = json_decode($response, true);
 
-        return array_map(fn($item) => BotCommandType::from($item), $data);
+        if ($response['ok']) {
+            return array_map(fn($item) => BotCommandType::from($item), $response['result']);
+        }
+
+        return null;
     }
 
 }

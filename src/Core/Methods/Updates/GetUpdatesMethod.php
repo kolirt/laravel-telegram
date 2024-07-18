@@ -21,7 +21,7 @@ trait GetUpdatesMethod
      * @param int|null $timeout
      * @param array|null $allowed_updates
      *
-     * @return UpdateType[]
+     * @return UpdateType[]|null
      *
      * @throws ConnectionException
      * @throws GuzzleException
@@ -31,7 +31,7 @@ trait GetUpdatesMethod
         int|null   $limit = null,
         int|null   $timeout = null,
         array|null $allowed_updates = null,
-    ): array
+    ): array|null
     {
         /**
          * @var PendingRequest $this ->client
@@ -43,9 +43,13 @@ trait GetUpdatesMethod
             'allowed_updates' => $allowed_updates
         ]))->getBody();
 
-        $data = json_decode($response, true)['result'];
+        $response = json_decode($response, true);
 
-        return array_map(fn($update) => UpdateType::from($update), $data);
+        if ($response['ok']) {
+            return array_map(fn($update) => UpdateType::from($update), $response['result']);
+        }
+
+        return null;
     }
 
 }

@@ -30,7 +30,7 @@ trait SendMessageMethod
      * @param bool|null $protect_content
      * @param InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
      *
-     * @return MessageType
+     * @return MessageType|null
      *
      * @throws ConnectionException
      * @throws GuzzleException
@@ -47,7 +47,7 @@ trait SendMessageMethod
         bool                                                                          $protect_content = null,
         // $reply_parameters = null,
         InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
-    ): MessageType
+    ): MessageType|null
     {
         $reply_markup_formatted = null;
 
@@ -76,7 +76,13 @@ trait SendMessageMethod
             'reply_markup' => $reply_markup_formatted
         ]))->getBody();
 
-        return MessageType::from(json_decode($response, true)['result']);
+        $response = json_decode($response, true);
+
+        if ($response['ok']) {
+            return MessageType::from($response['result']);
+        }
+
+        return null;
     }
 
     /**
@@ -87,9 +93,9 @@ trait SendMessageMethod
      * @param ParseModeEnum|null $parse_mode
      * @param bool|null $disable_notification
      * @param bool|null $protect_content
-     * @param ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
+     * @param InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
      *
-     * @return MessageType
+     * @return MessageType|null
      *
      * @throws ConnectionException
      * @throws GuzzleException
@@ -105,7 +111,7 @@ trait SendMessageMethod
         bool                                                                          $protect_content = null,
         // $reply_parameters = null,
         InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
-    ): MessageType
+    ): MessageType|null
     {
         /**
          * @var $this Telegram

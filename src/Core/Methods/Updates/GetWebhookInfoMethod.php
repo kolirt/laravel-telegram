@@ -18,21 +18,25 @@ trait GetWebhookInfoMethod
      * On success, returns a WebhookInfo object. If the bot is using getUpdates,
      * will return an object with the url field empty.
      *
-     * @return WebhookInfoType
+     * @return WebhookInfoType|null
      *
      * @throws ConnectionException
      * @throws GuzzleException
      */
-    public function getWebhookInfo(): WebhookInfoType
+    public function getWebhookInfo(): WebhookInfoType|null
     {
         /**
          * @var PendingRequest $this ->client
          */
         $response = $this->client->get('getWebhookInfo')->getBody();
 
-        $data = json_decode($response, true)['result'];
+        $response = json_decode($response, true);
 
-        return WebhookInfoType::from($data);
+        if ($response['ok']) {
+            return WebhookInfoType::from($response['result']);
+        }
+
+        return null;
     }
 
 }

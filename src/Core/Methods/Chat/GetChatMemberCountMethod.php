@@ -7,7 +7,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 
 /**
- * @see https://core.telegram.org/bots/api#getchatmember
+ * @see https://core.telegram.org/bots/api#getchatmembercount
  */
 trait GetChatMemberCountMethod
 {

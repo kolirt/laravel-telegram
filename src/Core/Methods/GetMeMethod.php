@@ -17,18 +17,24 @@ trait GetMeMethod
      * A simple method for testing your bot's authentication token.
      * Requires no parameters. Returns basic information about the bot in form of a User object.
      *
-     * @return UserType
+     * @return UserType|null
      * @throws ConnectionException
      * @throws GuzzleException
      */
-    public function getMe(): UserType
+    public function getMe(): UserType|null
     {
         /**
          * @var PendingRequest $this ->client
          */
         $response = $this->client->get('getMe')->getBody();
 
-        return UserType::from(json_decode($response, true)['result']);
+        $response = json_decode($response, true);
+
+        if ($response['ok']) {
+            return UserType::from(['result']);
+        }
+
+        return null;
     }
 
 }

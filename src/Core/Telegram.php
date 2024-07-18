@@ -3,6 +3,7 @@
 namespace Kolirt\Telegram\Core;
 
 use Illuminate\Support\Facades\Http;
+use Kolirt\Telegram\Core\Methods\Chat\GetChatMemberCountMethod;
 use Kolirt\Telegram\Core\Methods\Chat\GetChatMemberMethod;
 use Kolirt\Telegram\Core\Methods\Commands\DeleteMyCommandsMethod;
 use Kolirt\Telegram\Core\Methods\Commands\GetMyCommandsMethod;
@@ -23,6 +24,7 @@ class Telegram
 
     /** Chat methods */
     use GetChatMemberMethod;
+    use GetChatMemberCountMethod;
 
     /** Commands methods */
     use DeleteMyCommandsMethod;

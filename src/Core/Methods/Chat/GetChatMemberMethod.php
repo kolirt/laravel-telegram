@@ -41,10 +41,10 @@ trait GetChatMemberMethod
             'user_id' => $user_id
         ]))->getBody();
 
-        $data = json_decode($response, true);
+        $response = json_decode($response, true);
 
-        if (!empty($data['result'])) {
-            return ChatMemberType::from($data['result']);
+        if ($response['ok']) {
+            return ChatMemberType::from($response['result']);
         }
 
         return null;

@@ -165,6 +165,11 @@ class KeyboardBuilder
         return count($this->lines) === 0;
     }
 
+    public function hasDefaultHandler(): bool
+    {
+        return (bool)$this->default_handler;
+    }
+
     /**
      * @return KeyboardLine[]
      */

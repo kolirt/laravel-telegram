@@ -6,8 +6,9 @@
   - [Requirements](#requirements)
   - [Installation](#installation)
   - [Setup](#setup)
+- [Console commands](#console-commands) 
 - [Define bot commands](#define-bot-commands)
-- [Console commands](#console-commands)
+- [Define keyboard](#define-keyboard)
 - [Telegram API implementation status](#telegram-api-implementation-status)
     - [Getting updates](#getting-updates)
         - [Types](#types)
@@ -47,18 +48,6 @@ php artisan telegram:bot-create test {token}
 ```
 
 
-# Define bot commands
-
-You can configure bot commands in `routes/telegram.php`, which will be published after the installation, and then you can update the commands in bot using the `php aritsan telegram:bot-update-commands {bot_name}` command.
-```php
-$config->bot('test')
-    ->commands(function (CommandBuilder $builder) {
-        $builder->start(StartCommand::class, 'Start command description');
-        $builder->command('info', InfoCommand::class, 'Info command description');
-        $builder->command('test', [TestCommand::class, 'index'], 'Test command description');
-    })
-```
-
 # Console commands
 
 - `telegram:bot-create {bot_name}` - Create a new bot
@@ -71,6 +60,29 @@ $config->bot('test')
 - `telegram:publish-migrations` - Publish migration files
 - `telegram:publish-routes` - Publish the route file
 - `telegram:serve {bot_name}` - Serve the bot without webhook
+
+
+# Define bot commands
+
+You can configure bot commands in `routes/telegram.php`, which will be published after the installation, and then you can update the commands in bot using the `php aritsan telegram:bot-update-commands {bot_name}` command.
+```php
+$config->bot('test')
+    ->commands(function (CommandBuilder $builder) {
+        $builder->start(StartCommand::class, 'Start command description');
+        $builder->command('info', InfoCommand::class, 'Info command description');
+        $builder->command('test', [TestCommand::class, 'index'], 'Test command description');
+    })
+```
+
+# Define keyboard
+```php
+$config->bot('tma')
+    ->keyboard(function (KeyboardBuilder $keyboard) {
+        $keyboard->defaultHandler(StartCommand::class);
+        // OR
+        $keyboard->defaultHandler(HomeController::class);
+    });
+```
 
 
 # Telegram API implementation status

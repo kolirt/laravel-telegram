@@ -92,6 +92,22 @@ trait SendPhotoMethod
         }
 
         info($response);
+        info(request_params([
+            'business_connection_id' => $business_connection_id,
+            'chat_id' => $chat_id,
+            'message_thread_id' => $message_thread_id,
+            'photo' => $photo,
+            'caption' => $caption,
+            'parse_mode' => $parse_mode,
+            // 'caption_entities' => $caption_entities,
+            'show_caption_above_media' => $show_caption_above_media,
+            'has_spoiler' => $has_spoiler,
+            'disable_notification' => $disable_notification,
+            'protect_content' => $protect_content,
+            'message_effect_id' => $message_effect_id,
+            // 'reply_parameters' => $reply_parameters,
+            'reply_markup' => $reply_markup_formatted
+        ]));
 
         return null;
     }

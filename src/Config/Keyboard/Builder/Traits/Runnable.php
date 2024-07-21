@@ -89,13 +89,13 @@ trait Runnable
             '==========='
         );*/
 
-        dump(
+        /*dump(
             '$matched_button',
             $matched_button,
             '$next_button',
             $next_button,
             '========='
-        );
+        );*/
 
         /** handle back and home buttons */
         if (!$next_button && $matched_button) {
@@ -153,7 +153,7 @@ trait Runnable
 
         /** run handler */
         if ($next_button) {
-            dump('$next_button', $next_button);
+            //dump('$next_button', $next_button);
             $next_button->run(
                 $bot,
                 $telegram,
@@ -164,7 +164,7 @@ trait Runnable
                 $input
             );
         } else if ($matched_button) {
-            dump('$matched_button', $matched_button);
+            //dump('$matched_button', $matched_button);
             $matched_button->run(
                 bot: $bot,
                 telegram: $telegram,
@@ -176,7 +176,7 @@ trait Runnable
                 fallback: method_exists($matched_button, 'hasFallback') && $matched_button->hasFallback()
             );
         } else {
-            dump('else');
+            //dump('else');
             $this->runDefault(
                 $bot,
                 $telegram,

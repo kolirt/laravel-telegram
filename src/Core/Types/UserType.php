@@ -11,7 +11,7 @@ class UserType extends BaseType
     public function __construct(
         public int         $id,
         public bool        $is_bot,
-        public string|null      $first_name,
+        public string|null $first_name,
         public string|null $last_name = null,
         public string|null $username = null,
         public string|null $language_code = null,

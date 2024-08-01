@@ -5,13 +5,6 @@ namespace Kolirt\Telegram\Core\Methods\Chat;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
-use Kolirt\Telegram\Core\Types\Chat\Member\ChatMemberAdministratorType;
-use Kolirt\Telegram\Core\Types\Chat\Member\ChatMemberBannedType;
-use Kolirt\Telegram\Core\Types\Chat\Member\ChatMemberLeftType;
-use Kolirt\Telegram\Core\Types\Chat\Member\ChatMemberMemberType;
-use Kolirt\Telegram\Core\Types\Chat\Member\ChatMemberOwnerType;
-use Kolirt\Telegram\Core\Types\Chat\Member\ChatMemberRestrictedType;
-use Kolirt\Telegram\Core\Types\Chat\Member\ChatMemberType;
 
 /**
  * @see https://core.telegram.org/bots/api#getchatmember
@@ -26,12 +19,12 @@ trait GetChatMemberMethod
      * @param string|int $chat_id
      * @param int $user_id
      *
-     * @return ChatMemberOwnerType|ChatMemberAdministratorType|ChatMemberMemberType|ChatMemberRestrictedType|ChatMemberLeftType|ChatMemberBannedType|null
+     * @return GetChatMemberResponse
      *
      * @throws ConnectionException
      * @throws GuzzleException
      */
-    public function getChatMember(string|int $chat_id, int $user_id): ChatMemberOwnerType|ChatMemberAdministratorType|ChatMemberMemberType|ChatMemberRestrictedType|ChatMemberLeftType|ChatMemberBannedType|null
+    public function getChatMember(string|int $chat_id, int $user_id): GetChatMemberResponse
     {
         /**
          * @var PendingRequest $this ->client
@@ -41,13 +34,7 @@ trait GetChatMemberMethod
             'user_id' => $user_id
         ]))->getBody();
 
-        $response = json_decode($response, true);
-
-        if ($response['ok']) {
-            return ChatMemberType::from($response['result']);
-        }
-
-        return null;
+        return new GetChatMemberResponse(json_decode($response, true));
     }
 
 }

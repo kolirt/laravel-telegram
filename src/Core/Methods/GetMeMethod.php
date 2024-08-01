@@ -5,7 +5,6 @@ namespace Kolirt\Telegram\Core\Methods;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
-use Kolirt\Telegram\Core\Types\UserType;
 
 /**
  * @see https://core.telegram.org/bots/api#getme
@@ -17,24 +16,19 @@ trait GetMeMethod
      * A simple method for testing your bot's authentication token.
      * Requires no parameters. Returns basic information about the bot in form of a User object.
      *
-     * @return UserType|null
+     * @return GetMeResponse
+     *
      * @throws ConnectionException
      * @throws GuzzleException
      */
-    public function getMe(): UserType|null
+    public function getMe(): GetMeResponse
     {
         /**
          * @var PendingRequest $this ->client
          */
         $response = $this->client->get('getMe')->getBody();
 
-        $response = json_decode($response, true);
-
-        if ($response['ok']) {
-            return UserType::from(['result']);
-        }
-
-        return null;
+        return new GetMeResponse(json_decode($response, true));
     }
 
 }

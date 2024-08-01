@@ -16,12 +16,13 @@ trait GetChatMemberCountMethod
      * Use this method to get the number of members in a chat. Returns Int on success.
      *
      * @param string|int $chat_id
-     * @return int|null
      *
-     * @throws GuzzleException
+     * @return GetChatMemberCountResponse
+     *
      * @throws ConnectionException
+     * @throws GuzzleException
      */
-    public function getChatMemberCount(string|int $chat_id): int|null
+    public function getChatMemberCount(string|int $chat_id): GetChatMemberCountResponse
     {
         /**
          * @var PendingRequest $this ->client
@@ -30,13 +31,7 @@ trait GetChatMemberCountMethod
             'chat_id' => $chat_id,
         ]))->getBody();
 
-        $response = json_decode($response, true);
-
-        if ($response['ok']) {
-            return $response['result'];
-        }
-
-        return null;
+        return new GetChatMemberCountResponse(json_decode($response, true));
     }
 
 }

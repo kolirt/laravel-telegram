@@ -10,7 +10,6 @@ use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Keyboard\InlineKeyboardMarkupType;
 use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardMarkupType;
 use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardRemoveType;
-use Kolirt\Telegram\Core\Types\MessageType;
 
 /**
  * @see https://core.telegram.org/bots/api#sendmessage
@@ -30,7 +29,7 @@ trait SendMessageMethod
      * @param bool|null $protect_content
      * @param InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
      *
-     * @return MessageType|null
+     * @return SendMessageResponse
      *
      * @throws ConnectionException
      * @throws GuzzleException
@@ -47,7 +46,7 @@ trait SendMessageMethod
         bool                                                                          $protect_content = null,
         // $reply_parameters = null,
         InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
-    ): MessageType|null
+    ): SendMessageResponse
     {
         $reply_markup_formatted = null;
 
@@ -76,17 +75,10 @@ trait SendMessageMethod
             'reply_markup' => $reply_markup_formatted
         ]))->getBody();
 
-        $response = json_decode($response, true);
-
-        if ($response['ok']) {
-            return MessageType::from($response['result']);
-        }
-
-        return null;
+        return new SendMessageResponse(json_decode($response, true));
     }
 
     /**
-     *
      * @param string $text
      * @param string|null $business_connection_id
      * @param int|null $message_thread_id
@@ -95,7 +87,7 @@ trait SendMessageMethod
      * @param bool|null $protect_content
      * @param InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
      *
-     * @return MessageType|null
+     * @return SendMessageResponse
      *
      * @throws ConnectionException
      * @throws GuzzleException
@@ -111,7 +103,7 @@ trait SendMessageMethod
         bool                                                                          $protect_content = null,
         // $reply_parameters = null,
         InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
-    ): MessageType|null
+    ): SendMessageResponse
     {
         /**
          * @var $this Telegram

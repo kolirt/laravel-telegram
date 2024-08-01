@@ -19,7 +19,7 @@ trait DeleteMyCommandsMethod
      *
      * @param string|null $language_code
      *
-     * @return bool
+     * @return DeleteMyCommandsResponse
      *
      * @throws ConnectionException
      * @throws GuzzleException
@@ -27,7 +27,7 @@ trait DeleteMyCommandsMethod
     public function deleteMyCommands(
         // BotCommandScopeType|null $scope = null,
         string|null $language_code = null,
-    ): bool
+    ): DeleteMyCommandsResponse
     {
         /**
          * @var PendingRequest $this ->client
@@ -37,9 +37,7 @@ trait DeleteMyCommandsMethod
             'language_code' => $language_code,
         ]))->getBody();
 
-        $data = json_decode($response, true);
-
-        return $data['ok'];
+        return new DeleteMyCommandsResponse(json_decode($response, true));
     }
 
 }

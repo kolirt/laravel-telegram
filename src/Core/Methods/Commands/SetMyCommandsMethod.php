@@ -20,7 +20,7 @@ trait SetMyCommandsMethod
      * @param BotCommandType[] $commands
      * @param string|null $language_code
      *
-     * @return bool
+     * @return SetMyCommandsResponse
      *
      * @throws ConnectionException
      * @throws GuzzleException
@@ -29,7 +29,7 @@ trait SetMyCommandsMethod
         array       $commands,
         // BotCommandScopeType|null $scope = null,
         string|null $language_code = null,
-    ): bool
+    ): SetMyCommandsResponse
     {
         $formatted_commands = [];
         foreach ($commands as $command) {
@@ -45,9 +45,7 @@ trait SetMyCommandsMethod
             'language_code' => $language_code,
         ]))->getBody();
 
-        $data = json_decode($response, true);
-
-        return $data['ok'];
+        return new SetMyCommandsResponse(json_decode($response, true));
     }
 
 }

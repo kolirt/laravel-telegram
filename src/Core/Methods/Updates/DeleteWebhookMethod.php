@@ -18,14 +18,14 @@ trait DeleteWebhookMethod
      *
      * @param bool|null $drop_pending_updates
      *
-     * @return bool
+     * @return DeleteWebhookResponse
      *
-     * @throws GuzzleException
      * @throws ConnectionException
+     * @throws GuzzleException
      */
     public function deleteWebhook(
         bool|null $drop_pending_updates = null
-    ): bool
+    ): DeleteWebhookResponse
     {
         /**
          * @var PendingRequest $this ->client
@@ -34,9 +34,7 @@ trait DeleteWebhookMethod
             'drop_pending_updates' => $drop_pending_updates
         ]))->getBody();
 
-        $data = json_decode($response, true);
-
-        return $data['ok'];
+        return new DeleteWebhookResponse(json_decode($response, true));
     }
 
 }

@@ -10,7 +10,6 @@ use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Keyboard\InlineKeyboardMarkupType;
 use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardMarkupType;
 use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardRemoveType;
-use Kolirt\Telegram\Core\Types\MessageType;
 
 /**
  * @see https://core.telegram.org/bots/api#sendphoto
@@ -33,7 +32,8 @@ trait SendPhotoMethod
      * @param bool|null $protect_content
      * @param string|null $message_effect_id
      * @param InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
-     * @return MessageType
+     *
+     * @return SendPhotoResponse
      *
      * @throws ConnectionException
      * @throws GuzzleException
@@ -53,7 +53,7 @@ trait SendPhotoMethod
         string                                                                        $message_effect_id = null,
         // $reply_parameters = null,
         InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
-    ): MessageType|null
+    ): SendPhotoResponse
     {
         $reply_markup_formatted = null;
 
@@ -85,31 +85,7 @@ trait SendPhotoMethod
             'reply_markup' => $reply_markup_formatted
         ]))->getBody();
 
-        $response = json_decode($response, true);
-
-        if ($response['ok']) {
-            return MessageType::from($response['result']);
-        }
-
-        info($response);
-        info(request_params([
-            'business_connection_id' => $business_connection_id,
-            'chat_id' => $chat_id,
-            'message_thread_id' => $message_thread_id,
-            'photo' => $photo,
-            'caption' => $caption,
-            'parse_mode' => $parse_mode,
-            // 'caption_entities' => $caption_entities,
-            'show_caption_above_media' => $show_caption_above_media,
-            'has_spoiler' => $has_spoiler,
-            'disable_notification' => $disable_notification,
-            'protect_content' => $protect_content,
-            'message_effect_id' => $message_effect_id,
-            // 'reply_parameters' => $reply_parameters,
-            'reply_markup' => $reply_markup_formatted
-        ]));
-
-        return null;
+        return new SendPhotoResponse(json_decode($response, true));
     }
 
     /**
@@ -126,7 +102,8 @@ trait SendPhotoMethod
      * @param bool|null $protect_content
      * @param string|null $message_effect_id
      * @param InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
-     * @return MessageType
+     *
+     * @return SendPhotoResponse
      *
      * @throws ConnectionException
      * @throws GuzzleException
@@ -145,7 +122,7 @@ trait SendPhotoMethod
         string                                                                        $message_effect_id = null,
         // $reply_parameters = null,
         InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
-    ): MessageType|null
+    ): SendPhotoResponse
     {
         /**
          * @var $this Telegram

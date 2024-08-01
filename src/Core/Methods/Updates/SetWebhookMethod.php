@@ -30,7 +30,7 @@ trait SetWebhookMethod
      * @param bool|null $drop_pending_updates
      * @param string|null $secret_token
      *
-     * @return bool
+     * @return SetWebhookResponse
      *
      * @throws ConnectionException
      * @throws GuzzleException
@@ -43,7 +43,7 @@ trait SetWebhookMethod
         array       $allowed_updates = null,
         bool|null   $drop_pending_updates = null,
         string|null $secret_token = null,
-    ): bool
+    ): SetWebhookResponse
     {
         /**
          * @var PendingRequest $this ->client
@@ -58,9 +58,7 @@ trait SetWebhookMethod
             'secret_token' => $secret_token
         ]))->getBody();
 
-        $data = json_decode($response, true);
-
-        return $data['ok'];
+        return new SetWebhookResponse(json_decode($response, true));
     }
 
 }

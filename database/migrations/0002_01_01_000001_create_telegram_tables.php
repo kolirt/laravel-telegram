@@ -71,9 +71,9 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists(config('telegram.models.bot.table_name'));
-        Schema::dropIfExists(config('telegram.models.chat.table_name'));
-        Schema::dropIfExists(config('telegram.models.user.table_name'));
         Schema::dropIfExists(config('telegram.models.bot_chat_pivot.table_name'));
+        Schema::dropIfExists(config('telegram.models.user.table_name'));
+        Schema::dropIfExists(config('telegram.models.chat.table_name'));
+        Schema::dropIfExists(config('telegram.models.bot.table_name'));
     }
 };

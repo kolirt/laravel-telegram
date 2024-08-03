@@ -36,7 +36,7 @@ class Chat extends Model
             'chat_id',
             'bot_id'
         )
-            ->withPivot('last_activity_at', 'virtual_router_state')
+            ->withPivot('blocked_at', 'last_activity_at', 'virtual_router_state')
             ->using(BotChatPivot::class);
     }
 

@@ -61,6 +61,7 @@ return new class extends Migration {
 
             $table->text('virtual_router_state')->nullable();
 
+            $table->timestamp('blocked_at')->nullable();
             $table->timestamp('last_activity_at')->nullable();
             $table->timestamps();
 

@@ -15,6 +15,7 @@ class BotChatPivot extends Pivot
     protected $fillable = [
         'bot_id',
         'chat_id',
+        'blocked_at',
         'last_activity_at',
         'virtual_router_state'
     ];
@@ -22,6 +23,7 @@ class BotChatPivot extends Pivot
     protected $casts = [
         'bot_id' => 'integer',
         'chat_id' => 'integer',
+        'blocked_at' => 'datetime',
         'last_activity_at' => 'datetime'
     ];
 

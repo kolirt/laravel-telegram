@@ -127,8 +127,13 @@ class Bot
                 'bot_id' => $this->model->id,
                 'chat_id' => $chat_model->id
             ], [
-                'last_activity_at' => now()
+                'last_activity_at' => now(),
+                'blocked_at' => null
             ]);
+
+            /*if ($pivot_model->wasRecentlyCreated) {
+                $pivot_model->refresh();
+            }*/
         }
 
         return [$chat_model, $user_model, $pivot_model];

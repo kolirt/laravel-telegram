@@ -3,6 +3,7 @@
 namespace Kolirt\Telegram\Core;
 
 use Illuminate\Support\Facades\Http;
+use Kolirt\Telegram\Core\Methods\Animation\SendAnimationMethod;
 use Kolirt\Telegram\Core\Methods\Chat\GetChatMemberCountMethod;
 use Kolirt\Telegram\Core\Methods\Chat\GetChatMemberMethod;
 use Kolirt\Telegram\Core\Methods\Commands\DeleteMyCommandsMethod;
@@ -36,6 +37,9 @@ class Telegram
 
     /** Photo methods */
     use SendPhotoMethod;
+
+    /** Animation methods */
+    use SendAnimationMethod;
 
     /** Updates methods */
     use GetUpdatesMethod;

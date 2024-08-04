@@ -252,7 +252,7 @@ $config->bot('tma')
 - [ ] sendAudio
 - [ ] sendDocument
 - [ ] sendVideo
-- [ ] sendAnimation
+- [X] sendAnimation
 - [ ] sendVoice
 - [ ] sendVideoNote
 - [ ] sendMediaGroup

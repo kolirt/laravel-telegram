@@ -251,7 +251,7 @@ $config->bot('tma')
 - [X] [sendPhoto](https://core.telegram.org/bots/api#sendphoto) [[source code](src/Core/Methods/Photo/SendPhotoMethod.php)]
 - [ ] sendAudio
 - [ ] sendDocument
-- [ ] sendVideo
+- [X] sendVideo
 - [X] sendAnimation
 - [ ] sendVoice
 - [ ] sendVideoNote

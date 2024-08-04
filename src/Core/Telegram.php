@@ -16,6 +16,7 @@ use Kolirt\Telegram\Core\Methods\Updates\DeleteWebhookMethod;
 use Kolirt\Telegram\Core\Methods\Updates\GetUpdatesMethod;
 use Kolirt\Telegram\Core\Methods\Updates\GetWebhookInfoMethod;
 use Kolirt\Telegram\Core\Methods\Updates\SetWebhookMethod;
+use Kolirt\Telegram\Core\Methods\Video\SendVideoMethod;
 use Kolirt\Telegram\Core\Traits\Keyboardable;
 use Kolirt\Telegram\Core\Traits\Updatable;
 
@@ -37,6 +38,9 @@ class Telegram
 
     /** Photo methods */
     use SendPhotoMethod;
+
+    /** Video methods */
+    use SendVideoMethod;
 
     /** Animation methods */
     use SendAnimationMethod;

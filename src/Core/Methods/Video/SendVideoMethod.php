@@ -70,11 +70,11 @@ trait SendVideoMethod
         /**
          * @var PendingRequest $this ->client
          */
-        $response = $this->client->post('sendPhoto', request_params([
+        $response = $this->client->post('sendVideo', request_params([
             'business_connection_id' => $business_connection_id,
             'chat_id' => $chat_id,
             'message_thread_id' => $message_thread_id,
-            'animation' => $video,
+            'video' => $video,
             'caption' => $caption,
             'parse_mode' => $parse_mode,
             // 'caption_entities' => $caption_entities,

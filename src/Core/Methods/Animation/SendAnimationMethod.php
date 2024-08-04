@@ -70,7 +70,7 @@ trait SendAnimationMethod
         /**
          * @var PendingRequest $this ->client
          */
-        $response = $this->client->post('sendPhoto', request_params([
+        $response = $this->client->post('sendAnimation', request_params([
             'business_connection_id' => $business_connection_id,
             'chat_id' => $chat_id,
             'message_thread_id' => $message_thread_id,

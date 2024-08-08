@@ -15,7 +15,7 @@ class GetMeResponse extends BaseResponse
         parent::__construct($response);
 
         if (isset($response['result'])) {
-            $this->result = UserType::from(['result']);
+            $this->result = UserType::from($response['result']);
         }
     }
 

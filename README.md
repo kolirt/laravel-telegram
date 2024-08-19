@@ -42,7 +42,7 @@ php artisan telegram:install
 
 php artisan migrate
 
-php artisan telegram:bot-create test {token}
+php artisan telegram:bot-create {bot-name} {token}
 ```
 
 

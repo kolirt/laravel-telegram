@@ -1,7 +1,6 @@
 # Laravel telegram
 
-# Structure
-
+## Structure
 - [Getting started](#getting-started)
   - [Requirements](#requirements)
   - [Installation](#installation)
@@ -23,22 +22,21 @@
   <img src="https://cdn.buymeacoffee.com/buttons/v2/arial-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" >
 </a>
 
-# Getting started
 
-## Requirements
+## Getting started
 
+### Requirements
 - PHP >= 8
 - Laravel >= 10
 
 
-## Installation
+### Installation
 ```bash
 composer require kolirt/laravel-telegram
 ```
 
 
-## Setup
-
+### Setup
 ```bash
 php artisan telegram:install
 
@@ -48,8 +46,7 @@ php artisan telegram:bot-create test {token}
 ```
 
 
-# Console commands
-
+## Console commands
 - `telegram:bot-create {bot_name}` - Create a new bot
 - `telegram:bot-delete-commands {bot_name}` - Delete bot commands
 - `telegram:bot-update-commands {bot_name}` - Update bot commands
@@ -62,9 +59,9 @@ php artisan telegram:bot-create test {token}
 - `telegram:serve {bot_name}` - Serve the bot without webhook
 
 
-# Define bot commands
+## Define bot commands
+You can configure bot commands in `routes/telegram.php`, which will be published after the installation, and then you can update the commands in bot using the `php aritsan telegram:bot-update-commands {bot_name}` command
 
-You can configure bot commands in `routes/telegram.php`, which will be published after the installation, and then you can update the commands in bot using the `php aritsan telegram:bot-update-commands {bot_name}` command.
 ```php
 $config->bot('test')
     ->commands(function (CommandBuilder $builder) {
@@ -74,7 +71,8 @@ $config->bot('test')
     })
 ```
 
-# Define keyboard
+
+## Define keyboard
 ```php
 $config->bot('tma')
     ->keyboard(function (KeyboardBuilder $keyboard) {
@@ -85,7 +83,7 @@ $config->bot('tma')
 ```
 
 
-# Telegram API implementation status
+## Telegram API implementation status
 
 ### [Getting updates](https://core.telegram.org/bots/api#getting-updates)
 
@@ -94,15 +92,15 @@ $config->bot('tma')
 - [X] [Update](https://core.telegram.org/bots/api#update) - [[source code](src/Core/Types/Updates/UpdateType.php)]
 - [X] [WebhookInfo](https://core.telegram.org/bots/api#webhookinfo) - [[source code](src/Core/Types/Updates/WebhookInfoType.php)]
 
-#### Methods
 
+#### Methods
 - [X] [getUpdates](https://core.telegram.org/bots/api#getupdates) - [[source code](src/Core/Methods/Updates/GetUpdatesMethod.php)]
 - [X] [setWebhook](https://core.telegram.org/bots/api#setwebhook) - [[source code](src/Core/Methods/Updates/SetWebhookMethod.php)]
 - [X] [deleteWebhook](https://core.telegram.org/bots/api#deletewebhook) - [[source code](src/Core/Methods/Updates/DeleteWebhookMethod.php)]
 - [X] [getWebhookInfo](https://core.telegram.org/bots/api#getwebhookinfo) - [[source code](src/Core/Methods/Updates/GetWebhookInfoMethod.php)]
 
-### [Available types](https://core.telegram.org/bots/api#available-types)
 
+### [Available types](https://core.telegram.org/bots/api#available-types)
 - [x] [User](https://core.telegram.org/bots/api#user) - [[source code](src/Core/Types/UserType.php)]
 - [X] [Chat](https://core.telegram.org/bots/api#chat) - [[source code](src/Core/Types/ChatType.php)]
 - [X] [Message](https://core.telegram.org/bots/api#message) - [[source code](src/Core/Types/MessageType.php)]
@@ -237,8 +235,8 @@ $config->bot('tma')
 - [ ] Profile accent colors
 - [ ] Inline mode objects
 
-### [Available methods](https://core.telegram.org/bots/api#available-methods)
 
+### [Available methods](https://core.telegram.org/bots/api#available-methods)
 - [X] [getMe](https://core.telegram.org/bots/api#getme) [[source code](src/Core/Methods/GetMeMethod.php)]
 - [ ] logOut
 - [ ] close
@@ -324,14 +322,14 @@ $config->bot('tma')
 - [ ] getMyDefaultAdministratorRights
 - [ ] Inline mode methods
 
-# FAQ
 
-Check closed [issues](#) to get answers for most asked questions
+## FAQ
+Check closed [issues](https://github.com/kolirt/laravel-telegram/issues) to get answers for most asked questions
 
-# License
 
+## License
 [MIT](LICENSE.txt)
 
-# Other packages
 
+## Other packages
 Check out my other packages on my [GitHub profile](https://github.com/kolirt)

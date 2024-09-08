@@ -1,4 +1,4 @@
-# Laravel telegram
+# Laravel Telegram
 
 ## Structure
 - [Getting started](#getting-started)

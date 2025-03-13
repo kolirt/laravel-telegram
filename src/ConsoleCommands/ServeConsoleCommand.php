@@ -38,8 +38,8 @@ class ServeConsoleCommand extends Command
                     limit: 1
                 );
 
-                if (count($updates)) {
-                    $update = $updates[0];
+                if ($updates->ok && count($updates->result)) {
+                    $update = $updates->result[0];
 
                     if ($update->update_id !== $last_update_id) {
                         $last_update_id = $update->update_id;

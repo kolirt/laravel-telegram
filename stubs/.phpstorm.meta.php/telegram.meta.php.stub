@@ -8,7 +8,7 @@ namespace PHPSTORM_META {
     );
 
     expectedArguments(
-        \Kolirt\Telegram\Config\TelegramConfig::bot(),
+        \Kolirt\Telegram\Config\Config::bot(),
         0,
         argumentsSet('bot_names')
     );

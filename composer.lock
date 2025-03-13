@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "812440fa4e84423a9296907a6cc39ca0",
+    "content-hash": "49d2b747cf807a8829b0a5b2003e4657",
     "packages": [
         {
             "name": "brick/math",
@@ -1052,19 +1052,30 @@
         },
         {
             "name": "kolirt/laravel-master-model",
-            "version": "3.0.2",
+            "version": "4.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kolirt/laravel-master-model.git",
-                "reference": "c6b8d9a8c435a999a7886a6614458c78dc897cb2"
+                "reference": "e8379a4cb460fca890ac44f19dbe6ad4f9005014"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kolirt/laravel-master-model/zipball/c6b8d9a8c435a999a7886a6614458c78dc897cb2",
-                "reference": "c6b8d9a8c435a999a7886a6614458c78dc897cb2",
+                "url": "https://api.github.com/repos/kolirt/laravel-master-model/zipball/e8379a4cb460fca890ac44f19dbe6ad4f9005014",
+                "reference": "e8379a4cb460fca890ac44f19dbe6ad4f9005014",
                 "shasum": ""
             },
+            "require": {
+                "laravel/framework": ">=10.0",
+                "php": ">=8.1"
+            },
             "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Kolirt\\MasterModel\\ServiceProvider"
+                    ]
+                }
+            },
             "autoload": {
                 "files": [
                     "src/helpers.php"
@@ -1082,7 +1093,8 @@
                     "name": "kolirt"
                 }
             ],
-            "description": "Package will help for easing save relations and upload files.",
+            "description": "The package that simplifies working with models, saving relationships, and uploading files in Laravel",
+            "homepage": "https://github.com/kolirt/laravel-master-model",
             "keywords": [
                 "auto",
                 "files",
@@ -1095,9 +1107,15 @@
             ],
             "support": {
                 "issues": "https://github.com/kolirt/laravel-master-model/issues",
-                "source": "https://github.com/kolirt/laravel-master-model/tree/3.0.2"
+                "source": "https://github.com/kolirt/laravel-master-model/tree/4.0.8"
             },
-            "time": "2023-09-06T14:56:32+00:00"
+            "funding": [
+                {
+                    "url": "https://www.buymeacoffee.com/kolirt",
+                    "type": "custom"
+                }
+            ],
+            "time": "2025-03-05T12:29:51+00:00"
         },
         {
             "name": "laravel/framework",
@@ -5546,7 +5564,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.2"
+        "php": ">=8.1"
     },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"

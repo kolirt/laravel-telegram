@@ -21,7 +21,8 @@ class Command
     public function __construct(
         protected string       $name,
         protected string|array $handler,
-        protected string       $description
+        protected string       $description,
+        protected bool         $should_ignore_on_update = false
     )
     {
     }
@@ -91,6 +92,11 @@ class Command
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public function shouldIgnoreOnUpdate(): bool
+    {
+        return $this->should_ignore_on_update;
     }
 
 }

@@ -10,14 +10,14 @@ class CommandBuilder
      */
     protected array $commands = [];
 
-    public function start(string|array $handler, string $description): self
+    public function start(string|array $handler, string $description, bool $should_ignore_on_update = false): self
     {
-        return $this->command('start', $handler, $description);
+        return $this->command('start', $handler, $description, $should_ignore_on_update);
     }
 
-    public function command(string $name, string|array $handler, string $description): self
+    public function command(string $name, string|array $handler, string $description, bool $should_ignore_on_update = false): self
     {
-        $this->commands[$name] = new Command($name, $handler, $description);
+        $this->commands[$name] = new Command($name, $handler, $description, $should_ignore_on_update);
         return $this;
     }
 
@@ -32,6 +32,13 @@ class CommandBuilder
     public function getCommands(): array
     {
         return $this->commands;
+    }
+
+    public function getCommandsForUpdate(): array
+    {
+        return array_filter($this->getCommands(), function ($command) {
+            return !$command->shouldIgnoreOnUpdate();
+        });
     }
 
     public function isStartCommand(string $command_name): bool

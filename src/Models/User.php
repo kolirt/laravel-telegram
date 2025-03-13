@@ -3,7 +3,7 @@
 namespace Kolirt\Telegram\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Kolirt\MasterModel\MasterModel;
+use Kolirt\MasterModel\Traits\MasterModel;
 
 class User extends Authenticatable
 {

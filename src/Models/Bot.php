@@ -3,7 +3,7 @@
 namespace Kolirt\Telegram\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Kolirt\MasterModel\MasterModel;
+use Kolirt\MasterModel\Traits\MasterModel;
 use Kolirt\Telegram\Core\Methods\Updates\GetUpdatesMethod;
 use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 

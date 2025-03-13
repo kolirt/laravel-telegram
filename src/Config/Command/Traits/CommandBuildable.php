@@ -16,4 +16,11 @@ trait CommandBuildable
         return $this;
     }
 
+    public function getCommands(): array
+    {
+        return array_filter($this->command_builder->getCommands(), function ($command) {
+            return !$this->command_builder->isStartCommand($command->getCommandName());
+        });
+    }
+
 }

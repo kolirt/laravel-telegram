@@ -27,15 +27,17 @@ class BotUpdateCommandsConsoleCommand extends Command
             $config = ConfigFacade::getFacadeRoot();
             $config->load();
 
-            $bot_config = $config->getBot($bot_model->name);
-            if ($bot_config) {
+            $bot = $config->getBot($bot_model->name);
+            if ($bot) {
                 $telegram = new Telegram($bot_model->token);
 
                 /**
                  * @var BotCommandType[] $commands
                  */
                 $commands = [];
-                foreach ($bot_config->getCommands() as $command) {
+
+                /** @var \Kolirt\Telegram\Config\Command\Command $command */
+                foreach ($bot->getCommands() as $command) {
                     $commands[] = new BotCommandType(
                         command: $command->getCommandName(),
                         description: $command->getDescription()

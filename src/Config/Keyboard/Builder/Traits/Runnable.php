@@ -81,7 +81,7 @@ trait Runnable
         $buttons = $this->normalizeButtons();
 
         $matched_buttons = $this->path === ''
-            ? array_filter($buttons, fn($value, $key) => !str_contains( $key, '.'), ARRAY_FILTER_USE_BOTH)
+            ? array_filter($buttons, fn($value, $key) => !str_contains($key, '.'), ARRAY_FILTER_USE_BOTH)
             : array_filter($buttons, fn($value, $key) => $this->path === $key || str_starts_with($key, $this->path . '.'), ARRAY_FILTER_USE_BOTH);
         $matched_button = $matched_buttons[$this->path] ?? null;
         $matched_children = array_filter($matched_buttons, fn($key) => $key !== $this->path, ARRAY_FILTER_USE_KEY);

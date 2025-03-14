@@ -1,5 +1,6 @@
 <?php
 
+use Kolirt\Telegram\Core\Enums\ParseModeEnum;
 use Kolirt\Telegram\Models\Bot;
 use Kolirt\Telegram\Models\Chat;
 use Kolirt\Telegram\Models\Pivots\BotChatPivot;
@@ -7,6 +8,13 @@ use Kolirt\Telegram\Models\User;
 
 return [
     'api_endpoint' => 'https://api.telegram.org/bot',
+
+    /**
+     * Default parse mode for messages
+     *
+     * Available values: ParseModeEnum::HTML, ParseModeEnum::MARKDOWN, null
+     */
+    'default_parse_mode' => ParseModeEnum::HTML,
 
     'models' => [
         'bot' => [

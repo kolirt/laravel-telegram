@@ -66,7 +66,7 @@ trait SendMessageMethod
             'chat_id' => $chat_id,
             'message_thread_id' => $message_thread_id,
             'text' => $text,
-            'parse_mode' => $parse_mode,
+            'parse_mode' => $parse_mode ?? config('telegram.default_parse_mode'),
             // 'entities' => $entities,
             // 'link_preview_options' => $link_preview_options,
             'disable_notification' => $disable_notification,

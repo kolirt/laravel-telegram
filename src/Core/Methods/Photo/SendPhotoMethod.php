@@ -74,7 +74,7 @@ trait SendPhotoMethod
             'message_thread_id' => $message_thread_id,
             'photo' => $photo,
             'caption' => $caption,
-            'parse_mode' => $parse_mode,
+            'parse_mode' => $parse_mode ?? config('telegram.default_parse_mode'),
             // 'caption_entities' => $caption_entities,
             'show_caption_above_media' => $show_caption_above_media,
             'has_spoiler' => $has_spoiler,

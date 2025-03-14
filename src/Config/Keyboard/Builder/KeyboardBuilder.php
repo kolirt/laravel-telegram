@@ -187,47 +187,4 @@ class KeyboardBuilder
         return $this->lines;
     }
 
-    /*protected function getLines()
-    {
-        if ($this->path === '') {
-            return $this->lines;
-        }
-
-
-        $explode = explode('/', preg_replace('/^\//', '', $this->path));
-
-        $lines = $this->lines;
-        foreach ($explode as $name) {
-            $button = null;
-            foreach ($lines as $line) {
-
-//                dump($line);
-
-                $button = $line->getButtonByName($name);
-                dump($button);
-
-                if ($button && $button->hasChildren()) {
-
-                }
-
-//                if ($button) {
-//                    $lines = $button->getLines();
-//                }
-            }
-
-            dump('=========');
-        }
-
-        dd($lines);
-
-        $button = null;
-        $explode = explode('/', preg_replace('/^\//', '',  $this->path));
-
-        foreach ($explode as $name) {
-            dump($name);
-        }
-
-        dd($this);
-    }*/
-
 }

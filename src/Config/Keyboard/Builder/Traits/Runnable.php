@@ -81,40 +81,18 @@ trait Runnable
         $buttons = $this->normalizeButtons();
 
         $matched_buttons = $this->path === ''
-            ? array_filter($buttons, fn($value, $key) => preg_match('/^[\w\d]+$/', $key), ARRAY_FILTER_USE_BOTH)
-            : array_filter($buttons, fn($value, $key) => $this->path === $key || preg_match('/^' . $this->path . '\.[\w\d]+$/', $key), ARRAY_FILTER_USE_BOTH);
+            ? array_filter($buttons, fn($value, $key) => !str_contains( $key, '.'), ARRAY_FILTER_USE_BOTH)
+            : array_filter($buttons, fn($value, $key) => $this->path === $key || str_starts_with($key, $this->path . '.'), ARRAY_FILTER_USE_BOTH);
         $matched_button = $matched_buttons[$this->path] ?? null;
-        $matched_children = array_filter($matched_buttons, fn($key) => str_starts_with($key, $this->path !== '' ? $this->path . '.' : $this->path), ARRAY_FILTER_USE_KEY);
+        $matched_children = array_filter($matched_buttons, fn($key) => $key !== $this->path, ARRAY_FILTER_USE_KEY);
         $next_button = null;
+
         foreach ($matched_children as $value) {
             if ($value->getLabel() == $input) {
                 $next_button = $value;
                 break;
             }
         }
-
-//        dump($matched_button);
-//        dump($matched_children);
-//        dump($input);
-//        dump($matched_button);
-
-        /*dump(
-            $this->path,
-            $buttons,
-            $matched_buttons,
-            $matched_button,
-            $matched_children,
-            $next_button,
-            '==========='
-        );*/
-
-        /*dump(
-            '$matched_button',
-            $matched_button,
-            '$next_button',
-            $next_button,
-            '========='
-        );*/
 
         /** handle back and home buttons */
         if (!$next_button && $matched_button) {
@@ -187,7 +165,6 @@ trait Runnable
 
         /** run handler */
         if ($next_button) {
-            //dump('$next_button', $next_button);
             $next_button->run(
                 $bot,
                 $telegram,
@@ -198,7 +175,6 @@ trait Runnable
                 $input
             );
         } else if ($matched_button) {
-            //dump('$matched_button', $matched_button);
             $matched_button->run(
                 bot: $bot,
                 telegram: $telegram,
@@ -210,7 +186,6 @@ trait Runnable
                 fallback: method_exists($matched_button, 'hasFallback') && $matched_button->hasFallback()
             );
         } else {
-            //dump('else');
             $this->runDefault(
                 $bot,
                 $telegram,

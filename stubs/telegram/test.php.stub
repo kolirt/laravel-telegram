@@ -15,4 +15,4 @@ $config->bot('test')
         $builder->start(StartCommand::class, 'Start command description');
         $builder->command('info', InfoCommand::class, 'Info command description');
         $builder->command('test', [TestCommand::class, 'index'], 'Test command description');
-    })
+    });

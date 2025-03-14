@@ -3,8 +3,9 @@
 namespace Kolirt\Telegram\Config\Keyboard\Buttons;
 
 use Kolirt\Telegram\Config\Bot;
+use Kolirt\Telegram\Config\Keyboard\Builder\KeyboardBuilder;
 use Kolirt\Telegram\Config\Keyboard\Buttons\Traits\Childrenable;
-use Kolirt\Telegram\Config\Keyboard\Configuration\Traits\Configurable;
+use Kolirt\Telegram\Config\Keyboard\Navigation\Traits\Navigationable;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Keyboard\Buttons\KeyboardButtonType;
 use Kolirt\Telegram\Core\Types\Updates\UpdateType;
@@ -18,8 +19,8 @@ class KeyboardTextButton extends BaseKeyboardButton
 
     use Childrenable;
 
-    use Configurable {
-        Configurable::__construct as private __configurable_construct;
+    use Navigationable {
+        Navigationable::__construct as private __configurable_construct;
     }
 
     public function __construct(
@@ -28,6 +29,7 @@ class KeyboardTextButton extends BaseKeyboardButton
         protected string            $label,
         protected string|array|null $fallback_handler = null,
 
+        bool                        $on_top = false,
         bool                        $lined_back_and_home_buttons = false,
         bool                        $reverse_back_and_home_buttons = false,
         string                      $back_button_label = 'default',
@@ -36,12 +38,18 @@ class KeyboardTextButton extends BaseKeyboardButton
     )
     {
         $this->__configurable_construct(
+            on_top: $on_top,
             lined_back_and_home_buttons: $lined_back_and_home_buttons,
             reverse_back_and_home_buttons: $reverse_back_and_home_buttons,
             back_button_label: $back_button_label,
             home_button_enabled: $home_button_enabled,
             home_button_label: $home_button_label,
         );
+
+        if ($fallback_handler) {
+            $this->children(function (KeyboardBuilder $keyboard_builder) {
+            });
+        }
     }
 
     public function hasFallback()
@@ -54,6 +62,11 @@ class KeyboardTextButton extends BaseKeyboardButton
         return new KeyboardButtonType(
             text: $this->getLabel()
         );
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     public function run(
@@ -97,14 +110,5 @@ class KeyboardTextButton extends BaseKeyboardButton
         call_user_func([$handler, $method], ...$params);
     }
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getLabel(): string
-    {
-        return $this->label;
-    }
 
 }

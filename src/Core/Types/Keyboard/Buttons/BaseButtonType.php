@@ -9,7 +9,9 @@ abstract class BaseButtonType extends BaseType
 
     public function render(): array
     {
-        return (array)$this;
+        return array_filter((array)$this, function ($item) {
+            return !is_null($item);
+        });
     }
 
 }

@@ -18,11 +18,6 @@ class ServiceKeyboardBackButton extends BaseKeyboardButton
     {
     }
 
-    public function getLabel(): string
-    {
-        return $this->label;
-    }
-
     public function render(): KeyboardButtonType
     {
         return new KeyboardButtonType(

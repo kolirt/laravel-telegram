@@ -54,7 +54,7 @@ class TelegramController
             return UpdateType::from($request->all());
         } else {
             $updates = $telegram->getUpdates(offset: -1, limit: 1);
-            return count($updates) ? $updates[0] : null;
+            return $updates->ok && count($updates->result) ? $updates->result[0] : null;
         }
     }
 

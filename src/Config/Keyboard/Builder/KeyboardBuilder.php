@@ -6,8 +6,8 @@ use Kolirt\Telegram\Config\Bot;
 use Kolirt\Telegram\Config\Keyboard\Builder\Traits\Buttonable;
 use Kolirt\Telegram\Config\Keyboard\Builder\Traits\Pathable;
 use Kolirt\Telegram\Config\Keyboard\Builder\Traits\Runnable;
-use Kolirt\Telegram\Config\Keyboard\Configuration\Traits\Configurable;
 use Kolirt\Telegram\Config\Keyboard\Line\KeyboardLine;
+use Kolirt\Telegram\Config\Keyboard\Navigation\Traits\Navigationable;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Keyboard\Buttons\KeyboardButtonType;
 use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardMarkupType;
@@ -21,8 +21,8 @@ use ReflectionMethod;
 class KeyboardBuilder
 {
 
-    use Configurable {
-        Configurable::__construct as private __configurable_construct;
+    use Navigationable {
+        Navigationable::__construct as private __navigation_construct;
     }
     use Buttonable;
     use Pathable;
@@ -34,6 +34,7 @@ class KeyboardBuilder
     protected string|array $default_handler;
 
     public function __construct(
+        bool   $on_top = false,
         bool   $lined_back_and_home_buttons = false,
         bool   $reverse_back_and_home_buttons = false,
         string $back_button_label = '🔙 Back',
@@ -41,7 +42,8 @@ class KeyboardBuilder
         string $home_button_label = '🏘 Home',
     )
     {
-        $this->__configurable_construct(
+        $this->__navigation_construct(
+            on_top: $on_top,
             lined_back_and_home_buttons: $lined_back_and_home_buttons,
             reverse_back_and_home_buttons: $reverse_back_and_home_buttons,
             back_button_label: $back_button_label,
@@ -53,11 +55,12 @@ class KeyboardBuilder
     public function line($fn): void
     {
         $line = new KeyboardLine(
-            lined_back_and_home_buttons: $this->configuration->lined_back_and_home_buttons,
-            reverse_back_and_home_buttons: $this->configuration->reverse_back_and_home_buttons,
-            back_button_label: $this->configuration->back_button_label,
-            home_button_enabled: $this->configuration->home_button_enabled,
-            home_button_label: $this->configuration->home_button_label,
+            on_top: $this->navigation->on_top,
+            lined_back_and_home_buttons: $this->navigation->lined_back_and_home_buttons,
+            reverse_back_and_home_buttons: $this->navigation->reverse_back_and_home_buttons,
+            back_button_label: $this->navigation->back_button_label,
+            home_button_enabled: $this->navigation->home_button_enabled,
+            home_button_label: $this->navigation->home_button_label,
         );
         $line->addToPath($this->path);
         $fn($line);
@@ -111,53 +114,59 @@ class KeyboardBuilder
 
     public function renderReplyKeyboardMarkup(): ReplyKeyboardMarkupType|ReplyKeyboardRemoveType
     {
-        if (count($this->lines)) {
-            $keyboard = array_map(fn(KeyboardLine $line) => $line->render(), $this->lines);
-
-            // dump($this);
-
-            if ($this->path !== '') {
-                if ($this->configuration->lined_back_and_home_buttons && $this->configuration->home_button_enabled) {
-                    $buttons = [
-                        new KeyboardButtonType(
-                            text: $this->configuration->back_button_label
-                        ),
-                        new KeyboardButtonType(
-                            text: $this->configuration->home_button_label
-                        )
-                    ];
-
-                    $keyboard[] = $this->configuration->reverse_back_and_home_buttons ? array_reverse($buttons) : $buttons;
-                } else {
-                    $buttons = [
-                        [
-                            new KeyboardButtonType(
-                                text: $this->configuration->back_button_label
-                            ),
-                        ]
-                    ];
-
-                    if ($this->configuration->home_button_enabled) {
-                        $buttons[] = [
-                            new KeyboardButtonType(
-                                text: $this->configuration->home_button_label
-                            )
-                        ];
-                    }
-
-                    $buttons = $this->configuration->reverse_back_and_home_buttons ? array_reverse($buttons) : $buttons;
-
-                    array_push($keyboard, ...$buttons);
-                }
-            }
-
-            return new ReplyKeyboardMarkupType(
-                keyboard: $keyboard,
-                resize_keyboard: true
-            );
-        } else {
+        if ($this->path === '' && count($this->lines) === 0) {
             return new ReplyKeyboardRemoveType(true);
         }
+
+        $keyboard = array_map(fn(KeyboardLine $line) => $line->render(), $this->lines);
+
+        if ($this->path !== '') {
+            if ($this->navigation->lined_back_and_home_buttons && $this->navigation->home_button_enabled) {
+                $buttons = [
+                    new KeyboardButtonType(
+                        text: $this->navigation->back_button_label
+                    ),
+                    new KeyboardButtonType(
+                        text: $this->navigation->home_button_label
+                    )
+                ];
+
+                $navigation_buttons = $this->navigation->reverse_back_and_home_buttons ? array_reverse($buttons) : $buttons;
+                if ($this->navigation->on_top) {
+                    $keyboard = [
+                        $navigation_buttons,
+                        ...$keyboard
+                    ];
+                } else {
+                    $keyboard[] = $navigation_buttons;
+                }
+            } else {
+                $buttons = [
+                    [
+                        new KeyboardButtonType(
+                            text: $this->navigation->back_button_label
+                        ),
+                    ]
+                ];
+
+                if ($this->navigation->home_button_enabled) {
+                    $buttons[] = [
+                        new KeyboardButtonType(
+                            text: $this->navigation->home_button_label
+                        )
+                    ];
+                }
+
+                $buttons = $this->navigation->reverse_back_and_home_buttons ? array_reverse($buttons) : $buttons;
+
+                array_push($keyboard, ...$buttons);
+            }
+        }
+
+        return new ReplyKeyboardMarkupType(
+            keyboard: $keyboard,
+            resize_keyboard: true
+        );
     }
 
     public function empty(): bool

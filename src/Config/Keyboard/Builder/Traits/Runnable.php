@@ -2,6 +2,7 @@
 
 namespace Kolirt\Telegram\Config\Keyboard\Builder\Traits;
 
+use Illuminate\Database\Eloquent\Model;
 use Kolirt\Telegram\Config\Bot;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Updates\UpdateType;
@@ -42,11 +43,13 @@ trait Runnable
 
         foreach ($this->lines as $line) {
             foreach ($line->getButtons() as $button) {
-                $buttons[$button->getName()] = $button;
+                if (method_exists($button, 'getName')) {
+                    $buttons[$button->getName()] = $button;
 
-                if (method_exists($button, 'hasChildren') && $button->hasChildren()) {
-                    foreach ($button->getKeyboard()->normalizeButtons() as $value) {
-                        $buttons[$value->getName()] = $value;
+                    if (method_exists($button, 'hasChildren') && $button->hasChildren()) {
+                        foreach ($button->getKeyboard()->normalizeButtons() as $value) {
+                            $buttons[$value->getName()] = $value;
+                        }
                     }
                 }
             }
@@ -55,21 +58,32 @@ trait Runnable
         return $buttons;
     }
 
+    /**
+     * @param Bot $bot
+     * @param Telegram $telegram
+     * @param UpdateType $context
+     * @param Model|Chat $chat_model
+     * @param Model|User $user_model
+     * @param Model|BotChatPivot $bot_chat_pivot_model
+     * @param string $input
+     * @return void
+     */
     public function run(
-        Bot          $bot,
-        Telegram     $telegram,
-        UpdateType   $context,
-        Chat         $chat_model,
-        User         $user_model,
-        BotChatPivot $bot_chat_pivot_model,
-        string       $input
+        Bot                $bot,
+        Telegram           $telegram,
+        UpdateType         $context,
+        Model|Chat         $chat_model,
+        Model|User         $user_model,
+        Model|BotChatPivot $bot_chat_pivot_model,
+        string             $input
     ): void
     {
         $buttons = $this->normalizeButtons();
+
         $matched_buttons = $this->path === ''
             ? array_filter($buttons, fn($value, $key) => preg_match('/^[\w\d]+$/', $key), ARRAY_FILTER_USE_BOTH)
             : array_filter($buttons, fn($value, $key) => $this->path === $key || preg_match('/^' . $this->path . '\.[\w\d]+$/', $key), ARRAY_FILTER_USE_BOTH);
-        $matched_button = array_key_exists($this->path, $matched_buttons) ? $matched_buttons[$this->path] : null;
+        $matched_button = $matched_buttons[$this->path] ?? null;
         $matched_children = array_filter($matched_buttons, fn($key) => str_starts_with($key, $this->path !== '' ? $this->path . '.' : $this->path), ARRAY_FILTER_USE_KEY);
         $next_button = null;
         foreach ($matched_children as $value) {
@@ -78,6 +92,11 @@ trait Runnable
                 break;
             }
         }
+
+//        dump($matched_button);
+//        dump($matched_children);
+//        dump($input);
+//        dump($matched_button);
 
         /*dump(
             $this->path,
@@ -113,7 +132,13 @@ trait Runnable
 
         /** routing */
         $new_path = '';
-        if ($next_button && method_exists($next_button, 'hasChildren') && $next_button->hasChildren()) {
+        if (
+            $next_button &&
+            (
+                (method_exists($next_button, 'hasChildren') && $next_button->hasChildren()) ||
+                (method_exists($next_button, 'hasFallback') && $next_button->hasFallback())
+            )
+        ) {
             $new_path = $next_button->getName();
         } else if ($matched_button) {
             $new_path = $matched_button->getName();
@@ -122,13 +147,22 @@ trait Runnable
         $this->setPath($new_path);
 
         /** attach keyboard */
-        if ($next_button && method_exists($next_button, 'hasChildren') && $next_button->hasChildren()) {
+        if (
+            $next_button &&
+            (
+                (method_exists($next_button, 'hasChildren') && $next_button->hasChildren()) ||
+                (method_exists($next_button, 'hasFallback') && $next_button->hasFallback())
+            )
+        ) {
             $telegram->attachReplyKeyboardMarkupObject(
                 $next_button->getKeyboard()->renderReplyKeyboardMarkup()
             );
         } else if ($matched_button) {
             if ($this->path !== '') {
-                if (method_exists($matched_button, 'hasChildren') && $matched_button->hasChildren()) {
+                if (
+                    (method_exists($matched_button, 'hasChildren') && $matched_button->hasChildren()) ||
+                    (method_exists($matched_button, 'hasFallback') && $matched_button->hasFallback())
+                ) {
                     $telegram->attachReplyKeyboardMarkupObject(
                         $matched_button->getKeyboard()->renderReplyKeyboardMarkup()
                     );

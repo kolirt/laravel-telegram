@@ -14,7 +14,7 @@ if (!function_exists('request_params')) {
         }
 
         return array_filter($input, function ($value) {
-            return $value !== null;
+            return !is_null($value);
         });
     }
 }

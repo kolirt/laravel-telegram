@@ -5,7 +5,7 @@ namespace Kolirt\Telegram\Core\Types\Keyboard;
 class ReplyKeyboardRemoveType extends BaseReplyMarkupType
 {
 
-    public true $remove_keyboard = true;
+    public bool $remove_keyboard = true;
 
     public function __construct(
         bool|null $selective = null

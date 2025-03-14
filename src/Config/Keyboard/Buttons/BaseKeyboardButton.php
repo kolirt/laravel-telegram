@@ -13,9 +13,10 @@ use Kolirt\Telegram\Models\User;
 abstract class BaseKeyboardButton
 {
 
-    protected string $parent_path;
+    protected string $name;
+    protected string $label;
 
-    abstract public function getLabel(): string;
+    protected string $parent_path;
 
     abstract public function render(): KeyboardButtonType;
 
@@ -38,6 +39,11 @@ abstract class BaseKeyboardButton
     public function getParentPath(): string
     {
         return $this->parent_path;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
     }
 
 }

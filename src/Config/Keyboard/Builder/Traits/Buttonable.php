@@ -36,7 +36,7 @@ trait Buttonable
     public function requestUsers(string $label): KeyboardRequestUsersButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
-            $keyboard_line->requestUsers($label);
+            $button = $keyboard_line->requestUsers($label);
         });
 
         return $button;
@@ -45,7 +45,7 @@ trait Buttonable
     public function requestChat(string $label): KeyboardRequestChatButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
-            $keyboard_line->requestChat($label);
+            $button = $keyboard_line->requestChat($label);
         });
 
         return $button;
@@ -54,7 +54,7 @@ trait Buttonable
     public function requestContact(string $label): KeyboardRequestContactButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
-            $keyboard_line->requestContact($label);
+            $button = $keyboard_line->requestContact($label);
         });
 
         return $button;
@@ -63,7 +63,7 @@ trait Buttonable
     public function requestLocation(string $label): KeyboardRequestLocationButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
-            $keyboard_line->requestLocation($label);
+            $button = $keyboard_line->requestLocation($label);
         });
 
         return $button;
@@ -72,7 +72,7 @@ trait Buttonable
     public function requestPoll(string $label): KeyboardRequestPollButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
-            $keyboard_line->requestPoll($label);
+            $button = $keyboard_line->requestPoll($label);
         });
 
         return $button;
@@ -81,7 +81,7 @@ trait Buttonable
     public function webApp(string $label): KeyboardWebAppButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
-            $keyboard_line->webApp($label);
+            $button = $keyboard_line->webApp($label);
         });
 
         return $button;

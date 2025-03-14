@@ -41,6 +41,8 @@ class ReplyKeyboardMarkupType extends BaseReplyMarkupType
             }, $line);
         }, $data['keyboard']);
 
-        return $data;
+        return array_filter($data, function ($item) {
+            return !is_null($item);
+        });
     }
 }

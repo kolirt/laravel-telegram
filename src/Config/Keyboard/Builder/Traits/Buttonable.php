@@ -24,8 +24,8 @@ trait Buttonable
         $this->line(function (KeyboardLine $keyboard_line) use ($name, $handler, $label, $fallback_handler, &$button) {
             $button = $keyboard_line->textButton(
                 name: $name,
-                handler: $handler,
                 label: $label,
+                handler: $handler,
                 fallback_handler: $fallback_handler
             );
         });

@@ -25,8 +25,8 @@ class KeyboardTextButton extends BaseKeyboardButton
 
     public function __construct(
         protected string            $name,
-        protected string|array      $handler,
         protected string            $label,
+        protected string|array      $handler,
         protected string|array|null $fallback_handler = null,
 
         bool                        $on_top = false,

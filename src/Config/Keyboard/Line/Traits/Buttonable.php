@@ -32,8 +32,8 @@ trait Buttonable
 
         $text_button = new KeyboardTextButton(
             name: $name,
-            handler: $handler,
             label: $label,
+            handler: $handler,
             fallback_handler: $fallback_handler,
 
             on_top: $this->navigation->on_top,

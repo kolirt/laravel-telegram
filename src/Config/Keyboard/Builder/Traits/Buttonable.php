@@ -14,15 +14,15 @@ use Kolirt\Telegram\Config\Keyboard\Line\KeyboardLine;
 trait Buttonable
 {
 
-    public function text(
+    public function textButton(
         string       $name,
-        string|array $handler,
         string       $label,
+        string|array $handler,
         string|array $fallback_handler = null
     ): KeyboardTextButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($name, $handler, $label, $fallback_handler, &$button) {
-            $button = $keyboard_line->text(
+            $button = $keyboard_line->textButton(
                 name: $name,
                 handler: $handler,
                 label: $label,
@@ -33,55 +33,55 @@ trait Buttonable
         return $button;
     }
 
-    public function requestUsers(string $label): KeyboardRequestUsersButton
+    public function requestUsersButton(string $label): KeyboardRequestUsersButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
-            $button = $keyboard_line->requestUsers($label);
+            $button = $keyboard_line->requestUsersButton($label);
         });
 
         return $button;
     }
 
-    public function requestChat(string $label): KeyboardRequestChatButton
+    public function requestChatButton(string $label): KeyboardRequestChatButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
-            $button = $keyboard_line->requestChat($label);
+            $button = $keyboard_line->requestChatButton($label);
         });
 
         return $button;
     }
 
-    public function requestContact(string $label): KeyboardRequestContactButton
+    public function requestContactButton(string $label): KeyboardRequestContactButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
-            $button = $keyboard_line->requestContact($label);
+            $button = $keyboard_line->requestContactButton($label);
         });
 
         return $button;
     }
 
-    public function requestLocation(string $label): KeyboardRequestLocationButton
+    public function requestLocationButton(string $label): KeyboardRequestLocationButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
-            $button = $keyboard_line->requestLocation($label);
+            $button = $keyboard_line->requestLocationButton($label);
         });
 
         return $button;
     }
 
-    public function requestPoll(string $label): KeyboardRequestPollButton
+    public function requestPollButton(string $label): KeyboardRequestPollButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
-            $button = $keyboard_line->requestPoll($label);
+            $button = $keyboard_line->requestPollButton($label);
         });
 
         return $button;
     }
 
-    public function webApp(string $label): KeyboardWebAppButton
+    public function webAppButton(string $label): KeyboardWebAppButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
-            $button = $keyboard_line->webApp($label);
+            $button = $keyboard_line->webAppButton($label);
         });
 
         return $button;

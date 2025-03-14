@@ -14,8 +14,6 @@ class Navigation
 
         public bool   $home_button_enabled = false,
         public string $home_button_label = '🏘 Home',
-
-        public bool   $initial = true
     )
     {
     }
@@ -35,8 +33,6 @@ class Navigation
         if ($back_button_label !== null) $this->back_button_label = $back_button_label;
         if ($home_button_enabled !== null) $this->home_button_enabled = $home_button_enabled;
         if ($home_button_label !== null) $this->home_button_label = $home_button_label;
-
-        $this->initial = true;
 
         return $this;
     }

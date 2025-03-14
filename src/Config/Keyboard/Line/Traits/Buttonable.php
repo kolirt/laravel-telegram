@@ -21,16 +21,16 @@ trait Buttonable
      */
     protected array $buttons = [];
 
-    public function text(
+    public function textButton(
         string       $name,
-        string|array $handler,
         string       $label,
+        string|array $handler,
         string|array $fallback_handler = null
     ): KeyboardTextButton
     {
         $name = $this->path === '' ? $name : $this->path . '.' . $name;
 
-        $text = new KeyboardTextButton(
+        $text_button = new KeyboardTextButton(
             name: $name,
             handler: $handler,
             label: $label,
@@ -43,51 +43,51 @@ trait Buttonable
             home_button_enabled: $this->navigation->home_button_enabled,
             home_button_label: $this->navigation->home_button_label,
         );
-        $text->setParentPath($this->path);
-        $this->buttons[] = $text;
-        return $text;
+        $text_button->setParentPath($this->path);
+        $this->buttons[] = $text_button;
+        return $text_button;
     }
 
-    public function requestUsers(string $label): KeyboardRequestUsersButton
+    public function requestUsersButton(string $label): KeyboardRequestUsersButton
     {
-        $requestUsers = new KeyboardRequestUsersButton($label);
-        $this->buttons[] = $requestUsers;
-        return $requestUsers;
+        $request_users_button = new KeyboardRequestUsersButton($label);
+        $this->buttons[] = $request_users_button;
+        return $request_users_button;
     }
 
-    public function requestChat(string $label): KeyboardRequestChatButton
+    public function requestChatButton(string $label): KeyboardRequestChatButton
     {
-        $request_chat = new KeyboardRequestChatButton($label);
-        $this->buttons[] = $request_chat;
-        return $request_chat;
+        $request_chat_chat = new KeyboardRequestChatButton($label);
+        $this->buttons[] = $request_chat_chat;
+        return $request_chat_chat;
     }
 
-    public function requestContact(string $label): KeyboardRequestContactButton
+    public function requestContactButton(string $label): KeyboardRequestContactButton
     {
-        $request_contact = new KeyboardRequestContactButton($label);
-        $this->buttons[] = $request_contact;
-        return $request_contact;
+        $request_contact_chat = new KeyboardRequestContactButton($label);
+        $this->buttons[] = $request_contact_chat;
+        return $request_contact_chat;
     }
 
-    public function requestLocation(string $label): KeyboardRequestLocationButton
+    public function requestLocationButton(string $label): KeyboardRequestLocationButton
     {
-        $request_location = new KeyboardRequestLocationButton($label);
-        $this->buttons[] = $request_location;
-        return $request_location;
+        $request_location_chat = new KeyboardRequestLocationButton($label);
+        $this->buttons[] = $request_location_chat;
+        return $request_location_chat;
     }
 
-    public function requestPoll(string $label): KeyboardRequestPollButton
+    public function requestPollButton(string $label): KeyboardRequestPollButton
     {
-        $request_poll = new KeyboardRequestPollButton($label);
-        $this->buttons[] = $request_poll;
-        return $request_poll;
+        $request_poll_chat = new KeyboardRequestPollButton($label);
+        $this->buttons[] = $request_poll_chat;
+        return $request_poll_chat;
     }
 
-    public function webApp(string $label): KeyboardWebAppButton
+    public function webAppButton(string $label): KeyboardWebAppButton
     {
-        $web_app = new KeyboardWebAppButton($label);
-        $this->buttons[] = $web_app;
-        return $web_app;
+        $web_app_button = new KeyboardWebAppButton($label);
+        $this->buttons[] = $web_app_button;
+        return $web_app_button;
     }
 
     /**
@@ -98,7 +98,7 @@ trait Buttonable
         return $this->buttons;
     }
 
-    public function getButtonByLabel(string $label): KeyboardRequestPollButton|KeyboardRequestContactButton|KeyboardRequestChatButton|KeyboardRequestUsersButton|KeyboardRequestLocationButton|KeyboardWebAppButton|KeyboardTextButton|null
+    /*public function getButtonByLabel(string $label): KeyboardRequestPollButton|KeyboardRequestContactButton|KeyboardRequestChatButton|KeyboardRequestUsersButton|KeyboardRequestLocationButton|KeyboardWebAppButton|KeyboardTextButton|null
     {
         foreach ($this->getButtons() as $button) {
             if ($button->getLabel() == $label) {
@@ -107,9 +107,9 @@ trait Buttonable
         }
 
         return null;
-    }
+    }*/
 
-    public function getButtonByName(string $name): KeyboardRequestPollButton|KeyboardRequestContactButton|KeyboardRequestChatButton|KeyboardRequestUsersButton|KeyboardRequestLocationButton|KeyboardWebAppButton|KeyboardTextButton|null
+    /*public function getButtonByName(string $name): KeyboardRequestPollButton|KeyboardRequestContactButton|KeyboardRequestChatButton|KeyboardRequestUsersButton|KeyboardRequestLocationButton|KeyboardWebAppButton|KeyboardTextButton|null
     {
         foreach ($this->getButtons() as $button) {
             if ($button->getName() == $name) {
@@ -118,6 +118,6 @@ trait Buttonable
         }
 
         return null;
-    }
+    }*/
 
 }

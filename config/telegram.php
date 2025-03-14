@@ -14,7 +14,7 @@ return [
      *
      * Available values: ParseModeEnum::HTML, ParseModeEnum::MARKDOWN, null
      */
-    'default_parse_mode' => ParseModeEnum::HTML,
+    'default_parse_mode' => null,
 
     'models' => [
         'bot' => [

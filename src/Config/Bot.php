@@ -34,7 +34,6 @@ class Bot
         $this->model = $model;
     }
 
-
     public function run(Telegram $telegram, UpdateType $context): void
     {
         $this->syncContext($context);
@@ -79,8 +78,29 @@ class Bot
                 /** Keyboard */
                 $context->message &&
                 !empty($this->keyboard_builder) &&
-                (!$this->keyboard_builder->empty() || $this->keyboard_builder->hasDefaultHandler())
+                (
+                    !$this->keyboard_builder->empty() ||
+                    $this->keyboard_builder->hasDefaultHandler()
+                )
             ) {
+                $buttons = $this->keyboard_builder->getNormalizedButtons();
+
+                if (
+                    !array_key_exists($this->virtual_router_state, $buttons) ||
+                    !(
+                        (
+                            method_exists($buttons[$this->virtual_router_state], 'hasChildren') &&
+                            $buttons[$this->virtual_router_state]->hasChildren()
+                        ) ||
+                        (
+                            method_exists($buttons[$this->virtual_router_state], 'hasFallback') &&
+                            $buttons[$this->virtual_router_state]->hasFallback()
+                        )
+                    )
+                ) {
+                    $this->setVirtualRouterState('');
+                }
+
                 $this->keyboard_builder->run(
                     $this,
                     $telegram,

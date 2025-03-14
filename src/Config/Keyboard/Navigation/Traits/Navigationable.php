@@ -8,7 +8,6 @@ trait Navigationable
 {
 
     protected Navigation $navigation;
-    protected Navigation $fallback_navigation;
 
     public function __construct(
         bool   $on_top = false,
@@ -30,19 +29,6 @@ trait Navigationable
 
             home_button_enabled: $home_button_enabled,
             home_button_label: $home_button_label,
-        );
-
-        $this->fallback_navigation = new Navigation(
-            on_top: $on_top,
-            lined_back_and_home_buttons: $lined_back_and_home_buttons,
-            reverse_back_and_home_buttons: $reverse_back_and_home_buttons,
-
-            back_button_label: $back_button_label,
-
-            home_button_enabled: $home_button_enabled,
-            home_button_label: $home_button_label,
-
-            initial: false
         );
     }
 
@@ -66,25 +52,6 @@ trait Navigationable
         return $this;
     }
 
-    public function fallbackNavigation(
-        bool|null   $on_top = null,
-        bool|null   $lined_back_and_home_buttons = null,
-        bool|null   $reverse_back_and_home_buttons = null,
-        string|null $back_button_label = null,
-        bool|null   $home_button_enabled = null,
-        string|null $home_button_label = null,
-    ): self
-    {
-        $this->fallback_navigation->update(
-            on_top: $on_top,
-            lined_back_and_home_buttons: $lined_back_and_home_buttons,
-            reverse_back_and_home_buttons: $reverse_back_and_home_buttons,
-            back_button_label: $back_button_label,
-            home_button_enabled: $home_button_enabled,
-            home_button_label: $home_button_label,
-        );
-        return $this;
-    }
 
     public function getHomeButtonLabel(): ?string
     {

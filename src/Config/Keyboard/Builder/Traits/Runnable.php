@@ -13,32 +13,14 @@ use Kolirt\Telegram\Models\User;
 trait Runnable
 {
 
-    protected function prepareState(): array
-    {
-        $explode_path = explode('.', $this->path);
+    protected array|null $normalized_buttons = [];
 
-        $buttons = [];
-        $lines = $this->lines;
-        foreach ($explode_path as $index => $name) {
-            foreach ($lines as $line) {
-                $line_button = $line->getButtonByName($name);
-                if ($line_button) {
-                    $buttons[] = $line_button;
-                    if (count($explode_path) - 1 !== $index && $line_button->hasChildren()) {
-                        if (method_exists($line_button, 'hasChildren') && $line_button->hasChildren()) {
-                            $lines = $line_button->getKeyboard()->getLines();
-                        }
-                    }
-                    break;
-                }
-            }
+    public function getNormalizedButtons(): array
+    {
+        if ($this->normalized_buttons) {
+            return $this->normalized_buttons;
         }
 
-        return $buttons;
-    }
-
-    private function normalizeButtons(): array
-    {
         $buttons = [];
 
         foreach ($this->lines as $line) {
@@ -47,7 +29,7 @@ trait Runnable
                     $buttons[$button->getName()] = $button;
 
                     if (method_exists($button, 'hasChildren') && $button->hasChildren()) {
-                        foreach ($button->getKeyboard()->normalizeButtons() as $value) {
+                        foreach ($button->getKeyboard()->getNormalizedButtons() as $value) {
                             $buttons[$value->getName()] = $value;
                         }
                     }
@@ -55,7 +37,7 @@ trait Runnable
             }
         }
 
-        return $buttons;
+        return $this->normalized_buttons = $buttons;
     }
 
     /**
@@ -78,15 +60,15 @@ trait Runnable
         string             $input
     ): void
     {
-        $buttons = $this->normalizeButtons();
+        $buttons = $this->getNormalizedButtons();
 
         $matched_buttons = $this->path === ''
             ? array_filter($buttons, fn($value, $key) => !str_contains($key, '.'), ARRAY_FILTER_USE_BOTH)
             : array_filter($buttons, fn($value, $key) => $this->path === $key || str_starts_with($key, $this->path . '.'), ARRAY_FILTER_USE_BOTH);
         $matched_button = $matched_buttons[$this->path] ?? null;
         $matched_children = array_filter($matched_buttons, fn($key) => $key !== $this->path, ARRAY_FILTER_USE_KEY);
-        $next_button = null;
 
+        $next_button = null;
         foreach ($matched_children as $value) {
             if ($value->getLabel() == $input) {
                 $next_button = $value;

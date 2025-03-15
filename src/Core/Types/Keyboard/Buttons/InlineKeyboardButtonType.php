@@ -15,6 +15,7 @@ class InlineKeyboardButtonType extends BaseButtonType
         public string|null         $switch_inline_query = null,
         public string|null         $switch_inline_query_current_chat = null,
         // public SwitchInlineQueryChosenChatType|null $switch_inline_query_chosen_chat = null,
+        // public CopyTextButtonType|null $copy_text = null,
         // public CallbackGameType|null                $callback_game = null,
         public bool|null           $pay = null,
     )

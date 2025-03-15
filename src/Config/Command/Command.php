@@ -2,21 +2,16 @@
 
 namespace Kolirt\Telegram\Config\Command;
 
+use Illuminate\Database\Eloquent\Model;
 use Kolirt\Telegram\Config\Bot;
 use Kolirt\Telegram\Core\Telegram;
-use Kolirt\Telegram\Core\Types\Updates\UpdateType;
 use Kolirt\Telegram\Models\Chat;
+use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 use Kolirt\Telegram\Models\User;
 use ReflectionMethod;
 
 class Command
 {
-
-    public Bot $bot;
-    public Telegram $telegram;
-    public UpdateType $context;
-    public Chat|null $chat;
-    public User|null $user;
 
     public function __construct(
         protected string       $name,
@@ -27,48 +22,26 @@ class Command
     {
     }
 
-    public function setBot(Bot $bot): self
-    {
-        $this->bot = $bot;
-        return $this;
-    }
-
-    public function setTelegram(Telegram $telegram): self
-    {
-        $this->telegram = $telegram;
-        return $this;
-    }
-
-    public function setContext(UpdateType $context): self
-    {
-        $this->context = $context;
-        return $this;
-    }
-
-    public function setChat(Chat|null $chat): self
-    {
-        $this->chat = $chat;
-        return $this;
-    }
-
-    public function setUser(User|null $user): self
-    {
-        $this->user = $user;
-        return $this;
-    }
-
-    public function run(string $input): void
+    public function run(
+        Bot                     $bot,
+        Telegram                $telegram,
+        Model|Chat|null         $chat_model,
+        Model|User|null         $user_model,
+        Model|BotChatPivot|null $bot_chat_pivot_model,
+        string                  $input
+    ): void
     {
         $class = is_array($this->handler) ? $this->handler[0] : $this->handler;
         $method = is_array($this->handler) ? $this->handler[1] : '__invoke';
         $params = [];
 
         $handler = new $class(
-            $this->bot,
-            $this->telegram,
-            $this->context,
-            $this->chat,
-            $this->user
+            bot: $bot,
+            telegram: $telegram,
+            context: $telegram->update,
+            chat: $chat_model,
+            user: $user_model,
+            bot_chat_pivot_model: $bot_chat_pivot_model
         );
 
         $ref = new ReflectionMethod($handler, $method);

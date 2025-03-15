@@ -7,7 +7,7 @@ use Kolirt\Telegram\Core\Types\Updates\UpdateType;
 trait Updatable
 {
 
-    protected UpdateType $update;
+    public UpdateType $update;
 
     public function setUpdate(UpdateType $update): self
     {

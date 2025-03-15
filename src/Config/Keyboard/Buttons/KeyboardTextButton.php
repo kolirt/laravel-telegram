@@ -2,13 +2,13 @@
 
 namespace Kolirt\Telegram\Config\Keyboard\Buttons;
 
+use Illuminate\Database\Eloquent\Model;
 use Kolirt\Telegram\Config\Bot;
 use Kolirt\Telegram\Config\Keyboard\Builder\KeyboardBuilder;
 use Kolirt\Telegram\Config\Keyboard\Buttons\Traits\Childrenable;
 use Kolirt\Telegram\Config\Keyboard\Navigation\Traits\Navigationable;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Keyboard\Buttons\KeyboardButtonType;
-use Kolirt\Telegram\Core\Types\Updates\UpdateType;
 use Kolirt\Telegram\Models\Chat;
 use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 use Kolirt\Telegram\Models\User;
@@ -70,14 +70,13 @@ class KeyboardTextButton extends BaseKeyboardButton
     }
 
     public function run(
-        Bot          $bot,
-        Telegram     $telegram,
-        UpdateType   $context,
-        Chat         $chat_model,
-        User         $user_model,
-        BotChatPivot $bot_chat_pivot_model,
-        string       $input,
-        bool         $fallback = false
+        Bot                     $bot,
+        Telegram                $telegram,
+        Model|Chat|null         $chat_model,
+        Model|User|null         $user_model,
+        Model|BotChatPivot|null $bot_chat_pivot_model,
+        string                  $input,
+        bool                    $fallback = false
     )
     {
         if ($fallback) {
@@ -90,11 +89,12 @@ class KeyboardTextButton extends BaseKeyboardButton
         $params = [];
 
         $handler = new $class(
-            $bot,
-            $telegram,
-            $context,
-            $chat_model,
-            $user_model
+            bot: $bot,
+            telegram: $telegram,
+            context: $telegram->update,
+            chat: $chat_model,
+            user: $user_model,
+            bot_chat_pivot_model: $bot_chat_pivot_model
         );
 
         $ref = new ReflectionMethod($handler, $method);

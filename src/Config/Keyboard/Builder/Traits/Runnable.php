@@ -5,7 +5,6 @@ namespace Kolirt\Telegram\Config\Keyboard\Builder\Traits;
 use Illuminate\Database\Eloquent\Model;
 use Kolirt\Telegram\Config\Bot;
 use Kolirt\Telegram\Core\Telegram;
-use Kolirt\Telegram\Core\Types\Updates\UpdateType;
 use Kolirt\Telegram\Models\Chat;
 use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 use Kolirt\Telegram\Models\User;
@@ -43,7 +42,6 @@ trait Runnable
     /**
      * @param Bot $bot
      * @param Telegram $telegram
-     * @param UpdateType $context
      * @param Model|Chat $chat_model
      * @param Model|User $user_model
      * @param Model|BotChatPivot $bot_chat_pivot_model
@@ -53,7 +51,6 @@ trait Runnable
     public function run(
         Bot                $bot,
         Telegram           $telegram,
-        UpdateType         $context,
         Model|Chat         $chat_model,
         Model|User         $user_model,
         Model|BotChatPivot $bot_chat_pivot_model,
@@ -150,7 +147,6 @@ trait Runnable
             $next_button->run(
                 $bot,
                 $telegram,
-                $context,
                 $chat_model,
                 $user_model,
                 $bot_chat_pivot_model,
@@ -160,7 +156,6 @@ trait Runnable
             $matched_button->run(
                 bot: $bot,
                 telegram: $telegram,
-                context: $context,
                 chat_model: $chat_model,
                 user_model: $user_model,
                 bot_chat_pivot_model: $bot_chat_pivot_model,
@@ -169,13 +164,12 @@ trait Runnable
             );
         } else {
             $this->runDefault(
-                $bot,
-                $telegram,
-                $context,
-                $chat_model,
-                $user_model,
-                $bot_chat_pivot_model,
-                $input
+                bot: $bot,
+                telegram: $telegram,
+                chat_model: $chat_model,
+                user_model: $user_model,
+                bot_chat_pivot_model: $bot_chat_pivot_model,
+                input: $input
             );
         }
     }

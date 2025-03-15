@@ -34,9 +34,9 @@ class Bot
         $this->model = $model;
     }
 
-    public function run(Telegram $telegram, UpdateType $context): void
+    public function run(Telegram $telegram): void
     {
-        $this->syncContext($context);
+        $this->syncContext($telegram->update);
 
         if (
             $this->chat_model &&
@@ -44,11 +44,11 @@ class Bot
             $this->bot_chat_pivot_model
         ) {
             $this->setVirtualRouterState($this->bot_chat_pivot_model->virtual_router_state ?? '');
-            $text = $context->message->text ?? '';
+            $text = $telegram->update->message->text ?? '';
 
             if (
                 /** Commands */
-                $context->message &&
+                $telegram->update->message &&
                 !empty($this->command_builder) &&
                 !$this->command_builder->empty() &&
                 $this->command_builder->isCommand($text)
@@ -66,17 +66,17 @@ class Bot
                 $args = $segments[1] ?? '';
 
                 $command = $this->command_builder->getCommand($command_name);
-                if ($command) {
-                    $command->setBot($this);
-                    $command->setTelegram($telegram);
-                    $command->setContext($context);
-                    $command->setChat($this->chat_model);
-                    $command->setUser($this->user_model);
-                    $command->run($args);
-                }
+                $command?->run(
+                    bot: $this,
+                    telegram: $telegram,
+                    chat_model: $this->chat_model,
+                    user_model: $this->user_model,
+                    bot_chat_pivot_model: $this->bot_chat_pivot_model,
+                    input: $args
+                );
             } else if (
                 /** Keyboard */
-                $context->message &&
+                $telegram->update->message &&
                 !empty($this->keyboard_builder) &&
                 (
                     !$this->keyboard_builder->empty() ||
@@ -102,13 +102,12 @@ class Bot
                 }
 
                 $this->keyboard_builder->run(
-                    $this,
-                    $telegram,
-                    $context,
-                    $this->chat_model,
-                    $this->user_model,
-                    $this->bot_chat_pivot_model,
-                    $text
+                    bot: $this,
+                    telegram: $telegram,
+                    chat_model: $this->chat_model,
+                    user_model: $this->user_model,
+                    bot_chat_pivot_model: $this->bot_chat_pivot_model,
+                    input: $text
                 );
             }
         }

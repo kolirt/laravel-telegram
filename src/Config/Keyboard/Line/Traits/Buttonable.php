@@ -25,7 +25,9 @@ trait Buttonable
         string       $name,
         string       $label,
         string|array $handler,
-        string|array $fallback_handler = null
+        array        $handler_args = [],
+        string|array $fallback_handler = null,
+        array        $fallback_handler_args = []
     ): KeyboardTextButton
     {
         $name = $this->path === '' ? $name : $this->path . '.' . $name;
@@ -34,7 +36,9 @@ trait Buttonable
             name: $name,
             label: $label,
             handler: $handler,
+            handler_args: $handler_args,
             fallback_handler: $fallback_handler,
+            fallback_handler_args: $fallback_handler_args,
 
             on_top: $this->navigation->on_top,
             lined_back_and_home_buttons: $this->navigation->lined_back_and_home_buttons,

@@ -38,7 +38,7 @@ class TelegramController
                     $telegram->setUpdate($update);
 
                     $bot->setModel($bot_model);
-                    $bot->run($telegram, $update);
+                    $bot->run($telegram);
                 }
             }
 

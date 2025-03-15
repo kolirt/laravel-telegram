@@ -27,7 +27,9 @@ class KeyboardTextButton extends BaseKeyboardButton
         protected string            $name,
         protected string            $label,
         protected string|array      $handler,
+        protected array             $handler_args = [],
         protected string|array|null $fallback_handler = null,
+        protected array             $fallback_handler_args = [],
 
         bool                        $on_top = false,
         bool                        $lined_back_and_home_buttons = false,
@@ -77,7 +79,7 @@ class KeyboardTextButton extends BaseKeyboardButton
         Model|BotChatPivot|null $bot_chat_pivot_model,
         string                  $input,
         bool                    $fallback = false
-    )
+    ): void
     {
         if ($fallback) {
             $class = is_array($this->fallback_handler) ? $this->fallback_handler[0] : $this->fallback_handler;
@@ -86,15 +88,17 @@ class KeyboardTextButton extends BaseKeyboardButton
             $class = is_array($this->handler) ? $this->handler[0] : $this->handler;
             $method = is_array($this->handler) ? $this->handler[1] : '__invoke';
         }
+
         $params = [];
 
         $handler = new $class(
             bot: $bot,
             telegram: $telegram,
             context: $telegram->update,
-            chat: $chat_model,
-            user: $user_model,
-            bot_chat_pivot_model: $bot_chat_pivot_model
+            chat_model: $chat_model,
+            user_model: $user_model,
+            bot_chat_pivot_model: $bot_chat_pivot_model,
+            args: $fallback ? $this->fallback_handler_args : $this->handler_args
         );
 
         $ref = new ReflectionMethod($handler, $method);

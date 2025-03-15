@@ -10,14 +10,37 @@ class CommandBuilder
      */
     protected array $commands = [];
 
-    public function start(string|array $handler, string $description, bool $should_ignore_on_update = false): self
+    public function start(
+        string       $description,
+        string|array $handler,
+        array        $handler_args = [],
+        bool         $should_ignore_on_update = false
+    ): self
     {
-        return $this->command('start', $handler, $description, $should_ignore_on_update);
+        return $this->command(
+            name: 'start',
+            description: $description,
+            handler: $handler,
+            handler_args: $handler_args,
+            should_ignore_on_update: $should_ignore_on_update
+        );
     }
 
-    public function command(string $name, string|array $handler, string $description, bool $should_ignore_on_update = false): self
+    public function command(
+        string       $name,
+        string       $description,
+        string|array $handler,
+        array        $handler_args = [],
+        bool         $should_ignore_on_update = false
+    ): self
     {
-        $this->commands[$name] = new Command($name, $handler, $description, $should_ignore_on_update);
+        $this->commands[$name] = new Command(
+            name: $name,
+            description: $description,
+            handler: $handler,
+            handler_args: $handler_args,
+            should_ignore_on_update: $should_ignore_on_update
+        );
         return $this;
     }
 

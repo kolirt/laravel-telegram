@@ -18,15 +18,19 @@ trait Buttonable
         string       $name,
         string       $label,
         string|array $handler,
-        string|array $fallback_handler = null
+        array        $handler_args = [],
+        string|array $fallback_handler = null,
+        array        $fallback_handler_args = []
     ): KeyboardTextButton
     {
-        $this->line(function (KeyboardLine $keyboard_line) use ($name, $handler, $label, $fallback_handler, &$button) {
+        $this->line(function (KeyboardLine $keyboard_line) use ($name, $handler, $handler_args, $label, $fallback_handler, $fallback_handler_args, &$button) {
             $button = $keyboard_line->textButton(
                 name: $name,
                 label: $label,
                 handler: $handler,
-                fallback_handler: $fallback_handler
+                handler_args: $handler_args,
+                fallback_handler: $fallback_handler,
+                fallback_handler_args: $fallback_handler_args,
             );
         });
 

@@ -80,7 +80,7 @@ class KeyboardBuilder
         Model|User         $user_model,
         Model|BotChatPivot $bot_chat_pivot_model,
         string             $input
-    )
+    ): void
     {
         if (!$this->default_handler) {
             return;
@@ -88,14 +88,15 @@ class KeyboardBuilder
 
         $class = is_array($this->default_handler) ? $this->default_handler[0] : $this->default_handler;
         $method = is_array($this->default_handler) ? $this->default_handler[1] : '__invoke';
+
         $params = [];
 
         $handler = new $class(
             bot: $bot,
             telegram: $telegram,
             context: $telegram->update,
-            chat: $chat_model,
-            user: $user_model,
+            chat_model: $chat_model,
+            user_model: $user_model,
             bot_chat_pivot_model: $bot_chat_pivot_model
         );
 

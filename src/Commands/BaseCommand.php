@@ -17,9 +17,10 @@ class BaseCommand
         protected Bot                     $bot,
         protected Telegram                $telegram,
         protected UpdateType              $context,
-        protected Model|Chat|null         $chat = null,
-        protected Model|User|null         $user = null,
-        protected Model|BotChatPivot|null $bot_chat_pivot_model = null
+        protected Model|Chat|null         $chat_model = null,
+        protected Model|User|null         $user_model = null,
+        protected Model|BotChatPivot|null $bot_chat_pivot_model = null,
+        protected array                   $args = []
     )
     {
     }

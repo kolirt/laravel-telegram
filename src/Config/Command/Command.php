@@ -15,8 +15,9 @@ class Command
 
     public function __construct(
         protected string       $name,
-        protected string|array $handler,
         protected string       $description,
+        protected string|array $handler,
+        protected array        $handler_args = [],
         protected bool         $should_ignore_on_update = false
     )
     {
@@ -33,15 +34,17 @@ class Command
     {
         $class = is_array($this->handler) ? $this->handler[0] : $this->handler;
         $method = is_array($this->handler) ? $this->handler[1] : '__invoke';
+
         $params = [];
 
         $handler = new $class(
             bot: $bot,
             telegram: $telegram,
             context: $telegram->update,
-            chat: $chat_model,
-            user: $user_model,
-            bot_chat_pivot_model: $bot_chat_pivot_model
+            chat_model: $chat_model,
+            user_model: $user_model,
+            bot_chat_pivot_model: $bot_chat_pivot_model,
+            args: $this->handler_args
         );
 
         $ref = new ReflectionMethod($handler, $method);

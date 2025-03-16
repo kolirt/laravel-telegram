@@ -2,8 +2,8 @@
 
 namespace Kolirt\Telegram\Config\Keyboard\Buttons;
 
-use Kolirt\Telegram\Config\Keyboard\Buttons\Types\WebAppInfoType;
 use Kolirt\Telegram\Core\Types\Keyboard\Buttons\KeyboardButtonType;
+use Kolirt\Telegram\Core\Types\WebAppInfoType;
 
 class KeyboardWebAppButton extends BaseKeyboardButton
 {
@@ -15,17 +15,16 @@ class KeyboardWebAppButton extends BaseKeyboardButton
         string           $url
     )
     {
-        $this->web_app = new WebAppInfoType(
-            id: $url
-        );
+        $this->web_app = WebAppInfoType::from([
+            'url' => $url
+        ]);
     }
 
     public function render(): KeyboardButtonType
     {
         return new KeyboardButtonType(
             text: $this->getLabel(),
-        // TODO: Implement web_app
-        // web_app:
+            web_app: $this->web_app
         );
     }
 

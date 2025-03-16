@@ -87,9 +87,12 @@ trait Buttonable
         return $request_poll_chat;
     }
 
-    public function webAppButton(string $label): KeyboardWebAppButton
+    public function webAppButton(string $label, string $url): KeyboardWebAppButton
     {
-        $web_app_button = new KeyboardWebAppButton($label);
+        $web_app_button = new KeyboardWebAppButton(
+            label: $label,
+            url: $url
+        );
         $this->buttons[] = $web_app_button;
         return $web_app_button;
     }

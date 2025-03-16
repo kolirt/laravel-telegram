@@ -73,7 +73,7 @@ trait Buttonable
         return $button;
     }
 
-    public function requestPollButton(string $label): KeyboardRequestPollButton
+    public function requestPollButton(string $label, string $url): KeyboardRequestPollButton
     {
         $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
             $button = $keyboard_line->requestPollButton($label);
@@ -82,10 +82,13 @@ trait Buttonable
         return $button;
     }
 
-    public function webAppButton(string $label): KeyboardWebAppButton
+    public function webAppButton(string $label, string $url): KeyboardWebAppButton
     {
-        $this->line(function (KeyboardLine $keyboard_line) use ($label, &$button) {
-            $button = $keyboard_line->webAppButton($label);
+        $this->line(function (KeyboardLine $keyboard_line) use ($label, $url, &$button) {
+            $button = $keyboard_line->webAppButton(
+                label: $label,
+                url: $url
+            );
         });
 
         return $button;

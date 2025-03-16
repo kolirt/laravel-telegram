@@ -69,8 +69,15 @@ class ServiceProvider extends BaseServiceProvider
         $this->publishes([
             __DIR__ . '/../stubs/app/Http/Telegram/Commands/StartCommand.php.stub' => app_path('Http/Telegram/Commands/StartCommand.php'),
             __DIR__ . '/../stubs/app/Http/Telegram/Commands/InfoCommand.php.stub' => app_path('Http/Telegram/Commands/InfoCommand.php'),
-            __DIR__ . '/../stubs/app/Http/Telegram/Commands/TestCommand.php.stub' => app_path('Http/Telegram/Commands/TestCommand.php')
+            __DIR__ . '/../stubs/app/Http/Telegram/Commands/TestCommand.php.stub' => app_path('Http/Telegram/Commands/TestCommand.php'),
         ], 'commands');
+
+        $this->publishes([
+            __DIR__ . '/../stubs/app/Http/Telegram/Controllers/HomeController.php.stub' => app_path('Http/Telegram/Controllers/HomeController.php'),
+            __DIR__ . '/../stubs/app/Http/Telegram/Controllers/Button1Controller.php.stub' => app_path('Http/Telegram/Controllers/Button1Controller.php'),
+            __DIR__ . '/../stubs/app/Http/Telegram/Controllers/Button2Controller.php.stub' => app_path('Http/Telegram/Controllers/Button2Controller.php'),
+            __DIR__ . '/../stubs/app/Http/Telegram/Controllers/Button3Controller.php.stub' => app_path('Http/Telegram/Controllers/Button3Controller.php'),
+        ], 'controllers');
 
         $this->publishes([
             __DIR__ . '/../config/telegram.php' => config_path('telegram.php')

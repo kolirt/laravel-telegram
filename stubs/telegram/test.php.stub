@@ -3,6 +3,10 @@
 use App\Http\Telegram\Commands\InfoCommand;
 use App\Http\Telegram\Commands\StartCommand;
 use App\Http\Telegram\Commands\TestCommand;
+use App\Http\Telegram\Controllers\HomeController;
+use App\Http\Telegram\Controllers\Button1Controller;
+use App\Http\Telegram\Controllers\Button2Controller;
+use App\Http\Telegram\Controllers\Button3Controller;
 use Kolirt\Telegram\Config\Command\CommandBuilder;
 use Kolirt\Telegram\Config\Config;
 
@@ -12,7 +16,52 @@ use Kolirt\Telegram\Config\Config;
 
 $config->bot('test')
     ->commands(function (CommandBuilder $builder) {
-        $builder->start(StartCommand::class, 'Start command description');
-        $builder->command('info', InfoCommand::class, 'Info command description');
-        $builder->command('test', [TestCommand::class, 'index'], 'Test command description');
-    });
+        $builder->start('Start command description', StartCommand::class);
+        $builder->command('info', 'Info command description', InfoCommand::class);
+        $builder->command(
+            name: 'test',
+            description: 'Test command description',
+            handler: [TestCommand::class, 'index'],
+            handler_args: ['arg1', 'arg2'], // then you can get these arguments in the command handler by $this->args
+            should_ignore_on_update: true, // if true, the command will not be added to the update list
+        );
+    })
+    ->keyboard(function (KeyboardBuilder $keyboard) {
+       $keyboard->defaultHandler(StartCommand::class);
+       // OR
+       $keyboard->defaultHandler(HomeController::class);
+
+        $keyboard_builder->line(function (KeyboardLine $keyboard_line) {
+            $keyboard_line
+                ->textButton(
+                    name: 'button1',
+                    label: 'Button 1',
+                    handler: Button1Controller::class
+                )
+                ->children(function (KeyboardBuilder $keyboard_builder) {
+                    $keyboard_builder
+                        ->textButton(
+                            name: 'button3',
+                            label: 'Button 3',
+                            handler: [Button3Controller::class, 'index'],
+                            handler_args: [1, 2, 3],
+                            fallback_handler: [Button3Controller::class, 'fallback']
+                        )
+                        ->children(function (KeyboardBuilder $keyboard_builder) {
+                            $keyboard_builder->requestContactButton(
+                                label: 'Share my contact'
+                            );
+
+                            $keyboard_builder->requestLocationButton(
+                                label: 'Share my location'
+                            );
+                        });
+                });
+
+                $keyboard_line->textButton(
+                    name: 'button2',
+                    label: 'Button 2',
+                    handler: Button2Controller::class
+                );
+        });
+   });

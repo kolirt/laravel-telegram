@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Http\Telegram\Controllers;
+
+use Kolirt\Telegram\Controllers\BaseController;
+
+class Button3Controller extends BaseController
+{
+    public function index(): void
+    {
+        $this->telegram->reply(
+            text: <<<TEXT
+            3️⃣ Button 3 text
+            TEXT,
+        );
+    }
+
+    public function fallback(): void
+    {
+        $this->telegram->reply(
+            text: <<<TEXT
+            3️⃣ Button 3 fallback text
+            TEXT
+        );
+    }
+}

@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Http\Telegram\Controllers;
+
+use Kolirt\Telegram\Controllers\BaseController;
+
+class Button1Controller extends BaseController
+{
+    public function __invoke(): void
+    {
+        $this->telegram->reply(
+            text: <<<TEXT
+            1️⃣ Button 1 text
+            TEXT
+        );
+    }
+}

@@ -44,7 +44,7 @@ class BotUpdateCommandsConsoleCommand extends Command
                     );
                 }
 
-                if ($telegram->setMyCommands(commands: $commands)) {
+                if ($telegram->setMyCommands(commands: $commands)->ok) {
                     $this->info('Commands updated');
                 } else {
                     $this->error('Commands not updated');

@@ -20,7 +20,7 @@ class BotDeleteCommandsConsoleCommand extends Command
         if ($bot_model) {
             $telegram = new Telegram($bot_model->token);
 
-            if ($telegram->deleteMyCommands()) {
+            if ($telegram->deleteMyCommands()->ok) {
                 $this->info('Commands deleted');
             } else {
                 $this->error('Commands not deleted');

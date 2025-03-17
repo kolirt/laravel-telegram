@@ -36,6 +36,7 @@ return [
         ],
     ],
 
+    'domain' => env('TELEGRAM_DOMAIN', env('APP_URL')),
     'webhook_path' => 'api/telegram/bot{token}',
 
     'config_files' => [

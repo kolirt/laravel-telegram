@@ -8,6 +8,7 @@ use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Kolirt\Telegram\Config\Config;
 use Kolirt\Telegram\ConsoleCommands\Bot\BotCreateConsoleCommand;
 use Kolirt\Telegram\ConsoleCommands\Bot\BotDeleteCommandsConsoleCommand;
+use Kolirt\Telegram\ConsoleCommands\Bot\BotSetWebhookConsoleCommand;
 use Kolirt\Telegram\ConsoleCommands\Bot\BotUpdateCommandsConsoleCommand;
 use Kolirt\Telegram\ConsoleCommands\GenerateMetaConsoleCommand;
 use Kolirt\Telegram\ConsoleCommands\Initial\InstallConsoleCommand;
@@ -24,6 +25,7 @@ class ServiceProvider extends BaseServiceProvider
         BotCreateConsoleCommand::class,
         BotDeleteCommandsConsoleCommand::class,
         BotUpdateCommandsConsoleCommand::class,
+        BotSetWebhookConsoleCommand::class,
 
         InstallConsoleCommand::class,
         PublishCommandsConsoleCommand::class,

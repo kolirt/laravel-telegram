@@ -50,6 +50,7 @@ php artisan telegram:bot-create {bot-name} {token}
 - `telegram:bot-create {bot_name}` - Create a new bot
 - `telegram:bot-delete-commands {bot_name}` - Delete bot commands
 - `telegram:bot-update-commands {bot_name}` - Update bot commands
+- `telegram:bot-set-webhook {bot_name}` - Set webhook for bot
 - `telegram:install` - Installation the package
 - `telegram:meta` - Generate metadata
 - `telegram:publish-commands` - Publish example commands

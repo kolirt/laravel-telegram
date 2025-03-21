@@ -5,10 +5,10 @@ namespace Kolirt\Telegram\Config\Command;
 use Illuminate\Database\Eloquent\Model;
 use Kolirt\Telegram\Config\Bot;
 use Kolirt\Telegram\Core\Telegram;
+use Kolirt\Telegram\Helpers\Run;
 use Kolirt\Telegram\Models\Chat;
 use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 use Kolirt\Telegram\Models\User;
-use ReflectionMethod;
 
 class Command
 {
@@ -35,8 +35,6 @@ class Command
         $class = is_array($this->handler) ? $this->handler[0] : $this->handler;
         $method = is_array($this->handler) ? $this->handler[1] : '__invoke';
 
-        $params = [];
-
         $handler = new $class(
             bot: $bot,
             telegram: $telegram,
@@ -47,17 +45,8 @@ class Command
             args: $this->handler_args
         );
 
-        $ref = new ReflectionMethod($handler, $method);
-        $ref_params = $ref->getParameters();
-        if (count($ref_params)) {
-            $type = $ref->getParameters()[0]->getType();
-            if ($type && class_exists($type->getName())) {
-                $input = new ($type->getName())($input);
-            }
-            $params[] = $input;
-        }
-
-        call_user_func([$handler, $method], ...$params);
+        $run = new Run;
+        $run->call($handler, $method, $input);
     }
 
     public function getCommandName(): string

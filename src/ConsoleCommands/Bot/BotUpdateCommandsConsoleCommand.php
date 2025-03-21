@@ -37,7 +37,9 @@ class BotUpdateCommandsConsoleCommand extends Command
                 $commands = [];
 
                 /** @var \Kolirt\Telegram\Config\Command\Command $command */
-                foreach ($bot->getCommandsForUpdate() as $command) {
+                $command_builder = $bot->getCommandBuilder();
+
+                foreach ($command_builder->getCommandsForUpdate() as $command) {
                     $commands[] = new BotCommandType(
                         command: $command->getCommandName(),
                         description: $command->getDescription()

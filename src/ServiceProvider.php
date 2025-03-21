@@ -50,9 +50,11 @@ class ServiceProvider extends BaseServiceProvider
         $this->commands($this->commands);
 
         $this->app->singleton('telegram-config', function (Application $app) {
-            $config = new Config;
-            $config->load();
-            return $config;
+            return new Config;
+
+//            $config = new Config;
+//            $config->load();
+//            return $config;
         });
     }
 

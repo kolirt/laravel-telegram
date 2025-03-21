@@ -4,11 +4,11 @@ namespace Kolirt\Telegram\Config\Keyboard\Buttons;
 
 use Illuminate\Database\Eloquent\Model;
 use Kolirt\Telegram\Config\Bot;
-use Kolirt\Telegram\Config\Keyboard\Builder\KeyboardBuilder;
 use Kolirt\Telegram\Config\Keyboard\Buttons\Traits\Childrenable;
 use Kolirt\Telegram\Config\Keyboard\Navigation\Traits\Navigationable;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Keyboard\Buttons\KeyboardButtonType;
+use Kolirt\Telegram\Helpers\Run;
 use Kolirt\Telegram\Models\Chat;
 use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 use Kolirt\Telegram\Models\User;
@@ -47,11 +47,6 @@ class KeyboardTextButton extends BaseKeyboardButton
             home_button_enabled: $home_button_enabled,
             home_button_label: $home_button_label,
         );
-
-        if ($fallback_handler) {
-            $this->children(function (KeyboardBuilder $keyboard_builder) {
-            });
-        }
     }
 
     public function hasFallback()
@@ -89,8 +84,6 @@ class KeyboardTextButton extends BaseKeyboardButton
             $method = is_array($this->handler) ? $this->handler[1] : '__invoke';
         }
 
-        $params = [];
-
         $handler = new $class(
             bot: $bot,
             telegram: $telegram,
@@ -101,18 +94,8 @@ class KeyboardTextButton extends BaseKeyboardButton
             args: $fallback ? $this->fallback_handler_args : $this->handler_args
         );
 
-        $ref = new ReflectionMethod($handler, $method);
-        $ref_params = $ref->getParameters();
-        if (count($ref_params)) {
-            $type = $ref->getParameters()[0]->getType();
-            if ($type && class_exists($type->getName())) {
-                $input = new ($type->getName())($input);
-            }
-            $params[] = $input;
-        }
-
-        call_user_func([$handler, $method], ...$params);
+        $run = new Run;
+        $run->call($handler, $method, $input);
     }
-
 
 }

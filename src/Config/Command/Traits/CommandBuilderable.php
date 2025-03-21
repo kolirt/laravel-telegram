@@ -1,26 +1,26 @@
 <?php
 
-namespace Kolirt\Telegram\Config\Keyboard\Builder\Traits;
+namespace Kolirt\Telegram\Config\Command\Traits;
 
 use Closure;
-use Kolirt\Telegram\Config\Keyboard\Builder\KeyboardBuilder;
+use Kolirt\Telegram\Config\Command\CommandBuilder;
 
-trait KeyboardBuilderable
+trait CommandBuilderable
 {
 
-    protected Closure|null $keyboard_builder;
+    protected Closure|null $command_builder = null;
 
-    public function keyboard(Closure $fn): self
+    public function commands(Closure $fn): self
     {
-        $this->keyboard_builder = $fn;
+        $this->command_builder = $fn;
         return $this;
     }
 
-    public function getKeyboardBuilder(): KeyboardBuilder|null
+    public function getCommandBuilder(): CommandBuilder|null
     {
-        if ($this->keyboard_builder) {
-            $keyboard_builder = new KeyboardBuilder;
-            $fn = $this->keyboard_builder;
+        if ($this->command_builder) {
+            $command_builder = new CommandBuilder;
+            $fn = $this->command_builder;
 
             $args = [];
 
@@ -30,20 +30,20 @@ trait KeyboardBuilderable
                 $name = $ref_param->getType()->getName();
 
                 switch ($name) {
-                    case KeyboardBuilder::class:
-                        $args[] = $keyboard_builder;
+                    case CommandBuilder::class:
+                        $args[] = $command_builder;
                         break;
                     case config('telegram.models.bot.model'):
-                        $args[]=  $this->model;
+                        $args[] = $this->model;
                         break;
                     case config('telegram.models.chat.model'):
-                        $args[]=  $this->chat_model;
+                        $args[] = $this->chat_model;
                         break;
                     case config('telegram.models.bot_chat_pivot.model'):
-                        $args[]=  $this->bot_chat_pivot_model;
+                        $args[] = $this->bot_chat_pivot_model;
                         break;
                     case config('telegram.models.user.model'):
-                        $args[]=  $this->user_model;
+                        $args[] = $this->user_model;
                         break;
                     default:
                         if (class_exists($name)) {
@@ -53,8 +53,7 @@ trait KeyboardBuilderable
             }
 
             $fn(...$args);
-            $keyboard_builder->setPath($this->virtual_router_state);
-            return $keyboard_builder;
+            return $command_builder;
         }
 
         return null;

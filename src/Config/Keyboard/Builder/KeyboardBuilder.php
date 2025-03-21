@@ -13,10 +13,10 @@ use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Keyboard\Buttons\KeyboardButtonType;
 use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardMarkupType;
 use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardRemoveType;
+use Kolirt\Telegram\Helpers\Run;
 use Kolirt\Telegram\Models\Chat;
 use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 use Kolirt\Telegram\Models\User;
-use ReflectionMethod;
 
 class KeyboardBuilder
 {
@@ -82,14 +82,10 @@ class KeyboardBuilder
         string             $input
     ): void
     {
-        if (!$this->default_handler) {
-            return;
-        }
+        if (!$this->default_handler) return;
 
         $class = is_array($this->default_handler) ? $this->default_handler[0] : $this->default_handler;
         $method = is_array($this->default_handler) ? $this->default_handler[1] : '__invoke';
-
-        $params = [];
 
         $handler = new $class(
             bot: $bot,
@@ -100,17 +96,8 @@ class KeyboardBuilder
             bot_chat_pivot_model: $bot_chat_pivot_model
         );
 
-        $ref = new ReflectionMethod($handler, $method);
-        $ref_params = $ref->getParameters();
-        if (count($ref_params)) {
-            $type = $ref->getParameters()[0]->getType();
-            if ($type && class_exists($type->getName())) {
-                $input = new ($type->getName())($input);
-            }
-            $params[] = $input;
-        }
-
-        call_user_func([$handler, $method], ...$params);
+        $run = new Run;
+        $run->call($handler, $method, $input);
     }
 
     public function renderReplyKeyboardMarkup(): ReplyKeyboardMarkupType|ReplyKeyboardRemoveType

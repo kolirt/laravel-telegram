@@ -39,4 +39,9 @@ class BotChatPivot extends Pivot
         return parent::setKeysForSaveQuery($query);
     }
 
+    public function setVirtualRouterState($state)
+    {
+        $this->update(['virtual_router_state' => $state]);;
+    }
+
 }

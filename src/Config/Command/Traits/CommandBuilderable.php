@@ -37,13 +37,13 @@ trait CommandBuilderable
                         $args[] = $this->model;
                         break;
                     case config('telegram.models.chat.model'):
-                        $args[] = $this->chat_model;
+                        $args[] = $this->chat_model ?? new $name;
                         break;
                     case config('telegram.models.bot_chat_pivot.model'):
-                        $args[] = $this->bot_chat_pivot_model;
+                        $args[] = $this->bot_chat_pivot_model ?? new $name;
                         break;
                     case config('telegram.models.user.model'):
-                        $args[] = $this->user_model;
+                        $args[] = $this->user_model ?? new $name;
                         break;
                     default:
                         if (class_exists($name)) {

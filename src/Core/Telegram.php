@@ -9,6 +9,7 @@ use Kolirt\Telegram\Core\Methods\Chat\GetChatMemberMethod;
 use Kolirt\Telegram\Core\Methods\Commands\DeleteMyCommandsMethod;
 use Kolirt\Telegram\Core\Methods\Commands\GetMyCommandsMethod;
 use Kolirt\Telegram\Core\Methods\Commands\SetMyCommandsMethod;
+use Kolirt\Telegram\Core\Methods\Document\SendDocumentMethod;
 use Kolirt\Telegram\Core\Methods\GetMeMethod;
 use Kolirt\Telegram\Core\Methods\Messages\SendMessageMethod;
 use Kolirt\Telegram\Core\Methods\Photo\SendPhotoMethod;
@@ -33,7 +34,10 @@ class Telegram
     use GetMyCommandsMethod;
     use SetMyCommandsMethod;
 
-    /** Messages methods */
+    /** Document methods */
+    use SendDocumentMethod;
+
+    /** Message methods */
     use SendMessageMethod;
 
     /** Photo methods */

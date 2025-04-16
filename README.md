@@ -249,7 +249,7 @@ $config->bot('tma')
 - [ ] copyMessages
 - [X] [sendPhoto](https://core.telegram.org/bots/api#sendphoto) [[source code](src/Core/Methods/Photo/SendPhotoMethod.php)]
 - [ ] sendAudio
-- [ ] sendDocument
+- [X] [sendDocument](https://core.telegram.org/bots/api#senddocument) [[source code](src/Core/Methods/Document/SendDocumentMethod.php)]
 - [X] sendVideo
 - [X] sendAnimation
 - [ ] sendVoice

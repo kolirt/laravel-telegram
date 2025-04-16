@@ -34,7 +34,7 @@ trait KeyboardBuilderable
                         $args[] = $keyboard_builder;
                         break;
                     case config('telegram.models.bot.model'):
-                        $args[]=  $this->model;
+                        $args[] = $this->model;
                         break;
                     case config('telegram.models.chat.model'):
                         $args[] = $this->chat_model ?? new $name;

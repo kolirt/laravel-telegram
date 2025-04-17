@@ -10,6 +10,7 @@ use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Keyboard\InlineKeyboardMarkupType;
 use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardMarkupType;
 use Kolirt\Telegram\Core\Types\Keyboard\ReplyKeyboardRemoveType;
+use Kolirt\Telegram\Core\Types\LinkPreviewOptionsType;
 
 /**
  * @see https://core.telegram.org/bots/api#sendmessage
@@ -25,8 +26,11 @@ trait SendMessageMethod
      * @param string|null $business_connection_id
      * @param int|null $message_thread_id
      * @param ParseModeEnum|null $parse_mode
+     * @param LinkPreviewOptionsType|null $link_preview_options
      * @param bool|null $disable_notification
      * @param bool|null $protect_content
+     * @param bool|null $allow_paid_broadcast
+     * @param string|null $message_effect_id
      * @param InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
      *
      * @return SendMessageResponse
@@ -41,9 +45,11 @@ trait SendMessageMethod
         int                                                                           $message_thread_id = null,
         ParseModeEnum|null                                                            $parse_mode = null,
         // $entities = null,
-        // $link_preview_options = null,
+        LinkPreviewOptionsType|null                                                   $link_preview_options = null,
         bool                                                                          $disable_notification = null,
         bool                                                                          $protect_content = null,
+        bool                                                                          $allow_paid_broadcast = null,
+        string                                                                        $message_effect_id = null,
         // $reply_parameters = null,
         InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
     ): SendMessageResponse
@@ -68,9 +74,11 @@ trait SendMessageMethod
             'text' => $text,
             'parse_mode' => $parse_mode ?? config('telegram.default_parse_mode'),
             // 'entities' => $entities,
-            // 'link_preview_options' => $link_preview_options,
+            'link_preview_options' => $link_preview_options?->render(),
             'disable_notification' => $disable_notification,
             'protect_content' => $protect_content,
+            'allow_paid_broadcast' => $allow_paid_broadcast,
+            'message_effect_id' => $message_effect_id,
             // 'reply_parameters' => $reply_parameters,
             'reply_markup' => $reply_markup_formatted
         ]))->getBody();
@@ -83,8 +91,11 @@ trait SendMessageMethod
      * @param string|null $business_connection_id
      * @param int|null $message_thread_id
      * @param ParseModeEnum|null $parse_mode
+     * @param LinkPreviewOptionsType|null $link_preview_options
      * @param bool|null $disable_notification
      * @param bool|null $protect_content
+     * @param bool|null $allow_paid_broadcast
+     * @param bool|null $message_effect_id
      * @param InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
      *
      * @return SendMessageResponse
@@ -98,9 +109,11 @@ trait SendMessageMethod
         int                                                                           $message_thread_id = null,
         ParseModeEnum|null                                                            $parse_mode = null,
         // $entities = null,
-        // $link_preview_options = null,
+        LinkPreviewOptionsType|null                                                   $link_preview_options = null,
         bool                                                                          $disable_notification = null,
         bool                                                                          $protect_content = null,
+        bool                                                                          $allow_paid_broadcast = null,
+        bool                                                                          $message_effect_id = null,
         // $reply_parameters = null,
         InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
     ): SendMessageResponse
@@ -115,9 +128,11 @@ trait SendMessageMethod
             message_thread_id: $message_thread_id,
             parse_mode: $parse_mode,
             // entities: $entities,
-            // link_preview_options: $link_preview_options,
+            link_preview_options: $link_preview_options,
             disable_notification: $disable_notification,
             protect_content: $protect_content,
+            allow_paid_broadcast: $allow_paid_broadcast,
+            message_effect_id: $message_effect_id,
             // reply_parameters: $reply_parameters,
             reply_markup: $reply_markup,
         );

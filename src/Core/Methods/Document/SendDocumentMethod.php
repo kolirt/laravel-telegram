@@ -24,12 +24,13 @@ trait SendDocumentMethod
      * @param string $document
      * @param string|null $business_connection_id
      * @param int|null $message_thread_id
+     * @param string|null $thumbnail
      * @param string|null $caption
      * @param ParseModeEnum|null $parse_mode
-     * @param bool|null $show_caption_above_media
-     * @param bool|null $has_spoiler
+     * @param bool|null $disable_content_type_detection
      * @param bool|null $disable_notification
      * @param bool|null $protect_content
+     * @param bool|null $allow_paid_broadcast
      * @param string|null $message_effect_id
      * @param InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
      *
@@ -43,13 +44,14 @@ trait SendDocumentMethod
         string                                                                        $document,
         string                                                                        $business_connection_id = null,
         int                                                                           $message_thread_id = null,
+        string                                                                        $thumbnail = null,
         string                                                                        $caption = null,
         ParseModeEnum|null                                                            $parse_mode = null,
         // $caption_entities = null,
-        bool                                                                          $show_caption_above_media = null,
-        bool                                                                          $has_spoiler = null,
+        bool                                                                          $disable_content_type_detection = null,
         bool                                                                          $disable_notification = null,
         bool                                                                          $protect_content = null,
+        bool                                                                          $allow_paid_broadcast = null,
         string                                                                        $message_effect_id = null,
         // $reply_parameters = null,
         InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
@@ -73,13 +75,14 @@ trait SendDocumentMethod
             'chat_id' => $chat_id,
             'message_thread_id' => $message_thread_id,
             'document' => $document,
+            'thumbnail' => $thumbnail,
             'caption' => $caption,
             'parse_mode' => $parse_mode ?? config('telegram.default_parse_mode'),
             // 'caption_entities' => $caption_entities,
-            'show_caption_above_media' => $show_caption_above_media,
-            'has_spoiler' => $has_spoiler,
+            'disable_content_type_detection' => $disable_content_type_detection,
             'disable_notification' => $disable_notification,
             'protect_content' => $protect_content,
+            'allow_paid_broadcast' => $allow_paid_broadcast,
             'message_effect_id' => $message_effect_id,
             // 'reply_parameters' => $reply_parameters,
             'reply_markup' => $reply_markup_formatted
@@ -94,12 +97,13 @@ trait SendDocumentMethod
      * @param string $document
      * @param string|null $business_connection_id
      * @param int|null $message_thread_id
+     * @param string|null $thumbnail
      * @param string|null $caption
      * @param ParseModeEnum|null $parse_mode
-     * @param bool|null $show_caption_above_media
-     * @param bool|null $has_spoiler
+     * @param bool|null $disable_content_type_detection
      * @param bool|null $disable_notification
      * @param bool|null $protect_content
+     * @param bool|null $allow_paid_broadcast
      * @param string|null $message_effect_id
      * @param InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup
      *
@@ -112,13 +116,14 @@ trait SendDocumentMethod
         string                                                                        $document,
         string                                                                        $business_connection_id = null,
         int                                                                           $message_thread_id = null,
+        string                                                                        $thumbnail = null,
         string                                                                        $caption = null,
         ParseModeEnum|null                                                            $parse_mode = null,
         // $caption_entities = null,
-        bool                                                                          $show_caption_above_media = null,
-        bool                                                                          $has_spoiler = null,
+        bool                                                                          $disable_content_type_detection = null,
         bool                                                                          $disable_notification = null,
         bool                                                                          $protect_content = null,
+        bool                                                                          $allow_paid_broadcast = null,
         string                                                                        $message_effect_id = null,
         // $reply_parameters = null,
         InlineKeyboardMarkupType|ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $reply_markup = null,
@@ -132,12 +137,14 @@ trait SendDocumentMethod
             document: $document,
             business_connection_id: $business_connection_id,
             message_thread_id: $message_thread_id,
+            thumbnail: $thumbnail,
             caption: $caption,
             parse_mode: $parse_mode,
-            show_caption_above_media: $show_caption_above_media,
-            has_spoiler: $has_spoiler,
+            // caption_entities: $caption_entities,
+            disable_content_type_detection: $disable_content_type_detection,
             disable_notification: $disable_notification,
             protect_content: $protect_content,
+            allow_paid_broadcast: $allow_paid_broadcast,
             message_effect_id: $message_effect_id,
             // reply_parameters: $reply_parameters,
             reply_markup: $reply_markup,

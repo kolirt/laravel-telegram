@@ -12,6 +12,11 @@ trait Keyboardable
 
     protected ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null $attached_keyboard = null;
 
+    public function getAttachedKeyboard(): ReplyKeyboardMarkupType|ReplyKeyboardRemoveType|null
+    {
+        return $this->attached_keyboard;
+    }
+
     public function attachReplyKeyboardMarkupObject(ReplyKeyboardMarkupType|ReplyKeyboardRemoveType $keyboard): self
     {
         $this->attached_keyboard = $keyboard;

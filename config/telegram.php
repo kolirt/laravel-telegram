@@ -38,6 +38,7 @@ return [
 
     'domain' => env('TELEGRAM_DOMAIN', env('APP_URL')),
     'webhook_path' => 'api/telegram/bot{token}',
+    'disable_routes' => false,
 
     'config_files' => [
         base_path('telegram/test.php')

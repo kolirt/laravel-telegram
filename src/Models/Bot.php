@@ -5,7 +5,6 @@ namespace Kolirt\Telegram\Models;
 use Illuminate\Database\Eloquent\Model;
 use Kolirt\MasterModel\Traits\MasterModel;
 use Kolirt\Telegram\Core\Methods\Updates\GetUpdatesMethod;
-use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 
 class Bot extends Model
 {
@@ -39,7 +38,7 @@ class Bot extends Model
             config('telegram.models.bot_chat_pivot.table_name'),
             'bot_id',
             'chat_id'
-        )->using(BotChatPivot::class)->withTimestamps();
+        )->using(config('telegram.models.bot_chat_pivot.model'))->withTimestamps();
     }
 
 }

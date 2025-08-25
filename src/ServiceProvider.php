@@ -60,7 +60,7 @@ class ServiceProvider extends BaseServiceProvider
 
     private function loadRoutes(): void
     {
-        if (config('telegram.webhook_path') && config('telegram.disable_routes', false)) {
+        if (config('telegram.webhook_path') && !config('telegram.disable_routes', false)) {
             Route::middleware('api')
                 ->domain(config('telegram.domain'))
                 ->any(config('telegram.webhook_path'), [TelegramController::class, 'index']);

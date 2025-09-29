@@ -33,7 +33,7 @@ abstract class BaseController
 
     public function goHome(): void
     {
-        $this->personal_chat->update([
+        $this->personal_chat?->update([
             'virtual_path' => '',
             'virtual_state' => null,
             'virtual_state_data' => null,

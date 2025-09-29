@@ -76,9 +76,9 @@ class KeyboardBuilder
     public function runDefault(
         Bot                $bot,
         Telegram           $telegram,
-        Model|Chat         $chat_model,
-        Model|User         $user_model,
-        Model|BotChatPivot $bot_chat_pivot_model,
+        Model|Chat         $chat,
+        Model|User         $user,
+        Model|BotChatPivot $personal_chat,
         string             $input
     ): void
     {
@@ -87,17 +87,19 @@ class KeyboardBuilder
         $class = is_array($this->default_handler) ? $this->default_handler[0] : $this->default_handler;
         $method = is_array($this->default_handler) ? $this->default_handler[1] : '__invoke';
 
+        $request = $this->makeRequest($input);
+
         $handler = new $class(
+            request: $request,
             bot: $bot,
             telegram: $telegram,
             context: $telegram->update,
-            chat_model: $chat_model,
-            user_model: $user_model,
-            bot_chat_pivot_model: $bot_chat_pivot_model
+            chat: $chat,
+            user: $user,
+            personal_chat: $personal_chat
         );
 
-        $run = new Run;
-        $run->call($handler, $method, $input);
+        (new Run)->call($handler, $method);
     }
 
     public function renderReplyKeyboardMarkup(): ReplyKeyboardMarkupType|ReplyKeyboardRemoveType

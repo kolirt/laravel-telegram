@@ -12,6 +12,7 @@ use Kolirt\Telegram\Helpers\Run;
 use Kolirt\Telegram\Models\Chat;
 use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 use Kolirt\Telegram\Models\User;
+use Kolirt\Telegram\Request\Request;
 
 class KeyboardTextButton extends BaseKeyboardButton
 {
@@ -66,12 +67,12 @@ class KeyboardTextButton extends BaseKeyboardButton
     }
 
     public function run(
+        Request                 $request,
         Bot                     $bot,
         Telegram                $telegram,
-        Model|Chat|null         $chat_model,
-        Model|User|null         $user_model,
-        Model|BotChatPivot|null $bot_chat_pivot_model,
-        string                  $input,
+        Model|Chat|null         $chat,
+        Model|User|null         $user,
+        Model|BotChatPivot|null $personal_chat,
         bool                    $fallback = false
     ): void
     {
@@ -84,17 +85,16 @@ class KeyboardTextButton extends BaseKeyboardButton
         }
 
         $handler = new $class(
+            request: $request,
             bot: $bot,
             telegram: $telegram,
             context: $telegram->update,
-            chat_model: $chat_model,
-            user_model: $user_model,
-            bot_chat_pivot_model: $bot_chat_pivot_model,
+            chat: $chat,
+            user: $user,
+            personal_chat: $personal_chat,
             args: $fallback ? $this->fallback_handler_args : $this->handler_args
         );
 
-        $run = new Run;
-        $run->call($handler, $method, $input);
+        (new Run)->call($handler, $method);
     }
-
 }

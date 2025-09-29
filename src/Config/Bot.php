@@ -4,8 +4,10 @@ namespace Kolirt\Telegram\Config;
 
 use Kolirt\Telegram\Config\Command\CommandBuilder;
 use Kolirt\Telegram\Config\Command\Traits\CommandBuilderable;
+use Kolirt\Telegram\Config\Hooks\Hookable;
 use Kolirt\Telegram\Config\Keyboard\Builder\KeyboardBuilder;
 use Kolirt\Telegram\Config\Keyboard\Builder\Traits\KeyboardBuilderable;
+use Kolirt\Telegram\Config\VirtualPath\VirtualPathable;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Updates\UpdateType;
 use Kolirt\Telegram\Models\Bot as BotModel;
@@ -16,14 +18,16 @@ use Kolirt\Telegram\Models\User;
 class Bot
 {
 
-    use CommandBuilderable, KeyboardBuilderable;
+    use VirtualPathable;
+    use CommandBuilderable;
+    use KeyboardBuilderable;
+    use Hookable;
 
     protected BotModel $model;
 
-    protected Chat|null $chat_model = null;
-    protected User|null $user_model = null;
-    protected BotChatPivot|null $bot_chat_pivot_model = null;
-    protected string $virtual_router_state = '';
+    protected Chat|null $chat = null;
+    protected User|null $user = null;
+    protected BotChatPivot|null $personal_chat = null;
 
     public function __construct(
         protected string $name,
@@ -40,21 +44,19 @@ class Bot
     {
         $this->syncContext($telegram->update);
 
+        $this->beforeStart();
+
         if (
-            $this->chat_model &&
-            $this->user_model &&
-            $this->bot_chat_pivot_model
+            $this->chat &&
+            $this->user &&
+            $this->personal_chat
         ) {
-            $this->virtual_router_state = $this->bot_chat_pivot_model->virtual_router_state ?? '';
+            $this->setVirtualPath($this->personal_chat->virtual_path);
             $text = $telegram->update->message->text ?? '';
 
-            /**
-             * @var CommandBuilder $command_builder
-             */
+            /** @var CommandBuilder $command_builder */
             $command_builder = $this->getCommandBuilder();
-            /**
-             * @var KeyboardBuilder $keyboard_builder
-             */
+            /** @var KeyboardBuilder $keyboard_builder */
             $keyboard_builder = $this->getKeyboardBuilder();
 
             if (
@@ -67,8 +69,11 @@ class Bot
                 $segments = explode(' ', $text, 2);
                 $command_name = str_replace('/', '', $segments[0]);
 
-                if ($command_builder->isStartCommand($command_name)) {
-                    $this->setVirtualRouterState('', $keyboard_builder);
+                if (
+                    $keyboard_builder &&
+                    $command_builder->isStartCommand($command_name)
+                ) {
+                    $this->resetVirtualPath();
                     $telegram->attachReplyKeyboardMarkupObject(
                         $keyboard_builder->renderReplyKeyboardMarkup()
                     );
@@ -80,9 +85,9 @@ class Bot
                 $command?->run(
                     bot: $this,
                     telegram: $telegram,
-                    chat_model: $this->chat_model,
-                    user_model: $this->user_model,
-                    bot_chat_pivot_model: $this->bot_chat_pivot_model,
+                    chat: $this->chat,
+                    user: $this->user,
+                    personal_chat: $this->personal_chat,
                     input: $args
                 );
 
@@ -96,29 +101,30 @@ class Bot
                 (!$keyboard_builder->empty() || $keyboard_builder->hasDefaultHandler())
             ) {
                 $buttons = $keyboard_builder->getNormalizedButtons();
+                $virtual_path = $this->getVirtualPath();
 
                 if (
-                    !array_key_exists($this->virtual_router_state, $buttons) ||
+                    !array_key_exists($virtual_path, $buttons) ||
                     !(
                         (
-                            method_exists($buttons[$this->virtual_router_state], 'hasChildren') &&
-                            $buttons[$this->virtual_router_state]->hasChildren()
+                            method_exists($buttons[$virtual_path], 'hasChildren') &&
+                            $buttons[$virtual_path]->hasChildren()
                         ) ||
                         (
-                            method_exists($buttons[$this->virtual_router_state], 'hasFallback') &&
-                            $buttons[$this->virtual_router_state]->hasFallback()
+                            method_exists($buttons[$virtual_path], 'hasFallback') &&
+                            $buttons[$virtual_path]->hasFallback()
                         )
                     )
                 ) {
-                    $this->setVirtualRouterState('', $keyboard_builder);
+                    $this->resetVirtualPath();
                 }
 
                 $keyboard_builder->run(
                     bot: $this,
                     telegram: $telegram,
-                    chat_model: $this->chat_model,
-                    user_model: $this->user_model,
-                    bot_chat_pivot_model: $this->bot_chat_pivot_model,
+                    chat: $this->chat,
+                    user: $this->user,
+                    personal_chat: $this->personal_chat,
                     input: $text
                 );
             }
@@ -126,65 +132,77 @@ class Bot
     }
 
     /**
-     * @param string $state
-     * @param KeyboardBuilder|null $keyboard_builder
-     * @return void
-     */
-    protected function setVirtualRouterState(string $state, KeyboardBuilder|null $keyboard_builder = null): void
-    {
-        $this->bot_chat_pivot_model->setVirtualRouterState($state);
-        $this->virtual_router_state = $this->bot_chat_pivot_model->virtual_router_state ?? '';
-        $keyboard_builder?->setPath($this->virtual_router_state);
-    }
-
-    /**
      * @param UpdateType $context
      */
     protected function syncContext(UpdateType $context): void
     {
-        $chat_model = null;
-        $user_model = null;
+        $chat = null;
+        $user = null;
         $pivot_model = null;
 
         if ($context->message) {
             $message = $context->message;
 
             if ($message->chat) {
-                $chat_model = config('telegram.models.chat.model')::updateOrCreate(
+                $chat = config('telegram.models.chat.model')::updateOrCreate(
                     ['id' => $message->chat->id],
                     (array)$message->chat
                 );
 
                 if ($message->from) {
-                    $user_model = config('telegram.models.user.model')::updateOrCreate(
+                    $user = config('telegram.models.user.model')::updateOrCreate(
                         ['id' => $message->from->id],
                         [
                             ...(array)$message->from,
                             'is_premium' => $message->from->is_premium !== null,
-                            'chat_id' => $chat_model->id
+                            'chat_id' => $chat->id
                         ]
                     );
                 }
             }
         }
 
-        if ($chat_model) {
-            $pivot_model = config('telegram.models.bot_chat_pivot.model')::query()->updateOrCreate([
-                'bot_id' => $this->model->id,
-                'chat_id' => $chat_model->id
-            ], [
-                'last_activity_at' => now(),
-                'blocked_at' => null
-            ]);
+        if ($chat) {
+            $pivot_model = config('telegram.models.bot_chat_pivot.model')::query()
+                ->updateOrCreate(
+                    [
+                        'bot_id' => $this->model->id,
+                        'chat_id' => $chat->id
+                    ],
+                    [
+                        'last_activity_at' => now(),
+                        'blocked_at' => null
+                    ]
+                );
 
             /*if ($pivot_model->wasRecentlyCreated) {
                 $pivot_model->refresh();
             }*/
         }
 
-        $this->chat_model = $chat_model;
-        $this->user_model = $user_model;
-        $this->bot_chat_pivot_model = $pivot_model;
+        $this->chat = $chat;
+        $this->user = $user;
+        $this->personal_chat = $pivot_model;
+    }
+
+    public function goHome(Telegram $telegram): void
+    {
+        $this->setVirtualPath($this->personal_chat->virtual_path);
+
+        $keyboard_builder = $this->reloadKeyboardBuilder();
+
+        if (
+            $keyboard_builder &&
+            (!$keyboard_builder->empty() || $keyboard_builder->hasDefaultHandler())
+        ) {
+            $keyboard_builder->reload(
+                bot: $this,
+                telegram: $telegram,
+                chat: $this->chat,
+                user: $this->user,
+                personal_chat: $this->personal_chat
+            );
+        }
     }
 
 }

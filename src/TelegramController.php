@@ -4,10 +4,9 @@ namespace Kolirt\Telegram;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Kolirt\Telegram\Config\Config;
 use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Core\Types\Updates\UpdateType;
-use Kolirt\Telegram\Facades\Config as ConfigFacade;
+use Kolirt\Telegram\Facades\Config;
 
 class TelegramController
 {
@@ -22,19 +21,10 @@ class TelegramController
         });
 
         if ($bot_model) {
-            /**
-             * @var Config $config
-             */
-            $config = ConfigFacade::getFacadeRoot();
-            $config->load();
-
-            $bot = $config->getBot($bot_model->name);
-
-            if ($bot) {
+            if ($bot = Config::getBot($bot_model->name)) {
                 $telegram = new Telegram($bot_model->token);
-                $update = $this->getUpdate($request, $telegram);
 
-                if ($update) {
+                if ($update = $this->getUpdate($request, $telegram)) {
                     $telegram->setUpdate($update);
 
                     $bot->setModel($bot_model);

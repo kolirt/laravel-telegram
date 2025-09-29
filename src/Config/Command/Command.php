@@ -9,6 +9,7 @@ use Kolirt\Telegram\Helpers\Run;
 use Kolirt\Telegram\Models\Chat;
 use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 use Kolirt\Telegram\Models\User;
+use Kolirt\Telegram\Request\Request;
 
 class Command
 {
@@ -26,27 +27,31 @@ class Command
     public function run(
         Bot                     $bot,
         Telegram                $telegram,
-        Model|Chat|null         $chat_model,
-        Model|User|null         $user_model,
-        Model|BotChatPivot|null $bot_chat_pivot_model,
+        Model|Chat|null         $chat,
+        Model|User|null         $user,
+        Model|BotChatPivot|null $personal_chat,
         string                  $input
     ): void
     {
         $class = is_array($this->handler) ? $this->handler[0] : $this->handler;
         $method = is_array($this->handler) ? $this->handler[1] : '__invoke';
 
+        $request = new Request(
+            input: $input,
+        );
+
         $handler = new $class(
+            request: $request,
             bot: $bot,
             telegram: $telegram,
             context: $telegram->update,
-            chat_model: $chat_model,
-            user_model: $user_model,
-            bot_chat_pivot_model: $bot_chat_pivot_model,
+            chat: $chat,
+            user: $user,
+            personal_chat: $personal_chat,
             args: $this->handler_args
         );
 
-        $run = new Run;
-        $run->call($handler, $method, $input);
+        (new Run)->call($handler, $method);
     }
 
     public function getCommandName(): string

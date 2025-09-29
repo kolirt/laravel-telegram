@@ -17,6 +17,7 @@ use Kolirt\Telegram\ConsoleCommands\Initial\PublishConfigConsoleCommand;
 use Kolirt\Telegram\ConsoleCommands\Initial\PublishMigrationsConsoleCommand;
 use Kolirt\Telegram\ConsoleCommands\Initial\PublishRoutesConsoleCommand;
 use Kolirt\Telegram\ConsoleCommands\ServeConsoleCommand;
+use Kolirt\Telegram\Facades\Config as ConfigFacade;
 
 class ServiceProvider extends BaseServiceProvider
 {
@@ -43,19 +44,8 @@ class ServiceProvider extends BaseServiceProvider
 
         $this->loadRoutes();
         $this->publishFiles();
-    }
 
-    public function register(): void
-    {
-        $this->commands($this->commands);
-
-        $this->app->singleton('telegram-config', function (Application $app) {
-            return new Config;
-
-//            $config = new Config;
-//            $config->load();
-//            return $config;
-        });
+        ConfigFacade::load();
     }
 
     private function loadRoutes(): void
@@ -93,5 +83,14 @@ class ServiceProvider extends BaseServiceProvider
         $this->publishesMigrations([
             __DIR__ . '/../database/migrations' => database_path('migrations')
         ], 'migrations');
+    }
+
+    public function register(): void
+    {
+        $this->commands($this->commands);
+
+        $this->app->singleton('telegram-config', function (Application $app) {
+            return new Config;
+        });
     }
 }

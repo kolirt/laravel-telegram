@@ -1,6 +1,5 @@
 <?php
 
-use Kolirt\Telegram\Core\Enums\ParseModeEnum;
 use Kolirt\Telegram\Models\Bot;
 use Kolirt\Telegram\Models\Chat;
 use Kolirt\Telegram\Models\Pivots\BotChatPivot;

@@ -17,26 +17,6 @@ abstract class BaseResponse
     }
 
     /**
-     * Check if the response is successful.
-     *
-     * @return bool
-     */
-    public function isSuccess(): bool
-    {
-        return $this->ok;
-    }
-
-    /**
-     * Check if the response is an error.
-     *
-     * @return bool
-     */
-    public function isError(): bool
-    {
-        return !$this->isSuccess();
-    }
-
-    /**
      * Get the error description.
      *
      * @return int|null
@@ -64,6 +44,26 @@ abstract class BaseResponse
     public function isBlockedByUserError(): bool
     {
         return $this->isError() && $this->description === 'Forbidden: bot was blocked by the user';
+    }
+
+    /**
+     * Check if the response is an error.
+     *
+     * @return bool
+     */
+    public function isError(): bool
+    {
+        return !$this->isSuccess();
+    }
+
+    /**
+     * Check if the response is successful.
+     *
+     * @return bool
+     */
+    public function isSuccess(): bool
+    {
+        return $this->ok;
     }
 
     /**

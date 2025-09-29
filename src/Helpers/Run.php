@@ -7,7 +7,7 @@ use ReflectionMethod;
 class Run
 {
 
-    public function call($handler, $method, $input): void
+    public function call($handler, $method): void
     {
         $ref = new ReflectionMethod($handler, $method);
         $ref_params = $ref->getParameters();
@@ -18,11 +18,10 @@ class Run
             if ($type && class_exists($type->getName())) {
                 $params[] = app($type->getName());
             } else {
-                $params[] = $input;
+                $params[] = null;
             }
         }
 
         call_user_func([$handler, $method], ...$params);
     }
-
 }

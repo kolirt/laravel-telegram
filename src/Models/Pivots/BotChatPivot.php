@@ -17,14 +17,17 @@ class BotChatPivot extends Pivot
         'chat_id',
         'blocked_at',
         'last_activity_at',
-        'virtual_router_state'
+        'virtual_path',
+        'virtual_state',
+        'virtual_state_data'
     ];
 
     protected $casts = [
         'bot_id' => 'integer',
         'chat_id' => 'integer',
         'blocked_at' => 'datetime',
-        'last_activity_at' => 'datetime'
+        'last_activity_at' => 'datetime',
+        'virtual_state_data' => 'json'
     ];
 
     public function __construct(array $attributes = [])
@@ -38,10 +41,4 @@ class BotChatPivot extends Pivot
         $query->where('bot_id', $this->bot_id);
         return parent::setKeysForSaveQuery($query);
     }
-
-    public function setVirtualRouterState($state)
-    {
-        $this->update(['virtual_router_state' => $state]);;
-    }
-
 }

@@ -2,6 +2,7 @@
 
 namespace Kolirt\Telegram\Config\Keyboard\Buttons\Traits;
 
+use Closure;
 use Kolirt\Telegram\Config\Keyboard\Builder\KeyboardBuilder;
 
 trait Childrenable
@@ -9,7 +10,13 @@ trait Childrenable
 
     protected KeyboardBuilder $keyboard_builder;
 
-    public function children($fn): void
+    public function getKeyboard(): KeyboardBuilder
+    {
+        if (empty($this->keyboard_builder)) $this->children();
+        return $this->keyboard_builder;
+    }
+
+    public function children(?Closure $fn = null): void
     {
         $this->keyboard_builder = new KeyboardBuilder(
             on_top: $this->navigation->on_top,
@@ -20,12 +27,7 @@ trait Childrenable
             home_button_label: $this->navigation->home_button_label,
         );
         $this->keyboard_builder->addToPath($this->name);
-        $fn($this->keyboard_builder);
-    }
-
-    public function getKeyboard(): KeyboardBuilder
-    {
-        return $this->keyboard_builder;
+        $fn && $fn($this->keyboard_builder);
     }
 
     public function hasChildren(): bool

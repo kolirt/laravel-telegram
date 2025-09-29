@@ -59,7 +59,9 @@ return new class extends Migration {
                 ->on(config('telegram.models.chat.table_name'))
                 ->cascadeOnDelete();
 
-            $table->text('virtual_router_state')->nullable();
+            $table->text('virtual_path')->nullable();
+            $table->text('virtual_state')->nullable();
+            $table->json('virtual_state_data')->nullable();
 
             $table->timestamp('blocked_at')->nullable();
             $table->timestamp('last_activity_at')->nullable();

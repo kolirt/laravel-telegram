@@ -49,19 +49,19 @@ class CommandBuilder
         return $this->commands[$name] ?? null;
     }
 
+    public function getCommandsForUpdate(): array
+    {
+        return array_filter($this->getCommands(), function ($command) {
+            return !$command->shouldIgnoreOnUpdate();
+        });
+    }
+
     /**
      * @return Command[]
      */
     public function getCommands(): array
     {
         return $this->commands;
-    }
-
-    public function getCommandsForUpdate(): array
-    {
-        return array_filter($this->getCommands(), function ($command) {
-            return !$command->shouldIgnoreOnUpdate();
-        });
     }
 
     public function isStartCommand(string $command_name): bool

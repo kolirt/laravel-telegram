@@ -8,52 +8,28 @@ use Kolirt\Telegram\Core\Telegram;
 use Kolirt\Telegram\Models\Chat;
 use Kolirt\Telegram\Models\Pivots\BotChatPivot;
 use Kolirt\Telegram\Models\User;
+use Kolirt\Telegram\Request\Request;
 
 trait Runnable
 {
 
     protected array|null $normalized_buttons = [];
 
-    public function getNormalizedButtons(): array
-    {
-        if ($this->normalized_buttons) {
-            return $this->normalized_buttons;
-        }
-
-        $buttons = [];
-
-        foreach ($this->lines as $line) {
-            foreach ($line->getButtons() as $button) {
-                if (method_exists($button, 'getName')) {
-                    $buttons[$button->getName()] = $button;
-
-                    if (method_exists($button, 'hasChildren') && $button->hasChildren()) {
-                        foreach ($button->getKeyboard()->getNormalizedButtons() as $value) {
-                            $buttons[$value->getName()] = $value;
-                        }
-                    }
-                }
-            }
-        }
-
-        return $this->normalized_buttons = $buttons;
-    }
-
     /**
      * @param Bot $bot
      * @param Telegram $telegram
-     * @param Model|Chat $chat_model
-     * @param Model|User $user_model
-     * @param Model|BotChatPivot $bot_chat_pivot_model
+     * @param Model|Chat $chat
+     * @param Model|User $user
+     * @param Model|BotChatPivot $personal_chat
      * @param string $input
      * @return void
      */
     public function run(
         Bot                $bot,
         Telegram           $telegram,
-        Model|Chat         $chat_model,
-        Model|User         $user_model,
-        Model|BotChatPivot $bot_chat_pivot_model,
+        Model|Chat         $chat,
+        Model|User         $user,
+        Model|BotChatPivot $personal_chat,
         string             $input
     ): void
     {
@@ -62,6 +38,7 @@ trait Runnable
         $matched_buttons = $this->path === ''
             ? array_filter($buttons, fn($value, $key) => !str_contains($key, '.'), ARRAY_FILTER_USE_BOTH)
             : array_filter($buttons, fn($value, $key) => $this->path === $key || str_starts_with($key, $this->path . '.'), ARRAY_FILTER_USE_BOTH);
+
         $matched_button = $matched_buttons[$this->path] ?? null;
         $matched_children = array_filter($matched_buttons, fn($key) => $key !== $this->path, ARRAY_FILTER_USE_KEY);
 
@@ -100,7 +77,7 @@ trait Runnable
         } else if ($matched_button) {
             $new_path = $matched_button->getName();
         }
-        $bot_chat_pivot_model->update(['virtual_router_state' => $new_path]);
+        $personal_chat->update(['virtual_path' => $new_path]);
         $this->setPath($new_path);
 
         /** attach keyboard */
@@ -142,36 +119,92 @@ trait Runnable
             );
         }
 
+        $request = $this->makeRequest($input);
+
         /** run handler */
         if ($next_button) {
             $next_button->run(
-                $bot,
-                $telegram,
-                $chat_model,
-                $user_model,
-                $bot_chat_pivot_model,
-                $input
+                request: $request,
+                bot: $bot,
+                telegram: $telegram,
+                chat: $chat,
+                user: $user,
+                personal_chat: $personal_chat
             );
         } else if ($matched_button) {
             $matched_button->run(
+                request: $request,
                 bot: $bot,
                 telegram: $telegram,
-                chat_model: $chat_model,
-                user_model: $user_model,
-                bot_chat_pivot_model: $bot_chat_pivot_model,
-                input: $input,
+                chat: $chat,
+                user: $user,
+                personal_chat: $personal_chat,
                 fallback: method_exists($matched_button, 'hasFallback') && $matched_button->hasFallback()
             );
         } else {
             $this->runDefault(
                 bot: $bot,
                 telegram: $telegram,
-                chat_model: $chat_model,
-                user_model: $user_model,
-                bot_chat_pivot_model: $bot_chat_pivot_model,
+                chat: $chat,
+                user: $user,
+                personal_chat: $personal_chat,
                 input: $input
             );
         }
+    }
+
+    public function getNormalizedButtons(): array
+    {
+        if ($this->normalized_buttons) {
+            return $this->normalized_buttons;
+        }
+
+        $buttons = [];
+
+        foreach ($this->lines as $line) {
+            foreach ($line->getButtons() as $button) {
+                if (method_exists($button, 'getName')) {
+                    $buttons[$button->getName()] = $button;
+
+                    if (method_exists($button, 'hasChildren') && $button->hasChildren()) {
+                        foreach ($button->getKeyboard()->getNormalizedButtons() as $value) {
+                            $buttons[$value->getName()] = $value;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $this->normalized_buttons = $buttons;
+    }
+
+    protected function makeRequest($input)
+    {
+        return new Request(
+            input: $input
+        );
+    }
+
+    public function reload(
+        Bot                $bot,
+        Telegram           $telegram,
+        Model|Chat         $chat,
+        Model|User         $user,
+        Model|BotChatPivot $personal_chat
+    )
+    {
+        $telegram->attachReplyKeyboardMarkupObject(
+            $this->renderReplyKeyboardMarkup()
+        );
+
+        $this->runDefault(
+            bot: $bot,
+            telegram: $telegram,
+            chat: $chat,
+            user: $user,
+            personal_chat: $personal_chat,
+            input: ''
+        );
     }
 
 }
